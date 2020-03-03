@@ -2,143 +2,81 @@
 
 {% set title = "Plugin Sales"|t('plugin-sales') %}
 
+{% do view.registerCssFile('https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css') %}
+{% do view.registerJsFile('https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js',{
+    depends: ['craft\\web\\assets\\cp\\CpAsset']
+}) %}
+{% do view.registerJsFile('https://cdn.jsdelivr.net/npm/apexcharts') %}
+
+
 {% block content %}
 
-    {% set sales = craft.pluginSales.get(10) %}
 
-
+    <table id="plugin-sales">
+        <thead>
+            <tr>
+                <th>{{ 'Plugin'|t('plugin-sales') }}</th>
+                <th>{{ 'Edition'|t('plugin-sales') }}</th>
+                <th>{{ 'Type'|t('plugin-sales') }}</th>
+                <th>{{ 'Customer'|t('plugin-sales') }}</th>
+                <th>{{ 'Gross Amount'|t('plugin-sales') }}</th>
+                <th>{{ 'Net Amount'|t('plugin-sales') }}</th>
+                <th>{{ 'Date'|t('plugin-sales') }}</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
 
     <div style="max-width: 1200px;">
         <div id="chart1"></div>
         <div id="chart2"></div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
-
 {% endblock %}
-
 
 {% js %}
 
-    var colors = [
-      '#008FFB',
-      '#00E396',
-      '#FEB019',
-      '#FF4560',
-      '#775DD0',
-      '#546E7A',
-      '#26a69a',
-      '#D10CE8'
-    ];
+    var sales = {{ craft.pluginSales.getCachedSales()|raw }};
+
+    $('#plugin-sales').DataTable({
+        data: sales
+    });
 
     var options = {
-        series: [
-            {
-                name: 'Blitz',
-                data: [44, 55, 41, 67, 22, 43]
-            },
-            {
-                name: 'Campaign',
-                data: [13, 23, 20, 8, 13, 27]
-            },
-            {
-                name: 'Snaptcha',
-                data: [11, 17, 15, 15, 21, 14]
-            },
-            {
-                name: 'Sherlock',
-                data: [21, 7, 25, 13, 22, 8]
-            }
-        ],
-        chart: {
-            type: 'bar',
-            height: 350,
-            stacked: true,
-            toolbar: {
-                show: true
-            },
-            zoom: {
-                enabled: true
-            }
-        },
-        responsive: [{
-            breakpoint: 480,
-            options: {
-                legend: {
-                    position: 'bottom',
-                    offsetX: -10,
-                    offsetY: 0
-                }
-            }
-        }],
-        plotOptions: {
-            bar: {
-                horizontal: false,
-            },
-        },
-        xaxis: {
-            type: 'datetime',
-            categories: ['01/01/2011 GMT', '02/01/2011 GMT', '03/01/2011 GMT', '04/01/2011 GMT', '05/01/2011 GMT', '06/01/2011 GMT'],
-        },
-        legend: {
-            position: 'right',
-            offsetY: 40
-        },
-        fill: {
-            opacity: 1
-        }
+      series: [{
+        name: "Sales",
+        data: {{ craft.pluginSales.getCachedAmounts()|raw }}
+    }],
+      chart: {
+      height: 350,
+      type: 'line',
+      zoom: {
+        enabled: false
+      }
+    },
+    dataLabels: {
+      enabled: false
+    },
+    stroke: {
+      curve: 'straight'
+    },
+    title: {
+      text: 'Value of Sales',
+      align: 'left'
+    },
+    grid: {
+      row: {
+        colors: ['#f3f3f3', 'transparent'], // takes an array which will be repeated on columns
+        opacity: 0.5
+      },
+    },
+    xaxis: {
+      categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'],
+    }
     };
 
     var chart = new ApexCharts(document.querySelector("#chart1"), options);
     chart.render();
-
-    var options = {
-          series: [{
-          data: [21, 22, 10, 28, 16, 21, 13, 30]
-        }],
-          chart: {
-          height: 350,
-          type: 'bar',
-          events: {
-            click: function(chart, w, e) {
-              // console.log(chart, w, e)
-            }
-          }
-        },
-        colors: colors,
-        plotOptions: {
-          bar: {
-            columnWidth: '45%',
-            distributed: true
-          }
-        },
-        dataLabels: {
-          enabled: false
-        },
-        legend: {
-          show: false
-        },
-        xaxis: {
-          categories: [
-            ['John', 'Doe'],
-            ['Joe', 'Smith'],
-            ['Jake', 'Williams'],
-            'Amber',
-            ['Peter', 'Brown'],
-            ['Mary', 'Evans'],
-            ['David', 'Wilson'],
-            ['Lily', 'Roberts'],
-          ],
-          labels: {
-            style: {
-              colors: colors,
-              fontSize: '12px'
-            }
-          }
-        }
-        };
-
-        var chart = new ApexCharts(document.querySelector("#chart2"), options);
-        chart.render();
 
 {% endjs %}

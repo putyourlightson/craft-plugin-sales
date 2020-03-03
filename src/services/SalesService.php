@@ -8,6 +8,7 @@ namespace putyourlightson\pluginsales\services;
 use Craft;
 use craft\base\Component;
 use GuzzleHttp\Client;
+use putyourlightson\pluginsales\models\PluginModel;
 use putyourlightson\pluginsales\models\SaleModel;
 use putyourlightson\pluginsales\PluginSales;
 use putyourlightson\pluginsales\records\SaleRecord;
@@ -28,11 +29,20 @@ class SalesService extends Component
     public function get(int $limit = null): array
     {
         $saleModels = [];
-        $saleRecords = SaleRecord::find()->limit($limit)->all();
+
+        $saleRecords = SaleRecord::find()
+            ->with('plugin')
+            ->limit($limit)
+            ->all();
 
         foreach ($saleRecords as $saleRecord) {
             $saleModel = new SaleModel();
-            $saleModel->setAttributes($saleRecord, false);
+            $saleModel->setAttributes($saleRecord->getAttributes(), false);
+
+            $saleModel->pluginName = $saleRecord->plugin->name;
+            $saleModel->grossAmount = number_format($saleModel->grossAmount, 2);
+            $saleModel->netAmount = number_format($saleModel->netAmount, 2);
+
             $saleModels[] = $saleModel;
         }
 

@@ -54,4 +54,9 @@ class SaleModel extends Model
      * @var DateTime
      */
     public $dateSold;
+
+    /**
+     * @var string|null
+     */
+    public $pluginName;
 }

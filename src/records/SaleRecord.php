@@ -7,6 +7,7 @@ namespace putyourlightson\pluginsales\records;
 
 use craft\db\ActiveRecord;
 use DateTime;
+use yii\db\ActiveQuery;
 
 /**
  * @property int $id
@@ -18,6 +19,7 @@ use DateTime;
  * @property double $grossAmount
  * @property double $netAmount
  * @property DateTime $dateSold
+ * @property PluginRecord $plugin
  */
 class SaleRecord extends ActiveRecord
 {
@@ -29,5 +31,15 @@ class SaleRecord extends ActiveRecord
     public static function tableName(): string
     {
         return '{{%pluginsales_sales}}';
+    }
+
+    /**
+     * Returns the plugin model.
+     *
+     * @return ActiveQuery
+     */
+    public function getPlugin(): ActiveQuery
+    {
+        return $this->hasOne(PluginRecord::class, ['id' => 'pluginId']);
     }
 }
