@@ -1,7 +1,7 @@
 {
     "name": "putyourlightson/craft-plugin-sales",
     "description": "Plugin sales reports.",
-    "version": "1.0.0",
+    "version": "0.1.0",
     "type": "craft-plugin",
     "homepage": "https://putyourlightson.com/plugins/plugin-sales",
     "license": "proprietary",
@@ -34,7 +34,7 @@
         "documentationUrl": "https://putyourlightson.com/plugins/plugin-sales",
         "changelogUrl": "https://raw.githubusercontent.com/putyourlightson/craft-plugin-sales/v1/CHANGELOG.md",
         "class": "putyourlightson\\pluginsales\\PluginSales",
-        "schemaVersion": "1.0.0",
+        "schemaVersion": "0.1.0",
         "hasCpSettings": true,
         "hasCpSection": true
     }

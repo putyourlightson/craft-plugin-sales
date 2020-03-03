@@ -1,5 +1,7 @@
 # Plugin Sales for Craft CMS 3
 
+Plugin sales reports in your control panel.
+
 ## Documentation
 
 Learn more and read the documentation at [putyourlightson.com/plugins/plugin-sales »](https://putyourlightson.com/plugins/plugin-sales)
