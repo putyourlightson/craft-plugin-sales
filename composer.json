@@ -1,0 +1,41 @@
+{
+    "name": "putyourlightson/craft-plugin-sales",
+    "description": "Plugin sales reports.",
+    "version": "1.0.0",
+    "type": "craft-plugin",
+    "homepage": "https://putyourlightson.com/plugins/plugin-sales",
+    "license": "proprietary",
+    "keywords": [
+        "craft",
+        "cms",
+        "craftcms",
+        "plugin",
+        "sales",
+        "reports"
+    ],
+    "require": {
+        "craftcms/cms": "^3.4.0"
+    },
+    "autoload": {
+        "psr-4": {
+          "putyourlightson\\pluginsales\\": "src/"
+        }
+    },
+    "support": {
+        "docs": "https://putyourlightson.com/plugins/plugin-sales",
+        "source": "https://github.com/putyourlightson/craft-plugin-sales",
+        "issues": "https://github.com/putyourlightson/craft-plugin-sales/issues"
+    },
+    "extra": {
+        "name": "Plugin Sales",
+        "handle": "plugin-sales",
+        "developer": "PutYourLightsOn",
+        "developerUrl": "https://putyourlightson.com/",
+        "documentationUrl": "https://putyourlightson.com/plugins/plugin-sales",
+        "changelogUrl": "https://raw.githubusercontent.com/putyourlightson/craft-plugin-sales/v1/CHANGELOG.md",
+        "class": "putyourlightson\\pluginsales\\PluginSales",
+        "schemaVersion": "1.0.0",
+        "hasCpSettings": true,
+        "hasCpSection": true
+    }
+}

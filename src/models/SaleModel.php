@@ -1,0 +1,57 @@
+<?php
+/**
+ * @copyright Copyright (c) PutYourLightsOn
+ */
+
+namespace putyourlightson\pluginsales\models;
+
+use craft\base\Model;
+use DateTime;
+
+class SaleModel extends Model
+{
+    /**
+     * @var int
+     */
+    public $id;
+
+    /**
+     * @var int
+     */
+    public $saleId;
+
+    /**
+     * @var int
+     */
+    public $pluginId;
+
+    /**
+     * @var string
+     */
+    public $edition;
+
+    /**
+     * @var bool
+     */
+    public $renewal;
+
+    /**
+     * @var string
+     */
+    public $email;
+
+    /**
+     * @var double
+     */
+    public $grossAmount;
+
+    /**
+     * @var double
+     */
+    public $netAmount;
+
+    /**
+     * @var DateTime
+     */
+    public $dateSold;
+}
