@@ -1,10 +1,12 @@
-{#{% extends "_layouts/cp" %}#}
+{% extends "_layouts/cp" %}
 
 {% set title = "Plugin Sales"|t('plugin-sales') %}
 
 {% block content %}
 
-    {% set sales = craft.pluginSales.get() %}
+    {% set sales = craft.pluginSales.get(10) %}
+
+
 
     <div style="max-width: 1200px;">
         <div id="chart1"></div>

@@ -9,6 +9,7 @@ use Craft;
 use craft\base\Component;
 use GuzzleHttp\Client;
 use putyourlightson\pluginsales\models\SaleModel;
+use putyourlightson\pluginsales\PluginSales;
 use putyourlightson\pluginsales\records\SaleRecord;
 use yii\web\ForbiddenHttpException;
 
@@ -18,7 +19,9 @@ use yii\web\ForbiddenHttpException;
 class SalesService extends Component
 {
     /**
-     * Returns plugin sales
+     * Returns plugin sales.
+     *
+     * @param int|null $limit
      *
      * @return SaleModel[]
      */
@@ -37,7 +40,7 @@ class SalesService extends Component
     }
 
     /**
-     * Refreshes plugin sales
+     * Refreshes plugin sales.
      *
      * @throws ForbiddenHttpException
      */
@@ -105,6 +108,11 @@ class SalesService extends Component
 
         // Save sale records
         foreach ($sales as $sale) {
+            if (empty($sale['plugin']['id'])) {
+                Craft::dd($sale);
+            }
+            PluginSales::$plugin->plugins->create($sale['plugin']['id'], $sale['plugin']['name'], $sale['plugin']['hasMultipleEditions']);
+
             $saleRecord = SaleRecord::find()
                 ->where(['saleId' => $sale['id']])
                 ->one();
@@ -116,7 +124,7 @@ class SalesService extends Component
             $saleRecord->setAttributes([
                 'saleId' => $sale['id'],
                 'pluginId' => $sale['plugin']['id'],
-                'edition' => $sale['edition']['name'],
+                'edition' => $sale['edition']['handle'],
                 'renewal' => ($sale['purchasableType'] == 'craftnet\\plugins\\PluginRenewal'),
                 'grossAmount' => $sale['grossAmount'],
                 'netAmount' => $sale['netAmount'],

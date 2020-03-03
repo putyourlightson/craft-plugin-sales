@@ -12,17 +12,19 @@ use yii\web\ForbiddenHttpException;
 class PluginSalesVariable
 {
     /**
-     * Returns plugin sales
+     * Returns plugin sales.
+     *
+     * @param int|null $limit
      *
      * @return SaleModel[]
      */
-    public function get()
+    public function get(int $limit = null)
     {
-        return PluginSales::$plugin->sales->get();
+        return PluginSales::$plugin->sales->get($limit);
     }
 
     /**
-     * Refreshes plugin sales
+     * Refreshes plugin sales.
      *
      * @throws ForbiddenHttpException
      */
