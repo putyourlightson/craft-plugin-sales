@@ -13,15 +13,15 @@ use yii\web\ForbiddenHttpException;
 class PluginSalesVariable
 {
     /**
-     * Returns cached plugin sales.
+     * Returns cached plugin sale data.
      *
      * @param int|null $limit
      *
      * @return string
      */
-    public function getCachedSales(int $limit = null)
+    public function getSalesData($limit = null)
     {
-        $cacheKey = 'PluginSales'.($limit ?? '*');
+        $cacheKey = 'PluginSales.SalesData.'.($limit ?? '*');
         $data = Craft::$app->getCache()->get($cacheKey);
 
         if ($data !== false) {
@@ -30,7 +30,7 @@ class PluginSalesVariable
 
         $data = [];
 
-        $saleModels = $this->get($limit);
+        $saleModels = PluginSales::$plugin->sales->get($limit);
 
         foreach ($saleModels as $saleModel) {
             $data[] = [
@@ -52,37 +52,22 @@ class PluginSalesVariable
     }
 
     /**
-     * Returns cached plugin sales.
+     * Returns monthly plugin sale totals.
      *
      * @param int|null $limit
      *
      * @return string
      */
-    public function getCachedAmounts(int $limit = null)
+    public function getMonthlyTotals($limit = null)
     {
-        $cacheKey = 'PluginSalesAmounts'.($limit ?? '*');
+        $cacheKey = 'PluginSales.MonthlyTotals.'.($limit ?? '*');
         $data = Craft::$app->getCache()->get($cacheKey);
 
         if ($data !== false) {
-            return $data;
+            //return $data;
         }
 
-        $data = [
-            'categories' => [],
-            'values' => [],
-        ];
-
-        $saleModels = $this->get($limit);
-
-        foreach ($saleModels as $saleModel) {
-            $month = $saleModel->dateSold->format('m-Y');
-
-            $value = $data['categories'][$month] ?? 0;
-            $data['categories'][$month] = $month;
-            $data['values'][$month] = $value + $saleModel->grossAmount;
-        }
-
-        $data = json_encode($data);
+        $data = PluginSales::$plugin->sales->getMonthlyTotals($limit);
 
         Craft::$app->getCache()->set($cacheKey, $data);
 
@@ -96,7 +81,7 @@ class PluginSalesVariable
      *
      * @return SaleModel[]
      */
-    public function get(int $limit = null)
+    public function getSales($limit = null)
     {
         return PluginSales::$plugin->sales->get($limit);
     }
@@ -106,7 +91,7 @@ class PluginSalesVariable
      *
      * @throws ForbiddenHttpException
      */
-    public function refresh()
+    public function refreshSales()
     {
         PluginSales::$plugin->sales->refresh();
     }

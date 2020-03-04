@@ -8,7 +8,6 @@ namespace putyourlightson\pluginsales\services;
 use Craft;
 use craft\base\Component;
 use GuzzleHttp\Client;
-use putyourlightson\pluginsales\models\PluginModel;
 use putyourlightson\pluginsales\models\SaleModel;
 use putyourlightson\pluginsales\PluginSales;
 use putyourlightson\pluginsales\records\SaleRecord;
@@ -26,7 +25,7 @@ class SalesService extends Component
      *
      * @return SaleModel[]
      */
-    public function get(int $limit = null): array
+    public function get($limit = null): array
     {
         $saleModels = [];
 
@@ -47,6 +46,57 @@ class SalesService extends Component
         }
 
         return $saleModels;
+    }
+
+    /**
+     * Returns monthly plugin sale totals.
+     *
+     * @param int|null $limit
+     *
+     * @return array
+     */
+    public function getMonthlyTotals($limit = null): array
+    {
+        return SaleRecord::find()
+            ->select([
+                'MONTH(dateSold) as month',
+                'YEAR(dateSold) as year',
+                'COUNT(*) as count',
+                'ROUND(SUM(grossAmount), 2) as grossAmount',
+                'ROUND(SUM(netAmount), 2) as netAmount',
+            ])
+            ->groupBy(['YEAR(dateSold)', 'MONTH(dateSold)'])
+            ->orderBy(['YEAR(dateSold)' => SORT_ASC, 'MONTH(dateSold)' => SORT_ASC])
+            ->asArray()
+            ->all();
+    }
+
+    /**
+     * Returns first month of plugin sales.
+     *
+     * @return array|null
+     */
+    public function getFirstMonth()
+    {
+        return SaleRecord::find()
+            ->select(['MONTH(dateSold) as month', 'YEAR(dateSold) as year'])
+            ->orderBy(['YEAR(dateSold)' => SORT_ASC, 'MONTH(dateSold)' => SORT_ASC])
+            ->asArray()
+            ->one();
+    }
+
+    /**
+     * Returns last month of plugin sales.
+     *
+     * @return array|null
+     */
+    public function getLastMonth()
+    {
+        return SaleRecord::find()
+            ->select(['MONTH(dateSold) as month', 'YEAR(dateSold) as year'])
+            ->orderBy(['YEAR(dateSold)' => SORT_DESC, 'MONTH(dateSold)' => SORT_DESC])
+            ->asArray()
+            ->one();
     }
 
     /**

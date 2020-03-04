@@ -11,6 +11,9 @@
 
 {% block content %}
 
+    <div id="chart"></div>
+
+    <br><br>
 
     <table id="plugin-sales">
         <thead>
@@ -28,55 +31,115 @@
         </tbody>
     </table>
 
-    <div style="max-width: 1200px;">
-        <div id="chart1"></div>
-        <div id="chart2"></div>
-    </div>
-
 {% endblock %}
 
 {% js %}
 
-    var sales = {{ craft.pluginSales.getCachedSales()|raw }};
-
     $('#plugin-sales').DataTable({
-        data: sales
+        data: {{ craft.pluginSales.getSalesData()|raw }}
     });
 
+    {% set monthlyTotals = craft.pluginSales.getMonthlyTotals() %}
+
     var options = {
-      series: [{
-        name: "Sales",
-        data: {{ craft.pluginSales.getCachedAmounts()|raw }}
-    }],
-      chart: {
-      height: 350,
-      type: 'line',
-      zoom: {
-        enabled: false
-      }
-    },
-    dataLabels: {
-      enabled: false
-    },
-    stroke: {
-      curve: 'straight'
-    },
-    title: {
-      text: 'Value of Sales',
-      align: 'left'
-    },
-    grid: {
-      row: {
-        colors: ['#f3f3f3', 'transparent'], // takes an array which will be repeated on columns
-        opacity: 0.5
-      },
-    },
-    xaxis: {
-      categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'],
-    }
+        series: [
+            {
+                name: "Gross Amount",
+                data: [
+                    {% for monthlyTotal in monthlyTotals %}
+                        '{{ monthlyTotal.grossAmount }}',
+                    {% endfor %}
+                ]
+            },
+            {
+                name: "Net Amount",
+                data: [
+                    {% for monthlyTotal in monthlyTotals %}
+                        '{{ monthlyTotal.netAmount }}',
+                    {% endfor %}
+                ]
+            },
+            {
+                name: "Licenses",
+                data: [
+                    {% for monthlyTotal in monthlyTotals %}
+                        '{{ monthlyTotal.count }}',
+                    {% endfor %}
+                ]
+            },
+        ],
+        chart: {
+            height: 400,
+            type: 'area',
+            zoom: {
+                enabled: false
+            }
+        },
+        dataLabels: {
+            enabled: false
+        },
+        stroke: {
+            curve: 'straight'
+        },
+        grid: {
+            row: {
+                colors: ['#f3f3f3', 'transparent'], // takes an array which will be repeated on columns
+                opacity: 0.5
+            },
+        },
+        xaxis: {
+            categories: [
+                {% for monthlyTotal in monthlyTotals %}
+                    '{{ monthlyTotal.month }}-{{ monthlyTotal.year }}',
+                {% endfor %}
+            ],
+            labels: {
+                style: {
+                    colors: '#888',
+                },
+            }
+        },
+        yaxis: [
+            {
+                seriesName: 'USD',
+                title: {
+                    text: "USD"
+                },
+                labels: {
+                    style: {
+                        colors: '#888',
+                    },
+                    formatter: function(val) {
+                        return Math.round(val);
+                    },
+                }
+            },
+            {
+                seriesName: 'USD',
+                show: false,
+            },
+            {
+                seriesName: 'Licenses',
+                opposite: true,
+                title: {
+                    text: "Licenses"
+                },
+                labels: {
+                    style: {
+                        colors: '#888',
+                    },
+                    formatter: function(val) {
+                        return Math.round(val);
+                    },
+                }
+            }
+        ],
+        legend: {
+            position: 'top',
+        },
     };
 
-    var chart = new ApexCharts(document.querySelector("#chart1"), options);
+    var chart = new ApexCharts(document.querySelector("#chart"), options);
     chart.render();
 
 {% endjs %}
