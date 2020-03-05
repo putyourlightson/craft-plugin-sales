@@ -8,70 +8,19 @@ namespace putyourlightson\pluginsales\variables;
 use Craft;
 use putyourlightson\pluginsales\models\SaleModel;
 use putyourlightson\pluginsales\PluginSales;
+use putyourlightson\pluginsales\services\ReportsService;
 use yii\web\ForbiddenHttpException;
 
 class PluginSalesVariable
 {
     /**
-     * Returns cached plugin sale data.
+     * Returns reports service
      *
-     * @param int|null $limit
-     *
-     * @return string
+     * @return ReportsService
      */
-    public function getSalesData($limit = null)
+    public function getReports(): ReportsService
     {
-        $cacheKey = 'PluginSales.SalesData.'.($limit ?? '*');
-        $data = Craft::$app->getCache()->get($cacheKey);
-
-        if ($data !== false) {
-            return $data;
-        }
-
-        $data = [];
-
-        $saleModels = PluginSales::$plugin->sales->get($limit);
-
-        foreach ($saleModels as $saleModel) {
-            $data[] = [
-                $saleModel->pluginName,
-                ucfirst($saleModel->edition),
-                Craft::t('plugin-sales', ($saleModel->renewal ? 'Renewal' : 'License')),
-                $saleModel->email,
-                $saleModel->grossAmount,
-                $saleModel->netAmount,
-                $saleModel->dateSold,
-            ];
-        }
-
-        $data = json_encode($data);
-
-        Craft::$app->getCache()->set($cacheKey, $data);
-
-        return $data;
-    }
-
-    /**
-     * Returns monthly plugin sale totals.
-     *
-     * @param int|null $limit
-     *
-     * @return string
-     */
-    public function getMonthlyTotals($limit = null)
-    {
-        $cacheKey = 'PluginSales.MonthlyTotals.'.($limit ?? '*');
-        $data = Craft::$app->getCache()->get($cacheKey);
-
-        if ($data !== false) {
-            //return $data;
-        }
-
-        $data = PluginSales::$plugin->sales->getMonthlyTotals($limit);
-
-        Craft::$app->getCache()->set($cacheKey, $data);
-
-        return $data;
+        return PluginSales::$plugin->reports;
     }
 
     /**
@@ -81,7 +30,7 @@ class PluginSalesVariable
      *
      * @return SaleModel[]
      */
-    public function getSales($limit = null)
+    public function get($limit = null)
     {
         return PluginSales::$plugin->sales->get($limit);
     }
@@ -91,7 +40,7 @@ class PluginSalesVariable
      *
      * @throws ForbiddenHttpException
      */
-    public function refreshSales()
+    public function refresh()
     {
         PluginSales::$plugin->sales->refresh();
     }

@@ -13,9 +13,6 @@ use putyourlightson\pluginsales\PluginSales;
 use putyourlightson\pluginsales\records\SaleRecord;
 use yii\web\ForbiddenHttpException;
 
-/**
- * @property int $count
- */
 class SalesService extends Component
 {
     /**
@@ -46,57 +43,6 @@ class SalesService extends Component
         }
 
         return $saleModels;
-    }
-
-    /**
-     * Returns monthly plugin sale totals.
-     *
-     * @param int|null $limit
-     *
-     * @return array
-     */
-    public function getMonthlyTotals($limit = null): array
-    {
-        return SaleRecord::find()
-            ->select([
-                'MONTH(dateSold) as month',
-                'YEAR(dateSold) as year',
-                'COUNT(*) as count',
-                'ROUND(SUM(grossAmount), 2) as grossAmount',
-                'ROUND(SUM(netAmount), 2) as netAmount',
-            ])
-            ->groupBy(['YEAR(dateSold)', 'MONTH(dateSold)'])
-            ->orderBy(['YEAR(dateSold)' => SORT_ASC, 'MONTH(dateSold)' => SORT_ASC])
-            ->asArray()
-            ->all();
-    }
-
-    /**
-     * Returns first month of plugin sales.
-     *
-     * @return array|null
-     */
-    public function getFirstMonth()
-    {
-        return SaleRecord::find()
-            ->select(['MONTH(dateSold) as month', 'YEAR(dateSold) as year'])
-            ->orderBy(['YEAR(dateSold)' => SORT_ASC, 'MONTH(dateSold)' => SORT_ASC])
-            ->asArray()
-            ->one();
-    }
-
-    /**
-     * Returns last month of plugin sales.
-     *
-     * @return array|null
-     */
-    public function getLastMonth()
-    {
-        return SaleRecord::find()
-            ->select(['MONTH(dateSold) as month', 'YEAR(dateSold) as year'])
-            ->orderBy(['YEAR(dateSold)' => SORT_DESC, 'MONTH(dateSold)' => SORT_DESC])
-            ->asArray()
-            ->one();
     }
 
     /**
@@ -194,5 +140,7 @@ class SalesService extends Component
 
             $saleRecord->save();
         }
+
+        Craft::$app->getCache()->delete(ReportsService::SALES_DATA_CACHE_KEY);
     }
 }

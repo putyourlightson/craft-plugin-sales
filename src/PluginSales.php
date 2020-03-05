@@ -10,12 +10,14 @@ use craft\base\Plugin;
 use craft\web\twig\variables\CraftVariable;
 use putyourlightson\pluginsales\models\SettingsModel;
 use putyourlightson\pluginsales\services\PluginsService;
+use putyourlightson\pluginsales\services\ReportsService;
 use putyourlightson\pluginsales\services\SalesService;
 use putyourlightson\pluginsales\variables\PluginSalesVariable;
 use yii\base\Event;
 
 /**
  * @property PluginsService $plugins
+ * @property ReportsService $reports
  * @property SalesService $sales
  * @property SettingsModel $settings
  * @property mixed $settingsResponse
@@ -67,6 +69,7 @@ class PluginSales extends Plugin
     {
         $this->setComponents([
             'plugins' => PluginsService::class,
+            'reports' => ReportsService::class,
             'sales' => SalesService::class,
         ]);
     }

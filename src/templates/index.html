@@ -3,7 +3,11 @@
 {% set title = "Plugin Sales"|t('plugin-sales') %}
 
 {% do view.registerCssFile('https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css') %}
-{% do view.registerJsFile('https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js',{
+{% do view.registerCssFile('https://cdn.datatables.net/buttons/1.6.1/css/buttons.dataTables.min.css') %}
+{% do view.registerJsFile('https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js', {
+    depends: ['craft\\web\\assets\\cp\\CpAsset']
+}) %}
+{% do view.registerJsFile('https://cdn.datatables.net/buttons/1.6.1/js/dataTables.buttons.min.js', {
     depends: ['craft\\web\\assets\\cp\\CpAsset']
 }) %}
 {% do view.registerJsFile('https://cdn.jsdelivr.net/npm/apexcharts') %}
@@ -11,11 +15,11 @@
 
 {% block content %}
 
-    <div id="chart"></div>
+    <div id="chart" style="width:100%"></div>
 
     <br><br>
 
-    <table id="plugin-sales">
+    <table id="plugin-sales" style="width:100%">
         <thead>
             <tr>
                 <th>{{ 'Plugin'|t('plugin-sales') }}</th>
@@ -35,51 +39,48 @@
 
 {% js %}
 
-    $('#plugin-sales').DataTable({
-        data: {{ craft.pluginSales.getSalesData()|raw }}
-    });
+{#    $('#plugin-sales').DataTable({#}
+{#        data: {{ craft.pluginSales.reports.getSalesData()|raw }},#}
+{#    });#}
 
-    {% set monthlyTotals = craft.pluginSales.getMonthlyTotals() %}
+    {% set monthlyLicenseTotals = craft.pluginSales.reports.getMonthlyLicenseTotals() %}
+    {% set monthlyRenewalTotals = craft.pluginSales.reports.getMonthlyRenewalTotals() %}
 
     var options = {
         series: [
             {
-                name: "Gross Amount",
+                name: 'Licenses',
                 data: [
-                    {% for monthlyTotal in monthlyTotals %}
-                        '{{ monthlyTotal.grossAmount }}',
+                    {% for monthlyTotal in monthlyLicenseTotals %}
+                        [
+                            '{{ monthlyTotal.month }}/1/{{ monthlyTotal.year }}',
+                            {{ monthlyTotal.grossAmount }},
+                        ],
                     {% endfor %}
                 ]
             },
             {
-                name: "Net Amount",
+                name: 'Renewals',
                 data: [
-                    {% for monthlyTotal in monthlyTotals %}
-                        '{{ monthlyTotal.netAmount }}',
-                    {% endfor %}
-                ]
-            },
-            {
-                name: "Licenses",
-                data: [
-                    {% for monthlyTotal in monthlyTotals %}
-                        '{{ monthlyTotal.count }}',
+                    {% for monthlyTotal in monthlyRenewalTotals %}
+                        [
+                            '{{ monthlyTotal.month }}/1/{{ monthlyTotal.year }}',
+                            {{ monthlyTotal.grossAmount }},
+                        ],
                     {% endfor %}
                 ]
             },
         ],
         chart: {
             height: 400,
-            type: 'area',
-            zoom: {
-                enabled: false
-            }
+            type: 'bar',
+            stacked: true,
+        },
+        title: {
+            text: 'Gross Amount',
         },
         dataLabels: {
             enabled: false
-        },
-        stroke: {
-            curve: 'straight'
         },
         grid: {
             row: {
@@ -88,52 +89,27 @@
             },
         },
         xaxis: {
-            categories: [
-                {% for monthlyTotal in monthlyTotals %}
-                    '{{ monthlyTotal.month }}-{{ monthlyTotal.year }}',
-                {% endfor %}
-            ],
+            type: 'datetime',
             labels: {
+                format: 'MMM yyyy',
                 style: {
                     colors: '#888',
                 },
             }
         },
-        yaxis: [
-            {
-                seriesName: 'USD',
-                title: {
-                    text: "USD"
-                },
-                labels: {
-                    style: {
-                        colors: '#888',
-                    },
-                    formatter: function(val) {
-                        return Math.round(val);
-                    },
-                }
+        yaxis: {
+            title: {
+                text: "USD"
             },
-            {
-                seriesName: 'USD',
-                show: false,
-            },
-            {
-                seriesName: 'Licenses',
-                opposite: true,
-                title: {
-                    text: "Licenses"
+            labels: {
+                style: {
+                    colors: '#888',
                 },
-                labels: {
-                    style: {
-                        colors: '#888',
-                    },
-                    formatter: function(val) {
-                        return Math.round(val);
-                    },
-                }
+                formatter: function(val) {
+                    return Math.round(val);
+                },
             }
-        ],
+        },
         legend: {
             position: 'top',
         },
