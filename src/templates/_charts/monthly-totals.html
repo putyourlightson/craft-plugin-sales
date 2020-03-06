@@ -1,0 +1,102 @@
+{% set grossAmounts = [] %}
+{% set netAmounts = [] %}
+{% set count = [] %}
+
+{% for monthlyTotal in craft.pluginSales.reports.getMonthlyTotals() %}
+    {% set grossAmounts = grossAmounts|merge([monthlyTotal.grossAmount]) %}
+    {% set netAmounts = netAmounts|merge([monthlyTotal.netAmount]) %}
+    {% set count = count|merge([monthlyTotal.count]) %}
+{% endfor %}
+
+<div id="chart-monthly-totals" class="chart"></div>
+
+
+{% js %}
+
+    var options = {
+        chart: {
+            height: 400,
+            type: 'area',
+        },
+        title: {
+            text: 'Monthly Totals',
+        },
+        series: [
+            {
+                name: 'Gross Sales',
+                data: {{ grossAmounts|json_encode|raw }},
+            },
+            {
+                name: 'Net Sales',
+                data: {{ netAmounts|json_encode|raw }},
+            },
+            {
+                name: 'Licenses',
+                data: {{ count|json_encode|raw }},
+            },
+        ],
+        dataLabels: {
+            enabled: false
+        },
+        stroke: {
+            curve: 'straight'
+        },
+        grid: {
+            row: {
+                colors: ['#f3f3f3', 'transparent'],
+                opacity: 0.5
+            },
+        },
+        xaxis: {
+            categories: {{ craft.pluginSales.reports.getMonths()|json_encode|raw }},
+            labels: {
+                format: 'MMM yyyy',
+                style: {
+                    colors: '#888',
+                },
+            }
+        },
+        yaxis: [
+            {
+                seriesName: 'Gross Sales',
+                title: {
+                    text: "USD"
+                },
+                labels: {
+                    style: {
+                        colors: '#888',
+                    },
+                    formatter: function(val) {
+                        return Math.round(val);
+                    },
+                }
+            },
+            {
+                seriesName: 'Gross Sales',
+                show: false,
+            },
+            {
+                seriesName: 'Licenses',
+                opposite: true,
+                title: {
+                    text: "Licenses"
+                },
+                labels: {
+                    style: {
+                        colors: '#888',
+                    },
+                    formatter: function(val) {
+                        return Math.round(val);
+                    },
+                }
+            }
+        ],
+        legend: {
+            position: 'top',
+        },
+    };
+
+    var chart = new ApexCharts(document.querySelector("#chart-monthly-totals"), options);
+    chart.render();
+
+{% endjs %}

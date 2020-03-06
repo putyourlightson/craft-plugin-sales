@@ -1,0 +1,65 @@
+
+<div id="chart-license-renewals" class="chart"></div>
+
+
+{% js %}
+
+    var options = {
+        chart: {
+            height: 400,
+            type: 'bar',
+            stacked: true,
+        },
+        title: {
+            text: 'Licenses vs. Renewals',
+        },
+        series: [
+            {
+                name: 'Licenses',
+                data: {{ craft.pluginSales.reports.getMonthlyLicenseTotals()|json_encode|raw }},
+            },
+            {
+                name: 'Renewals',
+                data: {{ craft.pluginSales.reports.getMonthlyRenewalTotals()|json_encode|raw }},
+            },
+        ],
+        dataLabels: {
+            enabled: false
+        },
+        grid: {
+            row: {
+                colors: ['#f3f3f3', 'transparent'],
+                opacity: 0.5
+            },
+        },
+        xaxis: {
+            categories: {{ craft.pluginSales.reports.getMonths()|json_encode|raw }},
+            labels: {
+                format: 'MMM yyyy',
+                style: {
+                    colors: '#888',
+                },
+            }
+        },
+        yaxis: {
+            title: {
+                text: "USD"
+            },
+            labels: {
+                style: {
+                    colors: '#888',
+                },
+                formatter: function(val) {
+                    return Math.round(val);
+                },
+            }
+        },
+        legend: {
+            position: 'top',
+        },
+    };
+
+    var chart = new ApexCharts(document.querySelector("#chart-license-renewals"), options);
+    chart.render();
+
+{% endjs %}

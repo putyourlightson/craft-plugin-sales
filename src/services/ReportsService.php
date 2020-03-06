@@ -7,23 +7,42 @@ namespace putyourlightson\pluginsales\services;
 
 use Craft;
 use craft\base\Component;
+use DateInterval;
+use DateTime;
 use putyourlightson\pluginsales\records\SaleRecord;
 use yii\db\ActiveQuery;
 
 /**
- * @property null|array $firstMonth
- * @property null|array $lastMonth
+ *
+ * @property string $salesData
  * @property array $monthlyTotals
+ * @property array $monthlyLicenseTotals
+ * @property array $monthlyRenewalTotals
+ * @property array $months
  */
 class ReportsService extends Component
 {
+    const MONTH_FORMAT = 'M Y';
+
+    const CACHE_KEYS = [
+        'salesData' => 'pluginSales.salesData',
+        'monthlyTotals' => 'pluginSales.monthlyTotals',
+        'monthlyLicenseTotals' => 'pluginSales.monthlyLicenseTotals',
+        'monthlyRenewalTotals' => 'pluginSales.monthlyRenewalTotals',
+        'months' => 'pluginSales.months',
+    ];
+
     /**
      * Returns cached plugin sale data.
      *
      * @return string
      */
-    public function getSalesData()
+    public function getSalesData(): string
     {
+        if ($data = Craft::$app->getCache()->get(self::CACHE_KEYS['salesData'])) {
+            return $data;
+        }
+
         $data = [];
 
         $sales = SaleRecord::find()
@@ -45,7 +64,27 @@ class ReportsService extends Component
 
         $data = json_encode($data);
 
+        Craft::$app->getCache()->set(self::CACHE_KEYS['salesData'], $data);
+
         return $data;
+    }
+
+    /**
+     * Returns monthly totals.
+     *
+     * @return array
+     */
+    public function getMonthlyTotals(): array
+    {
+        if ($monthlyTotals = Craft::$app->getCache()->get(self::CACHE_KEYS['monthlyTotals'])) {
+            return $monthlyTotals;
+        }
+
+        $monthlyTotals = $this->_getMonthlyTotalsQuery()->all();
+
+        Craft::$app->getCache()->set(self::CACHE_KEYS['monthlyTotals'], $monthlyTotals);
+
+        return $monthlyTotals;
     }
 
     /**
@@ -55,9 +94,15 @@ class ReportsService extends Component
      */
     public function getMonthlyLicenseTotals(): array
     {
-        return $this->_getMonthlyTotalsQuery()
-            ->where(['renewal' => false])
-            ->all();
+        if ($monthlyTotals = Craft::$app->getCache()->get(self::CACHE_KEYS['monthlyLicenseTotals'])) {
+            return $monthlyTotals;
+        }
+
+        $monthlyTotals = $this->_getMonthlyLicenseRenewalTotals(false);
+
+        Craft::$app->getCache()->set(self::CACHE_KEYS['monthlyLicenseTotals'], $monthlyTotals);
+
+        return $monthlyTotals;
     }
 
     /**
@@ -67,37 +112,53 @@ class ReportsService extends Component
      */
     public function getMonthlyRenewalTotals(): array
     {
-        return $this->_getMonthlyTotalsQuery()
-            ->where(['renewal' => true])
-            ->all();
+        if ($monthlyTotals = Craft::$app->getCache()->get(self::CACHE_KEYS['monthlyRenewalTotals'])) {
+            return $monthlyTotals;
+        }
+
+        $monthlyTotals = $this->_getMonthlyLicenseRenewalTotals(true);
+
+        Craft::$app->getCache()->set(self::CACHE_KEYS['monthlyRenewalTotals'], $monthlyTotals);
+
+        return $monthlyTotals;
     }
 
     /**
-     * Returns first month of plugin sales.
+     * Returns all months of plugin sales.
      *
-     * @return array|null
+     * @return array
      */
-    public function getFirstMonth()
+    public function getMonths()
     {
-        return $this->_getMonthQuery()
-            ->orderBy(['YEAR(dateSold)' => SORT_ASC, 'MONTH(dateSold)' => SORT_ASC])
-            ->one();
+        if ($months = Craft::$app->getCache()->get(self::CACHE_KEYS['months'])) {
+            return $months;
+        }
+
+        $monthlyTotals = $this->getMonthlyTotals();
+
+        if (empty($monthlyTotals)) {
+            return [];
+        }
+
+        $firstMonth = reset($monthlyTotals);
+        $lastMonth = end($monthlyTotals);
+        $currentMonth = new DateTime($firstMonth['year'].'-'.$firstMonth['month'].'-1');
+        $months = [];
+
+        while ($currentMonth->format('n') <= $lastMonth['month']
+            || $currentMonth->format('Y') < $lastMonth['year']
+        ) {
+            $months[] = $currentMonth->format(self::MONTH_FORMAT);
+            $currentMonth->add(new DateInterval('P1M'));
+        }
+
+        Craft::$app->getCache()->set(self::CACHE_KEYS['months'], $months);
+
+        return $months;
     }
 
     /**
-     * Returns last month of plugin sales.
-     *
-     * @return array|null
-     */
-    public function getLastMonth()
-    {
-        return $this->_getMonthQuery()
-            ->orderBy(['YEAR(dateSold)' => SORT_DESC, 'MONTH(dateSold)' => SORT_DESC])
-            ->one();
-    }
-
-    /**
-     * Returns monthly license totals query.
+     * Returns monthly totals query.
      *
      * @return ActiveQuery
      */
@@ -117,14 +178,38 @@ class ReportsService extends Component
     }
 
     /**
-     * Returns month query.
+     * Returns monthly license or renewal totals.
      *
-     * @return ActiveQuery
+     * @param bool $renewal
+     *
+     * @return array
      */
-    private function _getMonthQuery(): ActiveQuery
+    private function _getMonthlyLicenseRenewalTotals(bool $renewal): array
     {
-        return SaleRecord::find()
-            ->select(['MONTH(dateSold) as month', 'YEAR(dateSold) as year'])
-            ->asArray();
+        $monthlyTotals = $this->_getMonthlyTotalsQuery()
+            ->where(['renewal' => $renewal])
+            ->all();
+
+        $allMonthlyTotals = [];
+        $currentMonthIndex = 0;
+
+        foreach ($this->getMonths() as $month) {
+            if ($currentMonthIndex >= count($monthlyTotals)) {
+                break;
+            }
+
+            $monthlyTotal = $monthlyTotals[$currentMonthIndex];
+            $currentMonth = new DateTime($monthlyTotal['year'].'-'.$monthlyTotal['month'].'-1');
+
+            if ($currentMonth->format(self::MONTH_FORMAT) == $month) {
+                $allMonthlyTotals[] = $monthlyTotal['grossAmount'];
+                $currentMonthIndex++;
+            }
+            else {
+                $allMonthlyTotals[] = 0;
+            }
+        }
+
+        return $allMonthlyTotals;
     }
 }

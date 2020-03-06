@@ -2,120 +2,39 @@
 
 {% set title = "Plugin Sales"|t('plugin-sales') %}
 
-{% do view.registerCssFile('https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css') %}
-{% do view.registerCssFile('https://cdn.datatables.net/buttons/1.6.1/css/buttons.dataTables.min.css') %}
-{% do view.registerJsFile('https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js', {
-    depends: ['craft\\web\\assets\\cp\\CpAsset']
-}) %}
-{% do view.registerJsFile('https://cdn.datatables.net/buttons/1.6.1/js/dataTables.buttons.min.js', {
-    depends: ['craft\\web\\assets\\cp\\CpAsset']
-}) %}
-{% do view.registerJsFile('https://cdn.jsdelivr.net/npm/apexcharts') %}
+{% do view.registerAssetBundle('putyourlightson\\pluginsales\\assets\\ReportsAsset') %}
 
 
 {% block content %}
 
-    <div id="chart" style="width:100%"></div>
+    {% include 'plugin-sales/_charts/monthly-totals' %}
+    {% include 'plugin-sales/_charts/licenses-renewals' %}
 
-    <br><br>
-
-    <table id="plugin-sales" style="width:100%">
-        <thead>
-            <tr>
-                <th>{{ 'Plugin'|t('plugin-sales') }}</th>
-                <th>{{ 'Edition'|t('plugin-sales') }}</th>
-                <th>{{ 'Type'|t('plugin-sales') }}</th>
-                <th>{{ 'Customer'|t('plugin-sales') }}</th>
-                <th>{{ 'Gross Amount'|t('plugin-sales') }}</th>
-                <th>{{ 'Net Amount'|t('plugin-sales') }}</th>
-                <th>{{ 'Date'|t('plugin-sales') }}</th>
-            </tr>
-        </thead>
-        <tbody>
-        </tbody>
-    </table>
+    <div class="chart">
+        <table id="plugin-sales" class="display fullwidth chart">
+            <thead>
+                <tr>
+                    <th>{{ 'Plugin'|t('plugin-sales') }}</th>
+                    <th>{{ 'Edition'|t('plugin-sales') }}</th>
+                    <th>{{ 'Type'|t('plugin-sales') }}</th>
+                    <th>{{ 'Customer'|t('plugin-sales') }}</th>
+                    <th>{{ 'Gross Amount'|t('plugin-sales') }}</th>
+                    <th>{{ 'Net Amount'|t('plugin-sales') }}</th>
+                    <th>{{ 'Date'|t('plugin-sales') }}</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
 
 {% endblock %}
 
+
 {% js %}
 
-{#    $('#plugin-sales').DataTable({#}
-{#        data: {{ craft.pluginSales.reports.getSalesData()|raw }},#}
-{#    });#}
-
-    {% set monthlyLicenseTotals = craft.pluginSales.reports.getMonthlyLicenseTotals() %}
-    {% set monthlyRenewalTotals = craft.pluginSales.reports.getMonthlyRenewalTotals() %}
-
-    var options = {
-        series: [
-            {
-                name: 'Licenses',
-                data: [
-                    {% for monthlyTotal in monthlyLicenseTotals %}
-                        [
-                            '{{ monthlyTotal.month }}/1/{{ monthlyTotal.year }}',
-                            {{ monthlyTotal.grossAmount }},
-                        ],
-                    {% endfor %}
-                ]
-            },
-            {
-                name: 'Renewals',
-                data: [
-                    {% for monthlyTotal in monthlyRenewalTotals %}
-                        [
-                            '{{ monthlyTotal.month }}/1/{{ monthlyTotal.year }}',
-                            {{ monthlyTotal.grossAmount }},
-                        ],
-                    {% endfor %}
-                ]
-            },
-        ],
-        chart: {
-            height: 400,
-            type: 'bar',
-            stacked: true,
-        },
-        title: {
-            text: 'Gross Amount',
-        },
-        dataLabels: {
-            enabled: false
-        },
-        grid: {
-            row: {
-                colors: ['#f3f3f3', 'transparent'], // takes an array which will be repeated on columns
-                opacity: 0.5
-            },
-        },
-        xaxis: {
-            type: 'datetime',
-            labels: {
-                format: 'MMM yyyy',
-                style: {
-                    colors: '#888',
-                },
-            }
-        },
-        yaxis: {
-            title: {
-                text: "USD"
-            },
-            labels: {
-                style: {
-                    colors: '#888',
-                },
-                formatter: function(val) {
-                    return Math.round(val);
-                },
-            }
-        },
-        legend: {
-            position: 'top',
-        },
-    };
-
-    var chart = new ApexCharts(document.querySelector("#chart"), options);
-    chart.render();
+    $('#plugin-sales').DataTable({
+        data: {{ craft.pluginSales.reports.getSalesData()|raw }},
+    });
 
 {% endjs %}
