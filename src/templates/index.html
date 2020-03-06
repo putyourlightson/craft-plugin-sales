@@ -7,6 +7,11 @@
 
 {% block content %}
 
+    <div class="flex">
+        <div class="btn">Export to CSV</div>
+        <div class="btn">Export to CSV</div>
+    </div>
+
     {% include 'plugin-sales/_charts/monthly-totals' %}
     {% include 'plugin-sales/_charts/licenses-renewals' %}
 
@@ -35,6 +40,7 @@
 
     $('#plugin-sales').DataTable({
         data: {{ craft.pluginSales.reports.getSalesData()|raw }},
+        order: [[ 6, 'desc' ]],
     });
 
 {% endjs %}
