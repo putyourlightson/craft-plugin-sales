@@ -6,6 +6,8 @@
 namespace putyourlightson\pluginsales\migrations;
 
 use craft\db\Migration;
+use putyourlightson\pluginsales\PluginSales;
+use putyourlightson\pluginsales\records\FetchRecord;
 use putyourlightson\pluginsales\records\PluginRecord;
 use putyourlightson\pluginsales\records\SaleRecord;
 
@@ -16,6 +18,16 @@ class Install extends Migration
      */
     public function safeUp(): bool
     {
+        if (!$this->db->tableExists(FetchRecord::tableName())) {
+            $this->createTable(FetchRecord::tableName(), [
+                'id' => $this->primaryKey(),
+                'fetched' => $this->integer()->notNull(),
+                'dateCreated' => $this->dateTime()->notNull(),
+                'dateUpdated' => $this->dateTime()->notNull(),
+                'uid' => $this->uid(),
+            ]);
+        }
+
         if (!$this->db->tableExists(PluginRecord::tableName())) {
             $this->createTable(PluginRecord::tableName(), [
                 'id' => $this->primaryKey(),
@@ -57,6 +69,9 @@ class Install extends Migration
     {
         $this->dropTableIfExists(SaleRecord::tableName());
         $this->dropTableIfExists(PluginRecord::tableName());
+        $this->dropTableIfExists(FetchRecord::tableName());
+
+        PluginSales::$plugin->reports->clearCachedReports();
 
         return true;
     }

@@ -1,0 +1,55 @@
+{% set totals = craft.pluginSales.reports.getTotals() %}
+{% set pluginTotals = craft.pluginSales.reports.getPluginTotals() %}
+{% set licenseRenewalTotals = craft.pluginSales.reports.getLicenseRenewalTotals() %}
+
+<div class="flex" style="justify-content: space-evenly;">
+    <div id="chart-plugins-pie"></div>
+    <div id="chart-license-renewals-pie"></div>
+    <div id="chart-net-commission-pie"></div>
+</div>
+
+{% js %}
+
+    var options = {
+        chart: {
+            height: 300,
+            type: 'donut',
+        },
+        dataLabels: {
+            enabled: false
+        },
+        legend: {
+            position: 'top',
+        },
+    };
+
+    options.series = [
+        {{ totals.netAmount }},
+        {{ totals.grossAmount - totals.netAmount }},
+    ];
+    options.labels = ['Net Profit', 'Commission'];
+    var chart = new ApexCharts(document.querySelector("#chart-net-commission-pie"), options);
+    chart.render();
+
+    options.series = [
+        {% for key, value in pluginTotals %}
+            {{ value }},
+        {% endfor %}
+    ];
+    options.labels = [
+        {% for key, value in pluginTotals %}
+            '{{ key }}',
+        {% endfor %}
+    ];
+    var chart = new ApexCharts(document.querySelector("#chart-plugins-pie"), options);
+    chart.render();
+
+    options.series = [
+        {{ licenseRenewalTotals.licenses }},
+        {{ licenseRenewalTotals.renewals }},
+    ];
+    options.labels = ['Licenses', 'Renewals'];
+    var chart = new ApexCharts(document.querySelector("#chart-license-renewals-pie"), options);
+    chart.render();
+
+{% endjs %}

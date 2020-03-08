@@ -1,4 +1,7 @@
+{% set monthlyPluginTotals = craft.pluginSales.reports.getMonthlyPluginTotals() %}
+{% set monthlyLicenseRenewalTotals = craft.pluginSales.reports.getMonthlyLicenseRenewalTotals() %}
 
+<div id="chart-plugins" class="chart"></div>
 <div id="chart-license-renewals" class="chart"></div>
 
 
@@ -10,19 +13,6 @@
             type: 'bar',
             stacked: true,
         },
-        title: {
-            text: 'Licenses vs. Renewals',
-        },
-        series: [
-            {
-                name: 'Licenses',
-                data: {{ craft.pluginSales.reports.getMonthlyLicenseTotals()|json_encode|raw }},
-            },
-            {
-                name: 'Renewals',
-                data: {{ craft.pluginSales.reports.getMonthlyRenewalTotals()|json_encode|raw }},
-            },
-        ],
         dataLabels: {
             enabled: false
         },
@@ -59,6 +49,31 @@
         },
     };
 
+    options.title = {
+        text: 'Plugin Sales',
+    };
+    options.series = [
+        {% for key, values in monthlyPluginTotals %}
+            {
+                name: '{{ key }}',
+                data: {{ values|json_encode|raw }},
+            },
+        {% endfor %}
+    ];
+    var chart = new ApexCharts(document.querySelector("#chart-plugins"), options);
+    chart.render();
+
+    options.title = {
+        text: 'Licenses vs. Renewals',
+    };
+    options.series = [
+        {% for key, values in monthlyLicenseRenewalTotals %}
+            {
+                name: '{{ key|capitalize }}',
+                data: {{ values|json_encode|raw }},
+            },
+        {% endfor %}
+    ];
     var chart = new ApexCharts(document.querySelector("#chart-license-renewals"), options);
     chart.render();
 

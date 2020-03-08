@@ -7,16 +7,45 @@
 
 {% block content %}
 
-    <div class="flex">
-        <div class="btn">Export to CSV</div>
-        <div class="btn">Export to CSV</div>
+    <div class="flex" style="justify-content: space-between; align-items: flex-start;">
+        <div>
+            <p>
+                {% set netAmount = craft.pluginSales.reports.getTotals().netAmount %}
+                {% if netAmount %}
+                    Congratulations, you have made a total net profit of
+                    <strong>${{ craft.pluginSales.reports.getTotals().netAmount|number_format(2) }}</strong>
+                {% else %}
+                    No earnings yet, keep on truckin!
+                {% endif %}
+            </p>
+            <p class="light">
+                {% set lastFetchedDate = craft.pluginSales.getLastFetchedDate() %}
+                {% if lastFetchedDate %}
+                    Plugin sales last fetched on {{ lastFetchedDate|datetime('long') }}
+                {% else %}
+                    Plugin sales not yet fetched.
+                {% endif %}
+            </p>
+            {% if lastFetchedDate and not craft.pluginSales.hasValidLicense() %}
+                <p class="warning">
+                    <strong>
+                        Please support development of this plugin by buying a license<a href="{{ url('plugin-store/plugin-sales') }}" class="go"></a>
+                    </strong>
+                </p>
+            {% endif %}
+        </div>
+        <div class="flex">
+            <a href="{{ actionUrl('plugin-sales/sales/refresh') }}" id="refresh" class="btn">Refresh Sales</a>
+            <a href="{{ actionUrl('plugin-sales/sales/export') }}" class="btn">Export to CSV</a>
+        </div>
     </div>
 
     {% include 'plugin-sales/_charts/monthly-totals' %}
-    {% include 'plugin-sales/_charts/licenses-renewals' %}
+    {% include 'plugin-sales/_charts/plugins-licenses-renewals' %}
+    {% include 'plugin-sales/_charts/pie-charts' %}
 
     <div class="chart">
-        <table id="plugin-sales" class="display fullwidth chart">
+        <table id="plugin-sales" class="fullwidth chart stripe">
             <thead>
                 <tr>
                     <th>{{ 'Plugin'|t('plugin-sales') }}</th>
@@ -38,9 +67,31 @@
 
 {% js %}
 
+    $('#refresh').click(function() {
+        $(this).replaceWith('<div class="spinner" style="width: 110px;"></div>');
+    });
+
     $('#plugin-sales').DataTable({
         data: {{ craft.pluginSales.reports.getSalesData()|raw }},
         order: [[ 6, 'desc' ]],
+        deferRender: true,
+        language: {
+            lengthMenu: '_MENU_ sales displayed',
+            search: '',
+            info: '_START_-_END_ of _TOTAL_ sales',
+        },
     });
+
+    $('#plugin-sales_wrapper select').wrap('<div class="select"></div>');
+
+    $('#plugin-sales_filter input').addClass('text fullwidth')
+        .attr('autocomplete', 'off')
+        .attr('placeholder', 'Search')
+        .wrap('<div class="flex-grow texticon search icon clearable"></div>');
+
+    $('#plugin-sales_wrapper').prepend('<div class="toolbar"></div>');
+
+    $('#plugin-sales_length').appendTo('#plugin-sales_wrapper .toolbar');
+    $('#plugin-sales_filter').appendTo('#plugin-sales_wrapper .toolbar');
 
 {% endjs %}

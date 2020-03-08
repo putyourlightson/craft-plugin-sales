@@ -4,20 +4,18 @@
 {{ forms.autosuggestField({
     label: "Craft ID Email"|t('plugin-sales'),
     name: 'email',
-    instructions: ""|t('plugin-sales'),
     suggestEnvVars: true,
     value: settings.email,
     errors: settings.getErrors('email'),
-	required: true,
-	first: true,
+    required: true,
+    first: true,
 }) }}
 
 {{ forms.autosuggestField({
-    label: "Craft ID API Key"|t('plugin-sales'),
-    name: 'apiKey',
-    instructions: ""|t('plugin-sales'),
+    label: "Craft ID Password"|t('plugin-sales'),
+    name: 'password',
     suggestEnvVars: true,
-    value: settings.apiKey,
-    errors: settings.getErrors('apiKey'),
-	required: true,
+    value: settings.password,
+    errors: settings.getErrors('password'),
+    required: true,
 }) }}

@@ -8,27 +8,30 @@ namespace putyourlightson\pluginsales\services;
 use Craft;
 use craft\base\Component;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\GuzzleException;
 use putyourlightson\pluginsales\models\SaleModel;
 use putyourlightson\pluginsales\PluginSales;
+use putyourlightson\pluginsales\records\FetchRecord;
 use putyourlightson\pluginsales\records\SaleRecord;
 use yii\web\ForbiddenHttpException;
 
+/**
+ * @property SaleModel[] $sales
+ * @property null|string|false $lastFetchedDate
+ */
 class SalesService extends Component
 {
     /**
      * Returns plugin sales.
      *
-     * @param int|null $limit
-     *
      * @return SaleModel[]
      */
-    public function get($limit = null): array
+    public function getSales(): array
     {
         $saleModels = [];
 
         $saleRecords = SaleRecord::find()
             ->with('plugin')
-            ->limit($limit)
             ->all();
 
         foreach ($saleRecords as $saleRecord) {
@@ -46,11 +49,25 @@ class SalesService extends Component
     }
 
     /**
+     * Returns last fetched date.
+     *
+     * @return string|null|false
+     */
+    public function getLastFetchedDate()
+    {
+        return FetchRecord::find()
+            ->select(['dateCreated'])
+            ->orderBy(['dateCreated' => SORT_DESC])
+            ->scalar();
+    }
+
+    /**
      * Refreshes plugin sales.
      *
+     * @return bool
      * @throws ForbiddenHttpException
      */
-    public function refresh()
+    public function refresh(): bool
     {
         $client = new Client([
             'base_uri' => 'https://id.craftcms.com/',
@@ -80,67 +97,78 @@ class SalesService extends Component
             'multipart' => [
                 [
                     'name' => 'loginName',
-                    'contents' => 'putyourlightson',
+                    'contents' => PluginSales::$plugin->settings->email,
                 ],
                 [
                     'name' => 'password',
-                    'contents' => 'ETBRXGXZfZZTT3mxMKVYmRGG',
+                    'contents' => PluginSales::$plugin->settings->password,
                 ],
             ],
         ]);
 
         // Get total
-        $response = $client->get('index.php?p=actions//craftnet/id/sales/get-sales&per_page=1', [
-            'headers' => $headers,
-        ]);
+        try {
+            $response = $client->get('index.php?p=actions//craftnet/id/sales/get-sales&per_page=1', [
+                'headers' => $headers,
+            ]);
+        }
+        catch (GuzzleException $exception) {
+            return false;
+        }
 
         $result = json_decode($response->getBody(), true);
         $total = $result['total'];
         $count = SaleRecord::find()->count();
+        $sales = [];
 
-        if ($total <= $count) {
-            return;
+        if ($total > $count) {
+            $limit = $total - $count;
+
+            // Get new sales
+            $response = $client->get('index.php?p=actions//craftnet/id/sales/get-sales&per_page='.$limit, [
+                'headers' => $headers,
+            ]);
+
+            $result = json_decode($response->getBody(), true);
+            $sales = $result['data'];
+
+            // Save sale records
+            foreach ($sales as $sale) {
+                PluginSales::$plugin->plugins->createIfNotExists(
+                    $sale['plugin']['id'],
+                    $sale['plugin']['name'],
+                    $sale['plugin']['hasMultipleEditions']
+                );
+
+                $saleRecord = SaleRecord::find()
+                    ->where(['saleId' => $sale['id']])
+                    ->one();
+
+                if ($saleRecord === null) {
+                    $saleRecord = new SaleRecord();
+                }
+
+                $saleRecord->setAttributes([
+                    'saleId' => $sale['id'],
+                    'pluginId' => $sale['plugin']['id'],
+                    'edition' => $sale['edition']['handle'],
+                    'renewal' => ($sale['purchasableType'] == 'craftnet\\plugins\\PluginRenewal'),
+                    'grossAmount' => $sale['grossAmount'],
+                    'netAmount' => $sale['netAmount'],
+                    'email' => $sale['customer']['email'],
+                    'dateSold' => $sale['saleTime'],
+                ], false);
+
+                $saleRecord->save();
+            }
         }
 
-        $limit = $total - $count;
+        $fetchRecord = new FetchRecord();
+        $fetchRecord->fetched = count($sales);
+        $fetchRecord->save();
 
-        // Get new sales
-        $response = $client->get('index.php?p=actions//craftnet/id/sales/get-sales&per_page='.$limit, [
-            'headers' => $headers,
-        ]);
+        PluginSales::$plugin->reports->clearCachedReports();
 
-        $result = json_decode($response->getBody(), true);
-        $sales = $result['data'];
-
-        // Save sale records
-        foreach ($sales as $sale) {
-            if (empty($sale['plugin']['id'])) {
-                Craft::dd($sale);
-            }
-            PluginSales::$plugin->plugins->create($sale['plugin']['id'], $sale['plugin']['name'], $sale['plugin']['hasMultipleEditions']);
-
-            $saleRecord = SaleRecord::find()
-                ->where(['saleId' => $sale['id']])
-                ->one();
-
-            if ($saleRecord === null) {
-                $saleRecord = new SaleRecord();
-            }
-
-            $saleRecord->setAttributes([
-                'saleId' => $sale['id'],
-                'pluginId' => $sale['plugin']['id'],
-                'edition' => $sale['edition']['handle'],
-                'renewal' => ($sale['purchasableType'] == 'craftnet\\plugins\\PluginRenewal'),
-                'grossAmount' => $sale['grossAmount'],
-                'netAmount' => $sale['netAmount'],
-                'email' => $sale['customer']['email'],
-                'dateSold' => $sale['saleTime'],
-            ], false);
-
-            $saleRecord->save();
-        }
-
-        Craft::$app->getCache()->delete(ReportsService::SALES_DATA_CACHE_KEY);
+        return true;
     }
 }

@@ -5,11 +5,8 @@
 
 namespace putyourlightson\pluginsales\variables;
 
-use Craft;
-use putyourlightson\pluginsales\models\SaleModel;
 use putyourlightson\pluginsales\PluginSales;
 use putyourlightson\pluginsales\services\ReportsService;
-use yii\web\ForbiddenHttpException;
 
 class PluginSalesVariable
 {
@@ -24,24 +21,22 @@ class PluginSalesVariable
     }
 
     /**
-     * Returns plugin sales.
+     * Returns last fetched date.
      *
-     * @param int|null $limit
-     *
-     * @return SaleModel[]
+     * @return string|null|false
      */
-    public function get($limit = null)
+    public function getLastFetchedDate()
     {
-        return PluginSales::$plugin->sales->get($limit);
+        return PluginSales::$plugin->sales->getLastFetchedDate();
     }
 
     /**
-     * Refreshes plugin sales.
+     * Returns whether the plugin has a valid license.
      *
-     * @throws ForbiddenHttpException
+     * @return bool
      */
-    public function refresh()
+    public function hasValidLicense()
     {
-        PluginSales::$plugin->sales->refresh();
+        return PluginSales::$plugin->hasValidLicense();
     }
 }

@@ -5,7 +5,6 @@
 
 namespace putyourlightson\pluginsales\models;
 
-use Craft;
 use craft\base\Model;
 use craft\behaviors\EnvAttributeParserBehavior;
 
@@ -15,7 +14,7 @@ class SettingsModel extends Model
      * @var string
      */
     public $email;
-    public $apiKey;
+    public $password;
 
     /**
      * @inheritdoc
@@ -25,7 +24,7 @@ class SettingsModel extends Model
         return [
             'parser' => [
                 'class' => EnvAttributeParserBehavior::class,
-                'attributes' => ['email', 'apiKey'],
+                'attributes' => ['email', 'password'],
             ],
         ];
     }
@@ -36,20 +35,8 @@ class SettingsModel extends Model
     public function rules()
     {
         return [
-            [['email', 'apiKey'], 'required'],
+            [['email', 'password'], 'required'],
             ['email', 'email']
         ];
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function attributeLabels(): array
-    {
-        $labels = parent::attributeLabels();
-
-        $labels['apiKey'] = Craft::t('plugin-sales', 'API Key');
-
-        return $labels;
     }
 }

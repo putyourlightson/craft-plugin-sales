@@ -9,6 +9,10 @@ use craft\base\Component;
 use putyourlightson\pluginsales\models\PluginModel;
 use putyourlightson\pluginsales\records\PluginRecord;
 
+/**
+ * @property PluginModel[] $plugins
+ * @property string[] $names
+ */
 class PluginsService extends Component
 {
     /**
@@ -19,14 +23,12 @@ class PluginsService extends Component
     /**
      * Returns plugins.
      *
-     * @param int|null $limit
-     *
      * @return PluginModel[]
      */
-    public function get(int $limit = null): array
+    public function getPlugins(): array
     {
         $pluginModels = [];
-        $pluginRecords = PluginRecord::find()->limit($limit)->all();
+        $pluginRecords = PluginRecord::find()->all();
 
         foreach ($pluginRecords as $pluginRecord) {
             $pluginModel = new PluginModel();
@@ -38,13 +40,25 @@ class PluginsService extends Component
     }
 
     /**
+     * Returns plugin names.
+     *
+     * @return string[]
+     */
+    public function getNames(): array
+    {
+        return PluginRecord::find()
+            ->select('name')
+            ->column();
+    }
+
+    /**
      * Creates a plugin if it doesn't already exist.
      *
      * @param int $id
      * @param string $name
      * @param bool $hasMultipleEditions
      */
-    public function create(int $id, string $name, bool $hasMultipleEditions)
+    public function createIfNotExists(int $id, string $name, bool $hasMultipleEditions)
     {
         if ($this->_pluginIds === null) {
             $this->_pluginIds = PluginRecord::find()->select('id')->column();

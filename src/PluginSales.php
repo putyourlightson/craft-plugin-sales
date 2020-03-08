@@ -7,8 +7,10 @@ namespace putyourlightson\pluginsales;
 
 use Craft;
 use craft\base\Plugin;
+use craft\services\Plugins;
 use craft\web\twig\variables\CraftVariable;
 use putyourlightson\pluginsales\models\SettingsModel;
+use putyourlightson\pluginsales\services\FetchService;
 use putyourlightson\pluginsales\services\PluginsService;
 use putyourlightson\pluginsales\services\ReportsService;
 use putyourlightson\pluginsales\services\SalesService;
@@ -16,6 +18,7 @@ use putyourlightson\pluginsales\variables\PluginSalesVariable;
 use yii\base\Event;
 
 /**
+ * @property FetchService $fetch
  * @property PluginsService $plugins
  * @property ReportsService $reports
  * @property SalesService $sales
@@ -45,6 +48,20 @@ class PluginSales extends Plugin
     }
 
     /**
+     * Returns whether the plugin has a valid license.
+     *
+     * @return bool
+     */
+    public function hasValidLicense()
+    {
+        $projectConfig = Craft::$app->getProjectConfig();
+        $configKey = Plugins::CONFIG_PLUGINS_KEY .'.'.$this->handle;
+        $data = $projectConfig->get($configKey) ?? $projectConfig->get($configKey, true);
+
+        return !empty($data['licenseKey']);
+    }
+
+    /**
      * @inheritdoc
      */
     protected function createSettingsModel(): SettingsModel
@@ -68,6 +85,7 @@ class PluginSales extends Plugin
     private function _registerComponents()
     {
         $this->setComponents([
+            'fetch' => FetchService::class,
             'plugins' => PluginsService::class,
             'reports' => ReportsService::class,
             'sales' => SalesService::class,
