@@ -1,3 +1,8 @@
+/* This ensures that things remain responsive */
+#content-container {
+    max-width: 100%;
+}
+
 .chart {
     margin: 25px 0;
 }
