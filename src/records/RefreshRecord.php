@@ -9,9 +9,9 @@ use craft\db\ActiveRecord;
 
 /**
  * @property int $id
- * @property int $fetched
+ * @property int $refreshed
  */
-class FetchRecord extends ActiveRecord
+class RefreshRecord extends ActiveRecord
 {
      /**
      * @inheritdoc
@@ -20,6 +20,6 @@ class FetchRecord extends ActiveRecord
      */
     public static function tableName(): string
     {
-        return '{{%pluginsales_fetches}}';
+        return '{{%pluginsales_refreshes}}';
     }
 }

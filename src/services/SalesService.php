@@ -11,13 +11,13 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use putyourlightson\pluginsales\models\SaleModel;
 use putyourlightson\pluginsales\PluginSales;
-use putyourlightson\pluginsales\records\FetchRecord;
+use putyourlightson\pluginsales\records\RefreshRecord;
 use putyourlightson\pluginsales\records\SaleRecord;
 use yii\web\ForbiddenHttpException;
 
 /**
  * @property SaleModel[] $sales
- * @property null|string|false $lastFetchedDate
+ * @property null|string|false $lastRefreshDate
  */
 class SalesService extends Component
 {
@@ -49,13 +49,13 @@ class SalesService extends Component
     }
 
     /**
-     * Returns last fetched date.
+     * Returns last refresh date.
      *
      * @return string|null|false
      */
-    public function getLastFetchedDate()
+    public function getLastRefreshDate()
     {
-        return FetchRecord::find()
+        return RefreshRecord::find()
             ->select(['dateCreated'])
             ->orderBy(['dateCreated' => SORT_DESC])
             ->scalar();
@@ -163,9 +163,9 @@ class SalesService extends Component
             }
         }
 
-        $fetchRecord = new FetchRecord();
-        $fetchRecord->fetched = count($sales);
-        $fetchRecord->save();
+        $refreshRecord = new RefreshRecord();
+        $refreshRecord->refreshed = count($sales);
+        $refreshRecord->save();
 
         return true;
     }

@@ -13,10 +13,9 @@ use craft\services\Plugins;
 use craft\web\twig\variables\CraftVariable;
 use putyourlightson\pluginsales\jobs\RefreshSalesJob;
 use putyourlightson\pluginsales\models\SettingsModel;
-use putyourlightson\pluginsales\records\FetchRecord;
+use putyourlightson\pluginsales\records\RefreshRecord;
 use putyourlightson\pluginsales\records\PluginRecord;
 use putyourlightson\pluginsales\records\SaleRecord;
-use putyourlightson\pluginsales\services\FetchService;
 use putyourlightson\pluginsales\services\PluginsService;
 use putyourlightson\pluginsales\services\ReportsService;
 use putyourlightson\pluginsales\services\SalesService;
@@ -24,7 +23,6 @@ use putyourlightson\pluginsales\variables\PluginSalesVariable;
 use yii\base\Event;
 
 /**
- * @property FetchService $fetch
  * @property PluginsService $plugins
  * @property ReportsService $reports
  * @property SalesService $sales
@@ -93,7 +91,6 @@ class PluginSales extends Plugin
     private function _registerComponents()
     {
         $this->setComponents([
-            'fetch' => FetchService::class,
             'plugins' => PluginsService::class,
             'reports' => ReportsService::class,
             'sales' => SalesService::class,
@@ -141,7 +138,7 @@ class PluginSales extends Plugin
                     // Clear all tables
                     SaleRecord::deleteAll();
                     PluginRecord::deleteAll();
-                    FetchRecord::deleteAll();
+                    RefreshRecord::deleteAll();
 
                     // Create queue job
                     Craft::$app->getQueue()->push(new RefreshSalesJob());

@@ -21,13 +21,13 @@ class PluginSalesVariable
     }
 
     /**
-     * Returns last fetched date.
+     * Returns last refresh date.
      *
      * @return string|null|false
      */
-    public function getLastFetchedDate()
+    public function getLastRefreshDate()
     {
-        return PluginSales::$plugin->sales->getLastFetchedDate();
+        return PluginSales::$plugin->sales->getLastRefreshDate();
     }
 
     /**

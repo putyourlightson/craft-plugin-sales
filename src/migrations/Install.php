@@ -6,8 +6,7 @@
 namespace putyourlightson\pluginsales\migrations;
 
 use craft\db\Migration;
-use putyourlightson\pluginsales\PluginSales;
-use putyourlightson\pluginsales\records\FetchRecord;
+use putyourlightson\pluginsales\records\RefreshRecord;
 use putyourlightson\pluginsales\records\PluginRecord;
 use putyourlightson\pluginsales\records\SaleRecord;
 
@@ -18,10 +17,10 @@ class Install extends Migration
      */
     public function safeUp(): bool
     {
-        if (!$this->db->tableExists(FetchRecord::tableName())) {
-            $this->createTable(FetchRecord::tableName(), [
+        if (!$this->db->tableExists(RefreshRecord::tableName())) {
+            $this->createTable(RefreshRecord::tableName(), [
                 'id' => $this->primaryKey(),
-                'fetched' => $this->integer()->notNull(),
+                'refreshed' => $this->integer()->notNull(),
                 'dateCreated' => $this->dateTime()->notNull(),
                 'dateUpdated' => $this->dateTime()->notNull(),
                 'uid' => $this->uid(),
@@ -47,7 +46,6 @@ class Install extends Migration
                 'edition' => $this->string(),
                 'renewal' => $this->boolean(),
                 'email' => $this->string(),
-                'edition' => $this->string(),
                 'grossAmount' => $this->double()->notNull(),
                 'netAmount' => $this->double()->notNull(),
                 'dateSold' => $this->dateTime()->notNull(),
@@ -69,7 +67,7 @@ class Install extends Migration
     {
         $this->dropTableIfExists(SaleRecord::tableName());
         $this->dropTableIfExists(PluginRecord::tableName());
-        $this->dropTableIfExists(FetchRecord::tableName());
+        $this->dropTableIfExists(RefreshRecord::tableName());
 
         return true;
     }

@@ -31,14 +31,14 @@
                 {% endif %}
             </p>
             <p class="light">
-                {% set lastFetchedDate = craft.pluginSales.getLastFetchedDate(start, end) %}
-                {% if lastFetchedDate %}
-                    Plugin sales last refreshed on {{ lastFetchedDate|datetime('long') }}
+                {% set lastRefreshDate = craft.pluginSales.getLastRefreshDate(start, end) %}
+                {% if lastRefreshDate %}
+                    Plugin sales last refreshed on {{ lastRefreshDate|datetime('long') }}
                 {% else %}
                     Plugin sales not yet refreshed.
                 {% endif %}
             </p>
-            {% if netAmount and lastFetchedDate and not craft.pluginSales.hasValidLicense() %}
+            {% if netAmount and lastRefreshDate and not craft.pluginSales.hasValidLicense() %}
                 <p class="warning">
                     <strong>
                         Please support development of this plugin by buying a license<a href="{{ url('plugin-store/buy/plugin-sales/standard') }}" class="go"></a>

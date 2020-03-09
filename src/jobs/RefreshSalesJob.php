@@ -16,9 +16,6 @@ class RefreshSalesJob extends BaseJob
 
     /**
      * @inheritdoc
-     *
-     * @throws Exception
-     * @throws Throwable
      */
     public function execute($queue)
     {
