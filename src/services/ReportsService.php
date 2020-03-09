@@ -290,15 +290,19 @@ class ReportsService extends Component
             'COUNT(*) as count',
             'ROUND(SUM(grossAmount), 2) as grossAmount',
             'ROUND(SUM(netAmount), 2) as netAmount',
+            'MONTH(dateSold) as month',
+            'YEAR(dateSold) as year',
         ];
 
+        // Special format for postgres
         if (Craft::$app->getDb()->getIsPgsql()) {
-            $select[] = 'EXTRACT(month from dateSold) as month';
-            $select[] = 'EXTRACT(year from dateSold) as year';
-        }
-        else {
-            $select[] = 'MONTH(dateSold) as month';
-            $select[] = 'YEAR(dateSold) as year';
+            $select = [
+                'COUNT(*) as count',
+                'ROUND(SUM("grossAmount")::numeric, 2) as grossAmount',
+                'ROUND(SUM("netAmount")::numeric, 2) as netAmount',
+                'EXTRACT(month from "dateSold") as month',
+                'EXTRACT(year from "dateSold") as year',
+            ];
         }
 
         $query = SaleRecord::find()

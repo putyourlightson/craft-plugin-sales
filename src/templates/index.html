@@ -17,9 +17,9 @@
             <p>
                 {% if netAmount %}
                     {% if not start and not end %}
-                        Congratulations!! You’ve made a total net profit of
+                        Congratulations!! You’ve generated net sales in the amount of
                     {% else %}
-                        You made a net profit during this period of
+                        You generated net sales during this period in the amount of
                     {% endif %}
                     <strong>${{ netAmount|number_format(2) }}</strong>
                 {% else %}

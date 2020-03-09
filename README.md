@@ -1,6 +1,10 @@
+<p align="center"><img width="130" src="https://putyourlightson.com/assets/logos/plugin-sales.svg"></p>
+
 # Plugin Sales for Craft CMS 3
 
-Plugin sales reports in your control panel.
+This plugin shows you your Craft CMS plugin sales in the control panel.
+
+![Plugin sales](https://putyourlightson.com/assets/images/plugin-sales-1.png)  
 
 ## Documentation
 

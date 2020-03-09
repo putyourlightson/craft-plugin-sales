@@ -1,6 +1,6 @@
 {
     "name": "putyourlightson/craft-plugin-sales",
-    "description": "Plugin sales reports.",
+    "description": "See your Craft CMS plugin sales in the control panel.",
     "version": "0.9.0",
     "type": "craft-plugin",
     "homepage": "https://putyourlightson.com/plugins/plugin-sales",
