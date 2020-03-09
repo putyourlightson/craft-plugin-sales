@@ -71,8 +71,6 @@ class Install extends Migration
         $this->dropTableIfExists(PluginRecord::tableName());
         $this->dropTableIfExists(FetchRecord::tableName());
 
-        PluginSales::$plugin->reports->clearCachedReports();
-
         return true;
     }
 }

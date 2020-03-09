@@ -7,9 +7,15 @@ namespace putyourlightson\pluginsales;
 
 use Craft;
 use craft\base\Plugin;
+use craft\events\PluginEvent;
+use craft\helpers\UrlHelper;
 use craft\services\Plugins;
 use craft\web\twig\variables\CraftVariable;
+use putyourlightson\pluginsales\jobs\RefreshSalesJob;
 use putyourlightson\pluginsales\models\SettingsModel;
+use putyourlightson\pluginsales\records\FetchRecord;
+use putyourlightson\pluginsales\records\PluginRecord;
+use putyourlightson\pluginsales\records\SaleRecord;
 use putyourlightson\pluginsales\services\FetchService;
 use putyourlightson\pluginsales\services\PluginsService;
 use putyourlightson\pluginsales\services\ReportsService;
@@ -45,6 +51,8 @@ class PluginSales extends Plugin
 
         $this->_registerComponents();
         $this->_registerVariables();
+        $this->_registerRedirectAfterInstall();
+        $this->_registerRefreshAfterSettingsSaved();
     }
 
     /**
@@ -80,7 +88,7 @@ class PluginSales extends Plugin
     }
 
     /**
-     * Registers the components
+     * Registers the components.
      */
     private function _registerComponents()
     {
@@ -93,7 +101,7 @@ class PluginSales extends Plugin
     }
 
     /**
-     * Registers the variables
+     * Registers the variables.
      */
     private function _registerVariables()
     {
@@ -102,6 +110,42 @@ class PluginSales extends Plugin
                 /** @var CraftVariable $variable */
                 $variable = $event->sender;
                 $variable->set('pluginSales', PluginSalesVariable::class);
+            }
+        );
+    }
+
+    /**
+     * Registers redirect after install.
+     */
+    private function _registerRedirectAfterInstall()
+    {
+        Event::on(Plugins::class, Plugins::EVENT_AFTER_INSTALL_PLUGIN,
+            function(PluginEvent $event) {
+                if ($event->plugin === $this) {
+                    Craft::$app->getResponse()->redirect(
+                        UrlHelper::cpUrl('settings/plugins/plugin-sales')
+                    )->send();
+                }
+            }
+        );
+    }
+
+    /**
+     * Registers a refresh after settings are saved.
+     */
+    private function _registerRefreshAfterSettingsSaved()
+    {
+        Event::on(Plugins::class, Plugins::EVENT_AFTER_SAVE_PLUGIN_SETTINGS,
+            function(PluginEvent $event) {
+                if ($event->plugin === $this) {
+                    // Clear all tables
+                    SaleRecord::deleteAll();
+                    PluginRecord::deleteAll();
+                    FetchRecord::deleteAll();
+
+                    // Create queue job
+                    Craft::$app->getQueue()->push(new RefreshSalesJob());
+                }
             }
         );
     }

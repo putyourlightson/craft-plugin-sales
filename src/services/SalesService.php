@@ -167,8 +167,6 @@ class SalesService extends Component
         $fetchRecord->fetched = count($sales);
         $fetchRecord->save();
 
-        PluginSales::$plugin->reports->clearCachedReports();
-
         return true;
     }
 }

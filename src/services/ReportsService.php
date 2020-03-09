@@ -286,16 +286,25 @@ class ReportsService extends Component
      */
     private function _getMonthlyTotalsQuery(string $start = null, string $end = null): ActiveQuery
     {
+        $select = [
+            'COUNT(*) as count',
+            'ROUND(SUM(grossAmount), 2) as grossAmount',
+            'ROUND(SUM(netAmount), 2) as netAmount',
+        ];
+
+        if (Craft::$app->getDb()->getIsPgsql()) {
+            $select[] = 'EXTRACT(month from dateSold) as month';
+            $select[] = 'EXTRACT(year from dateSold) as year';
+        }
+        else {
+            $select[] = 'MONTH(dateSold) as month';
+            $select[] = 'YEAR(dateSold) as year';
+        }
+
         $query = SaleRecord::find()
-            ->select([
-                'MONTH(dateSold) as month',
-                'YEAR(dateSold) as year',
-                'COUNT(*) as count',
-                'ROUND(SUM(grossAmount), 2) as grossAmount',
-                'ROUND(SUM(netAmount), 2) as netAmount',
-            ])
-            ->groupBy(['YEAR(dateSold)', 'MONTH(dateSold)'])
-            ->orderBy(['YEAR(dateSold)' => SORT_ASC, 'MONTH(dateSold)' => SORT_ASC])
+            ->select($select)
+            ->groupBy(['year', 'month'])
+            ->orderBy(['year' => SORT_ASC, 'month' => SORT_ASC])
             ->asArray();
 
         $query = $this->_applyDataRange($query, $start, $end);
