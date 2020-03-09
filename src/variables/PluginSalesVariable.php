@@ -31,6 +31,16 @@ class PluginSalesVariable
     }
 
     /**
+     * Returns colour palette
+     *
+     * @return array
+     */
+    public function getColourPalette(): array
+    {
+        return PluginSales::$plugin->settings->colourPalette;
+    }
+
+    /**
      * Returns whether the plugin has a valid license.
      *
      * @return bool

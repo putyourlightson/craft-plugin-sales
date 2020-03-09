@@ -85,6 +85,8 @@
 
 {% js %}
 
+    var palette = {{ craft.pluginSales.getColourPalette()|json_encode|raw }};
+
     {% set origin = '2018-04-01' %}
     var start = moment('{{ start ?? origin }}');
     var end = moment('{{ end ?? now|date('Y-m-d') }}');

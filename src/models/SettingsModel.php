@@ -14,7 +14,16 @@ class SettingsModel extends Model
      * @var string
      */
     public $email;
+
+    /**
+     * @var string
+     */
     public $password;
+
+    /**
+     * @var array
+     */
+    public $colourPalette = ['#008FFB', '#00E396', '#FEB019', '#FF4560', '#775DD0'];
 
     /**
      * @inheritdoc

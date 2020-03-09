@@ -1,8 +1,8 @@
-{% import "_includes/forms" as forms %}
-
+{% import '_includes/forms' as forms %}
 
 {{ forms.autosuggestField({
-    label: "Craft ID Email"|t('plugin-sales'),
+    label: 'Craft ID Email'|t('plugin-sales'),
+    instructions: 'The email address you use to login to your Craft ID account.'|t('plugin-sales'),
     name: 'email',
     suggestEnvVars: true,
     value: settings.email,
@@ -12,7 +12,8 @@
 }) }}
 
 {{ forms.autosuggestField({
-    label: "Craft ID Password"|t('plugin-sales'),
+    label: 'Craft ID Password'|t('plugin-sales'),
+    instructions: 'The password you use to login to your Craft ID account.'|t('plugin-sales'),
     name: 'password',
     suggestEnvVars: true,
     value: settings.password,
@@ -20,6 +21,23 @@
     required: true,
 }) }}
 
-<p class="light">
-    Saving these settings will trigger a job to refresh your plugin sales. Once complete they will be visible at the <a href="{{ url('plugin-sales') }}" class="go">plugin page</a>
+{% set input %}
+    <div class='flex'>
+        {% for i in 0..9 %}
+            {{ forms.color({
+                name: 'colourPalette[]',
+                value: settings.colourPalette[i] ?? '',
+            }) }}
+        {% endfor %}
+    </div>
+{% endset %}
+
+{{ forms.field({
+    label: 'Colour Palette'|t('plugin-sales'),
+    instructions: 'The colour palette to use for charts.'|t('plugin-sales'),
+    required: true,
+}, input) }}
+
+<p class='light'>
+    Saving these settings will trigger a job to refresh your plugin sales. Once complete they will be visible at the <a href='{{ url('plugin-sales') }}' class='go'>plugin page</a>
 </p>
