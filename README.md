@@ -2,7 +2,11 @@
 
 # Plugin Sales for Craft CMS 3
 
-This plugin shows you your Craft CMS plugin sales in the control panel.
+Beautiful charts and reports of *your* Craft CMS plugin sales in the control panel.
+
+- The most relevant charts for quick and insightful overviews.
+- Filter plugin sales by date ranges.
+- Export plugin sales in CSV format.
 
 ![Plugin sales](https://putyourlightson.com/assets/images/plugins/plugin-sales/plugin-sales.png)  
 
