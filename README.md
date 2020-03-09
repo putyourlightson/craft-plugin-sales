@@ -4,7 +4,7 @@
 
 This plugin shows you your Craft CMS plugin sales in the control panel.
 
-![Plugin sales](https://putyourlightson.com/assets/images/plugin-sales-1.png)  
+![Plugin sales](https://putyourlightson.com/assets/images/plugins/plugin-sales/plugin-sales.png)  
 
 ## Documentation
 
