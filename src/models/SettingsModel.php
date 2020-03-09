@@ -23,7 +23,7 @@ class SettingsModel extends Model
     /**
      * @var array
      */
-    public $colourPalette = ['#008FFB', '#00E396', '#FEB019', '#FF4560', '#775DD0'];
+    public $colourPalette = ['#008FFB', '#00E396', '#FEB019', '#FF4560', '#775DD0', '#1b24ae', '#4dc6cb'];
 
     /**
      * @inheritdoc
