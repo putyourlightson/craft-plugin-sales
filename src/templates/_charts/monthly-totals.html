@@ -2,7 +2,7 @@
 {% set netAmounts = [] %}
 {% set count = [] %}
 
-{% for monthlyTotal in craft.pluginSales.reports.getMonthlyTotals() %}
+{% for monthlyTotal in craft.pluginSales.reports.getMonthlyTotals(start, end) %}
     {% set grossAmounts = grossAmounts|merge([monthlyTotal.grossAmount]) %}
     {% set netAmounts = netAmounts|merge([monthlyTotal.netAmount]) %}
     {% set count = count|merge([monthlyTotal.count]) %}
@@ -19,7 +19,7 @@
             type: 'area',
         },
         title: {
-            text: 'Total Sales',
+            text: 'Monthly Sales',
         },
         series: [
             {
@@ -48,7 +48,7 @@
             },
         },
         xaxis: {
-            categories: {{ craft.pluginSales.reports.getMonths()|json_encode|raw }},
+            categories: {{ months|json_encode|raw }},
             labels: {
                 format: 'MMM yyyy',
                 style: {

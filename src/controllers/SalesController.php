@@ -34,7 +34,8 @@ class SalesController extends Controller
     {
         $csv = '';
 
-        $data = PluginSales::$plugin->reports->getSalesData();
+        $request = Craft::$app->getRequest();
+        $data = PluginSales::$plugin->reports->getSalesData($request->get('start'), $request->get('end'));
         $data = json_decode($data);
 
         foreach ($data as $row) {

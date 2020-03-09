@@ -1,7 +1,7 @@
 {
     "name": "putyourlightson/craft-plugin-sales",
     "description": "Plugin sales reports.",
-    "version": "0.1.0",
+    "version": "0.9.0",
     "type": "craft-plugin",
     "homepage": "https://putyourlightson.com/plugins/plugin-sales",
     "license": "proprietary",

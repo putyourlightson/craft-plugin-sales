@@ -1,5 +1,5 @@
-{% set monthlyPluginTotals = craft.pluginSales.reports.getMonthlyPluginTotals() %}
-{% set monthlyLicenseRenewalTotals = craft.pluginSales.reports.getMonthlyLicenseRenewalTotals() %}
+{% set monthlyPluginTotals = craft.pluginSales.reports.getMonthlyPluginTotals(start, end) %}
+{% set monthlyLicenseRenewalTotals = craft.pluginSales.reports.getMonthlyLicenseRenewalTotals(start, end) %}
 
 <div id="chart-plugins" class="chart"></div>
 <div id="chart-license-renewals" class="chart"></div>
@@ -23,7 +23,7 @@
             },
         },
         xaxis: {
-            categories: {{ craft.pluginSales.reports.getMonths()|json_encode|raw }},
+            categories: {{ months|json_encode|raw }},
             labels: {
                 format: 'MMM yyyy',
                 style: {

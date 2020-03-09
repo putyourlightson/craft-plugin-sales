@@ -25,36 +25,25 @@ class ReportsService extends Component
 {
     const MONTH_FORMAT = 'M Y';
 
-    const CACHE_KEYS = [
-        'salesData' => 'pluginSales.salesData',
-        'totals' => 'pluginSales.totals',
-        'pluginTotals' => 'pluginSales.pluginTotals',
-        'licenseRenewalTotals' => 'pluginSales.licenseRenewalTotals',
-        'months' => 'pluginSales.months',
-        'monthlyTotals' => 'pluginSales.monthlyTotals',
-        'monthlyPluginTotals' => 'pluginSales.monthlyPluginTotals',
-        'monthlyLicenseRenewalTotals' => 'pluginSales.monthlyLicenseRenewalTotals',
-    ];
-
     /**
-     * Returns cached plugin sale data.
+     * Returns plugin sales data.
+     *
+     * @param string|null $start
+     * @param string|null $end
      *
      * @return string
      */
-    public function getSalesData(): string
+    public function getSalesData(string $start = null, string $end = null): string
     {
-        if ($data = Craft::$app->getCache()->get(self::CACHE_KEYS['salesData'])) {
-            return $data;
-        }
-
         $data = [];
 
-        $sales = SaleRecord::find()
+        $query = SaleRecord::find()
             ->with('plugin')
-            ->orderBy(['dateSold' => SORT_DESC])
-            ->all();
+            ->orderBy(['dateSold' => SORT_DESC]);
 
-        foreach ($sales as $sale) {
+        $query = $this->_applyDataRange($query, $start, $end);
+
+        foreach ($query->all() as $sale) {
             $data[] = [
                 $sale->plugin->name,
                 ucfirst($sale->edition),
@@ -68,32 +57,27 @@ class ReportsService extends Component
 
         $data = json_encode($data);
 
-        Craft::$app->getCache()->set(self::CACHE_KEYS['salesData'], $data);
-
         return $data;
     }
 
     /**
      * Returns totals.
      *
+     * @param string|null $start
+     * @param string|null $end
+     *
      * @return array
      */
-    public function getTotals(): array
+    public function getTotals(string $start = null, string $end = null): array
     {
-        if ($totals = Craft::$app->getCache()->get(self::CACHE_KEYS['totals'])) {
-            //return $totals;
-        }
-
         $totals = $this->_populateZeroValues(['grossAmount', 'netAmount']);
 
-        $sales = $this->_getTotalsQuery()->all();
+        $sales = $this->_getTotalsQuery($start, $end)->all();
 
         foreach ($sales as $sale) {
             $totals['grossAmount'] = $sale['grossAmount'];
             $totals['netAmount'] = $sale['netAmount'];
         }
-
-        Craft::$app->getCache()->set(self::CACHE_KEYS['totals'], $totals);
 
         return $totals;
     }
@@ -101,17 +85,16 @@ class ReportsService extends Component
     /**
      * Returns plugin totals.
      *
+     * @param string|null $start
+     * @param string|null $end
+     *
      * @return array
      */
-    public function getPluginTotals(): array
+    public function getPluginTotals(string $start = null, string $end = null): array
     {
-        if ($totals = Craft::$app->getCache()->get(self::CACHE_KEYS['pluginTotals'])) {
-            //return $totals;
-        }
-
         $totals = $this->_populateZeroValues(PluginSales::$plugin->plugins->getNames());
 
-        $sales = $this->_getTotalsQuery()
+        $sales = $this->_getTotalsQuery($start, $end)
             ->addSelect(['pluginId', 'name'])
             ->groupBy(['pluginId'])
             ->joinWith('plugin')
@@ -121,25 +104,22 @@ class ReportsService extends Component
             $totals[$sale['name']] = $sale['grossAmount'];
         }
 
-        Craft::$app->getCache()->set(self::CACHE_KEYS['pluginTotals'], $totals);
-
         return $totals;
     }
 
     /**
      * Returns license and renewal totals.
      *
+     * @param string|null $start
+     * @param string|null $end
+     *
      * @return array
      */
-    public function getLicenseRenewalTotals(): array
+    public function getLicenseRenewalTotals(string $start = null, string $end = null): array
     {
-        if ($totals = Craft::$app->getCache()->get(self::CACHE_KEYS['licenseRenewalTotals'])) {
-            //return $totals;
-        }
-
         $totals = $this->_populateZeroValues(['licenses', 'renewals']);
 
-        $sales = $this->_getTotalsQuery()
+        $sales = $this->_getTotalsQuery($start, $end)
             ->addSelect(['renewal'])
             ->groupBy(['renewal'])
             ->all();
@@ -149,24 +129,21 @@ class ReportsService extends Component
             $totals[$key] = $sale['grossAmount'];
         }
 
-        Craft::$app->getCache()->set(self::CACHE_KEYS['licenseRenewalTotals'], $totals);
-
         return $totals;
     }
 
     /**
      * Returns all months of plugin sales.
      *
+     * @param string|null $start
+     * @param string|null $end
+     *
      * @return array
      */
-    public function getMonths(): array
+    public function getMonths(string $start = null, string $end = null): array
     {
-        if ($months = Craft::$app->getCache()->get(self::CACHE_KEYS['months'])) {
-            return $months;
-        }
-
         $months = [];
-        $sales = $this->getMonthlyTotals();
+        $sales = $this->getMonthlyTotals($start, $end);
 
         if (empty($sales)) {
             return $months;
@@ -183,46 +160,38 @@ class ReportsService extends Component
             $currentMonth->add(new DateInterval('P1M'));
         }
 
-        Craft::$app->getCache()->set(self::CACHE_KEYS['months'], $months);
-
         return $months;
     }
 
     /**
      * Returns monthly totals.
      *
+     * @param string|null $start
+     * @param string|null $end
+     *
      * @return array
      */
-    public function getMonthlyTotals(): array
+    public function getMonthlyTotals(string $start = null, string $end = null): array
     {
-        if ($totals = Craft::$app->getCache()->get(self::CACHE_KEYS['monthlyTotals'])) {
-            return $totals;
-        }
-
-        $totals = $this->_getMonthlyTotalsQuery()->all();
-
-        Craft::$app->getCache()->set(self::CACHE_KEYS['monthlyTotals'], $totals);
-
-        return $totals;
+        return $this->_getMonthlyTotalsQuery($start, $end)->all();
     }
 
     /**
      * Returns monthly plugin totals.
      *
+     * @param string|null $start
+     * @param string|null $end
+     *
      * @return array
      */
-    public function getMonthlyPluginTotals(): array
+    public function getMonthlyPluginTotals(string $start = null, string $end = null): array
     {
-        if ($totals = Craft::$app->getCache()->get(self::CACHE_KEYS['monthlyPluginTotals'])) {
-            return $totals;
-        }
-
         $totals = $this->_populateZeroValues(
             PluginSales::$plugin->plugins->getNames(),
-            $this->getMonths()
+            $this->getMonths($start, $end)
         );
 
-        $sales = $this->_getMonthlyTotalsQuery()
+        $sales = $this->_getMonthlyTotalsQuery($start, $end)
             ->addSelect(['pluginId', 'name'])
             ->addGroupBy(['pluginId'])
             ->joinWith('plugin')
@@ -243,28 +212,25 @@ class ReportsService extends Component
             $totals[$key] = array_values($values);
         }
 
-        Craft::$app->getCache()->set(self::CACHE_KEYS['monthlyPluginTotals'], $totals);
-
         return $totals;
     }
 
     /**
      * Returns monthly license and renewal totals.
      *
+     * @param string|null $start
+     * @param string|null $end
+     *
      * @return array
      */
-    public function getMonthlyLicenseRenewalTotals(): array
+    public function getMonthlyLicenseRenewalTotals(string $start = null, string $end = null): array
     {
-        if ($totals = Craft::$app->getCache()->get(self::CACHE_KEYS['monthlyLicenseRenewalTotals'])) {
-            return $totals;
-        }
-
         $totals = $this->_populateZeroValues(
             ['licenses', 'renewals'],
-            $this->getMonths()
+            $this->getMonths($start, $end)
         );
 
-        $sales = $this->_getMonthlyTotalsQuery()
+        $sales = $this->_getMonthlyTotalsQuery($start, $end)
             ->addSelect(['renewal'])
             ->addGroupBy(['renewal'])
             ->all();
@@ -284,45 +250,43 @@ class ReportsService extends Component
             $totals[$key] = array_values($values);
         }
 
-        Craft::$app->getCache()->set(self::CACHE_KEYS['monthlyLicenseRenewalTotals'], $totals);
-
         return $totals;
-    }
-
-    /**
-     * Clears cached reports.
-     */
-    public function clearCachedReports()
-    {
-        foreach (self::CACHE_KEYS as $cacheKey) {
-            Craft::$app->getCache()->delete($cacheKey);
-        }
     }
 
     /**
      * Returns totals query.
      *
+     * @param string|null $start
+     * @param string|null $end
+     *
      * @return ActiveQuery
      */
-    private function _getTotalsQuery(): ActiveQuery
+    private function _getTotalsQuery(string $start = null, string $end = null): ActiveQuery
     {
-        return SaleRecord::find()
+        $query = SaleRecord::find()
             ->select([
                 'COUNT(*) as count',
                 'ROUND(SUM(grossAmount), 2) as grossAmount',
                 'ROUND(SUM(netAmount), 2) as netAmount',
             ])
             ->asArray();
+
+        $query = $this->_applyDataRange($query, $start, $end);
+
+        return $query;
     }
 
     /**
      * Returns monthly totals query.
      *
+     * @param string|null $start
+     * @param string|null $end
+     *
      * @return ActiveQuery
      */
-    private function _getMonthlyTotalsQuery(): ActiveQuery
+    private function _getMonthlyTotalsQuery(string $start = null, string $end = null): ActiveQuery
     {
-        return SaleRecord::find()
+        $query = SaleRecord::find()
             ->select([
                 'MONTH(dateSold) as month',
                 'YEAR(dateSold) as year',
@@ -333,6 +297,10 @@ class ReportsService extends Component
             ->groupBy(['YEAR(dateSold)', 'MONTH(dateSold)'])
             ->orderBy(['YEAR(dateSold)' => SORT_ASC, 'MONTH(dateSold)' => SORT_ASC])
             ->asArray();
+
+        $query = $this->_applyDataRange($query, $start, $end);
+
+        return $query;
     }
 
     /**
@@ -359,5 +327,27 @@ class ReportsService extends Component
         }
 
         return $values;
+    }
+
+    /**
+     * Applies a date range condition to a query.
+     *
+     * @param ActiveQuery $query
+     * @param string|null $start
+     * @param string|null $end
+     *
+     * @return ActiveQuery
+     */
+    private function _applyDataRange(ActiveQuery $query, string $start = null, string $end = null): ActiveQuery
+    {
+        if ($start) {
+            $query->andWhere(['>=', 'dateSold', $start]);
+        }
+
+        if ($end) {
+            $query->andWhere(['<=', 'dateSold', $end]);
+        }
+
+        return $query;
     }
 }
