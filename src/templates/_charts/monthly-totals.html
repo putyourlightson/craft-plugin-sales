@@ -73,8 +73,8 @@
                     style: {
                         colors: '#888',
                     },
-                    formatter: function(val) {
-                        return Math.round(val);
+                    formatter: function(value) {
+                        return value.toLocaleString('{{ currentSite.language }}');
                     },
                 }
             },
@@ -92,8 +92,8 @@
                     style: {
                         colors: '#888',
                     },
-                    formatter: function(val) {
-                        return Math.round(val);
+                    formatter: function(value) {
+                        return value.toLocaleString('{{ currentSite.language }}');
                     },
                 }
             }
