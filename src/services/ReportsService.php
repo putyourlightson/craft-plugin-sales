@@ -7,6 +7,7 @@ namespace putyourlightson\pluginsales\services;
 
 use Craft;
 use craft\base\Component;
+use craft\helpers\Db;
 use DateInterval;
 use DateTime;
 use putyourlightson\pluginsales\PluginSales;
@@ -39,19 +40,20 @@ class ReportsService extends Component
 
         $query = SaleRecord::find()
             ->with('plugin')
-            ->orderBy(['dateSold' => SORT_DESC]);
+            ->orderBy(['dateSold' => SORT_DESC])
+            ->asArray();
 
         $query = $this->_applyDataRange($query, $start, $end);
 
         foreach ($query->all() as $sale) {
             $data[] = [
-                $sale->plugin->name,
-                ucfirst($sale->edition),
-                Craft::t('plugin-sales', $sale->renewal ? 'Renewal' : 'License'),
-                $sale->email,
-                number_format($sale->grossAmount, 2),
-                number_format($sale->netAmount, 2),
-                $sale->dateSold,
+                $sale['plugin']['name'],
+                ucfirst($sale['edition']),
+                Craft::t('plugin-sales', $sale['renewal'] ? 'Renewal' : 'License'),
+                $sale['email'],
+                number_format($sale['grossAmount'], 2),
+                number_format($sale['netAmount'], 2),
+                $sale['dateSold'],
             ];
         }
 
@@ -152,8 +154,9 @@ class ReportsService extends Component
         $lastMonth = end($sales);
         $firstMonth = reset($sales);
         $currentMonth = new DateTime($firstMonth['year'].'-'.$firstMonth['month'].'-1');
-
-        while ($currentMonth->format('n') <= $lastMonth['month']
+        $i = 0;
+        while (
+            ($currentMonth->format('n') <= $lastMonth['month'] && $currentMonth->format('Y') == $lastMonth['year'])
             || $currentMonth->format('Y') < $lastMonth['year']
         ) {
             $months[] = $currentMonth->format(self::MONTH_FORMAT);
@@ -353,9 +356,13 @@ class ReportsService extends Component
      */
     private function _applyDataRange(ActiveQuery $query, string $start = null, string $end = null): ActiveQuery
     {
+        $start = $start ? Db::prepareDateForDb($start.' 00:00:00') : null;
+
         if ($start) {
             $query->andWhere(['>=', 'dateSold', $start]);
         }
+
+        $end = $end ? Db::prepareDateForDb($end.' 23:59:59') : null;
 
         if ($end) {
             $query->andWhere(['<=', 'dateSold', $end]);
