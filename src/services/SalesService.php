@@ -100,11 +100,11 @@ class SalesService extends Component
             'multipart' => [
                 [
                     'name' => 'loginName',
-                    'contents' => PluginSales::$plugin->settings->email,
+                    'contents' => Craft::parseEnv(PluginSales::$plugin->settings->email),
                 ],
                 [
                     'name' => 'password',
-                    'contents' => PluginSales::$plugin->settings->password,
+                    'contents' => Craft::parseEnv(PluginSales::$plugin->settings->password),
                 ],
             ],
         ]);

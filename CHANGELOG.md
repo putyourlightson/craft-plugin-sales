@@ -1,5 +1,9 @@
 # Release Notes for Plugin Sales
  
+## 1.1.1 - 2020-03-10
+### Fixed
+- Fixed parsing of environment variables in plugin settings.
+
 ## 1.1.0 - 2020-03-10
 ### Added
 - Added a colour palette to plugin settings.
