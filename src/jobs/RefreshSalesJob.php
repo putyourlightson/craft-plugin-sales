@@ -6,7 +6,6 @@
 namespace putyourlightson\pluginsales\jobs;
 
 use Craft;
-use craft\helpers\App;
 use craft\queue\BaseJob;
 use putyourlightson\pluginsales\PluginSales;
 
@@ -17,10 +16,8 @@ class RefreshSalesJob extends BaseJob
      */
     public function execute($queue)
     {
-        App::maxPowerCaptain();
-
         // Set progress so it at least looks like something is happening
-        $this->setProgress($queue, 0.5);
+        $this->setProgress($queue, 0.1);
 
         PluginSales::$plugin->sales->refresh();
     }

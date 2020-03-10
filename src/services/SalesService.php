@@ -7,6 +7,7 @@ namespace putyourlightson\pluginsales\services;
 
 use Craft;
 use craft\base\Component;
+use craft\helpers\App;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use putyourlightson\pluginsales\models\SaleModel;
@@ -72,6 +73,8 @@ class SalesService extends Component
      */
     public function refresh(callable $setProgressHandler = null): bool
     {
+        App::maxPowerCaptain();
+
         $client = new Client([
             'base_uri' => 'https://id.craftcms.com/',
             'cookies' => true,
