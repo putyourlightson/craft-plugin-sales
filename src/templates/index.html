@@ -137,6 +137,14 @@
         $('.spinner').show();
     });
 
+    function formatCurrency(value) {
+        if (Math.round(value) !== value) {
+            value = value.toFixed(2);
+        }
+
+        return '$' + value.toLocaleString();
+    }
+
     {% if netAmount %}
         $('#plugin-sales').DataTable({
             data: {{ craft.pluginSales.reports.getSalesData(start, end)|raw }},

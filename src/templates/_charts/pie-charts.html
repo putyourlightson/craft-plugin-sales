@@ -16,6 +16,11 @@
             height: 300,
             type: 'donut',
         },
+        tooltip: {
+            y: {
+                formatter: (value) => formatCurrency(value),
+            },
+        },
         dataLabels: {
             enabled: false
         },

@@ -23,6 +23,11 @@
         title: {
             text: 'Monthly Sales',
         },
+        tooltip: {
+            y: {
+                formatter: (value) => formatCurrency(value),
+            },
+        },
         series: [
             {
                 name: 'Gross Sales',

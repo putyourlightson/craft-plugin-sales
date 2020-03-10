@@ -15,6 +15,11 @@
             type: 'bar',
             stacked: true,
         },
+        tooltip: {
+            y: {
+                formatter: (value) => formatCurrency(value),
+            },
+        },
         dataLabels: {
             enabled: false
         },
