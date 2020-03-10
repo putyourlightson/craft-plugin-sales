@@ -17,6 +17,7 @@
             type: 'donut',
         },
         tooltip: {
+            formatter: (value) => formatCurrency(value),
             y: {
                 formatter: (value) => formatCurrency(value),
             },

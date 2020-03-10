@@ -21,7 +21,7 @@
                     {% else %}
                         You generated net sales during this period in the amount of
                     {% endif %}
-                    <strong>${{ netAmount|number_format(2) }}</strong>
+                    <strong id="total" data-value="{{ netAmount }}">${{ netAmount|number_format(2) }}</strong>
                 {% else %}
                     {% if not start and not end %}
                         No earnings yet, keep on truckin!
@@ -138,12 +138,14 @@
     });
 
     function formatCurrency(value) {
-        if (Math.round(value) !== value) {
-            value = value.toFixed(2);
-        }
-
-        return '$' + value.toLocaleString();
+        return value.toLocaleString('{{ currentSite.language }}', {
+            style: 'currency',
+            currency: 'USD',
+            minimumFractionDigits: (value == parseInt(value) ? 0 : 2),
+        });
     }
+
+    $('#total').text(formatCurrency(parseFloat($('#total').attr('data-value'))));
 
     {% if netAmount %}
         $('#plugin-sales').DataTable({

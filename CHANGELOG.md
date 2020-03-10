@@ -4,7 +4,7 @@
 ### Added
 - Added a colour palette to plugin settings.
 - Added console commands to refresh and delete sales.
-- Added currency and locale formatting to amounts.
+- Added currency and site locale formatting to amounts.
 
 ### Changed
 - General UI improvements.
