@@ -2,7 +2,8 @@
  
 ## 1.1.0 - Unreleased
 ### Added
-- Added colour palette to plugin settings.
+- Added a colour palette to plugin settings.
+- Added console commands to refresh and delete sales.
 
 ### Changed
 - General UI improvements.

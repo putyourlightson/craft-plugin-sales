@@ -135,10 +135,7 @@ class PluginSales extends Plugin
         Event::on(Plugins::class, Plugins::EVENT_AFTER_SAVE_PLUGIN_SETTINGS,
             function(PluginEvent $event) {
                 if ($event->plugin === $this) {
-                    // Clear all tables
-                    SaleRecord::deleteAll();
-                    PluginRecord::deleteAll();
-                    RefreshRecord::deleteAll();
+                    PluginSales::$plugin->sales->delete();
 
                     // Create queue job
                     Craft::$app->getQueue()->push(new RefreshSalesJob());

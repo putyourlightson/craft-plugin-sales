@@ -11,6 +11,7 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use putyourlightson\pluginsales\models\SaleModel;
 use putyourlightson\pluginsales\PluginSales;
+use putyourlightson\pluginsales\records\PluginRecord;
 use putyourlightson\pluginsales\records\RefreshRecord;
 use putyourlightson\pluginsales\records\SaleRecord;
 use yii\web\ForbiddenHttpException;
@@ -64,10 +65,12 @@ class SalesService extends Component
     /**
      * Refreshes plugin sales.
      *
+     * @param callable|null $setProgressHandler
+     *
      * @return bool
      * @throws ForbiddenHttpException
      */
-    public function refresh(): bool
+    public function refresh(callable $setProgressHandler = null): bool
     {
         $client = new Client([
             'base_uri' => 'https://id.craftcms.com/',
@@ -124,6 +127,11 @@ class SalesService extends Component
         if ($total > $count) {
             $limit = $total - $count;
 
+            if (is_callable($setProgressHandler)) {
+                $progressLabel = Craft::t('plugin-sales', 'Fetching sales.');
+                call_user_func($setProgressHandler, $count, $total, $progressLabel);
+            }
+
             // Get new sales
             $response = $client->get('index.php?p=actions//craftnet/id/sales/get-sales&per_page='.$limit, [
                 'headers' => $headers,
@@ -168,5 +176,14 @@ class SalesService extends Component
         $refreshRecord->save();
 
         return true;
+    }
+
+    /**
+     * Deletes all plugin sales.
+     */
+    public function delete()
+    {
+        SaleRecord::deleteAll();
+        PluginRecord::deleteAll();
     }
 }
