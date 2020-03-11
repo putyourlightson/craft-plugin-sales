@@ -1,5 +1,9 @@
 # Release Notes for Plugin Sales
 
+## 1.1.4 - Unreleased
+### Fixed
+- Fixed localisation of last refresh date.
+
 ## 1.1.3 - 2020-03-11
 ### Added
 - Added logging of failed plugin sale refreshes.

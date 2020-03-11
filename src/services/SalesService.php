@@ -8,6 +8,8 @@ namespace putyourlightson\pluginsales\services;
 use Craft;
 use craft\base\Component;
 use craft\helpers\App;
+use craft\helpers\DateTimeHelper;
+use DateTime;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use putyourlightson\logtofile\LogToFile;
@@ -54,14 +56,20 @@ class SalesService extends Component
     /**
      * Returns last refresh date.
      *
-     * @return string|null|false
+     * @return DateTime|bool
      */
     public function getLastRefreshDate()
     {
-        return RefreshRecord::find()
+        $date = RefreshRecord::find()
             ->select(['dateCreated'])
             ->orderBy(['dateCreated' => SORT_DESC])
             ->scalar();
+
+        if (empty($date)) {
+            return false;
+        }
+
+        return DateTimeHelper::toDateTime($date);
     }
 
     /**
@@ -79,7 +87,16 @@ class SalesService extends Component
             'cookies' => true,
         ]);
 
-        $response = $client->get('login');
+        try {
+            $response = $client->get('login');
+        }
+
+        catch (GuzzleException $exception) {
+            LogToFile::error($exception->getMessage());
+
+            return false;
+        }
+
         $body = $response->getBody();
 
         // Extract CSRF token value

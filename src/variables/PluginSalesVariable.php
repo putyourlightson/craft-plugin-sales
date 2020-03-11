@@ -5,6 +5,7 @@
 
 namespace putyourlightson\pluginsales\variables;
 
+use DateTime;
 use putyourlightson\pluginsales\PluginSales;
 use putyourlightson\pluginsales\services\ReportsService;
 
@@ -23,7 +24,7 @@ class PluginSalesVariable
     /**
      * Returns last refresh date.
      *
-     * @return string|null|false
+     * @return DateTime|bool
      */
     public function getLastRefreshDate()
     {
