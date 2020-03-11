@@ -1,5 +1,12 @@
 # Release Notes for Plugin Sales
 
+## 1.1.3 - 2020-03-11
+### Added
+- Added logging of failed plugin sale refreshes.
+
+### Changed
+- General UI improvements.
+
 ## 1.1.2 - 2020-03-10
 ### Changed
 - Improved performance of generating charts and reports.

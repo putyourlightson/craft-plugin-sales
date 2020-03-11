@@ -17,7 +17,7 @@ class RefreshSalesJob extends BaseJob
     public function execute($queue)
     {
         // Set progress so it at least looks like something is happening
-        $this->setProgress($queue, 0.1);
+        $this->setProgress($queue, 0.3);
 
         PluginSales::$plugin->sales->refresh();
     }

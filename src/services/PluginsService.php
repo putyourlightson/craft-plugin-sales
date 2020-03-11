@@ -58,7 +58,7 @@ class PluginsService extends Component
      * @param string $name
      * @param bool $hasMultipleEditions
      */
-    public function createIfNotExists(int $id, string $name, bool $hasMultipleEditions)
+    public function create(int $id, string $name, bool $hasMultipleEditions)
     {
         if ($this->_pluginIds === null) {
             $this->_pluginIds = PluginRecord::find()->select('id')->column();

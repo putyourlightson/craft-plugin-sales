@@ -10,6 +10,7 @@ use craft\base\Component;
 use craft\helpers\App;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
+use putyourlightson\logtofile\LogToFile;
 use putyourlightson\pluginsales\models\SaleModel;
 use putyourlightson\pluginsales\PluginSales;
 use putyourlightson\pluginsales\records\PluginRecord;
@@ -66,12 +67,10 @@ class SalesService extends Component
     /**
      * Refreshes plugin sales.
      *
-     * @param callable|null $setProgressHandler
-     *
-     * @return bool
+     * @return int|bool
      * @throws ForbiddenHttpException
      */
-    public function refresh(callable $setProgressHandler = null): bool
+    public function refresh()
     {
         App::maxPowerCaptain();
 
@@ -119,6 +118,8 @@ class SalesService extends Component
             ]);
         }
         catch (GuzzleException $exception) {
+            LogToFile::error($exception->getMessage());
+
             return false;
         }
 
@@ -130,11 +131,6 @@ class SalesService extends Component
         if ($total > $count) {
             $limit = $total - $count;
 
-            if (is_callable($setProgressHandler)) {
-                $progressLabel = Craft::t('plugin-sales', 'Fetching sales.');
-                call_user_func($setProgressHandler, $count, $total, $progressLabel);
-            }
-
             // Get new sales
             $response = $client->get('index.php?p=actions//craftnet/id/sales/get-sales&per_page='.$limit, [
                 'headers' => $headers,
@@ -145,7 +141,7 @@ class SalesService extends Component
 
             // Save sale records
             foreach ($sales as $sale) {
-                PluginSales::$plugin->plugins->createIfNotExists(
+                PluginSales::$plugin->plugins->create(
                     $sale['plugin']['id'],
                     $sale['plugin']['name'],
                     $sale['plugin']['hasMultipleEditions']
@@ -174,11 +170,13 @@ class SalesService extends Component
             }
         }
 
+        $refreshed = count($sales);
+
         $refreshRecord = new RefreshRecord();
-        $refreshRecord->refreshed = count($sales);
+        $refreshRecord->refreshed = $refreshed;
         $refreshRecord->save();
 
-        return true;
+        return $refreshed;
     }
 
     /**

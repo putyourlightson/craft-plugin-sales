@@ -16,11 +16,16 @@ class SalesController extends Controller
      */
     public function actionRefresh()
     {
-        $success = PluginSales::$plugin->sales->refresh();
+        $refreshed = PluginSales::$plugin->sales->refresh();
 
-        if (!$success) {
+        if ($refreshed !== false) {
+            Craft::$app->getSession()->setNotice(
+                Craft::t('plugin-sales', '{count} plugin sales successfully refreshed.', ['count' => $refreshed])
+            );
+        }
+        else {
             Craft::$app->getSession()->setError(
-                Craft::t('plugin-sales', 'Plugin sales could not be refreshed.')
+                Craft::t('plugin-sales', 'Plugin sales could not be refreshed. Check the credentials and network connection.')
             );
         }
 

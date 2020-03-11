@@ -17,9 +17,9 @@
             <p>
                 {% if netAmount %}
                     {% if not start and not end %}
-                        Congratulations!! You’ve generated net sales in the amount of
+                        Congratulations, you’ve earned a total net profit of
                     {% else %}
-                        You generated net sales during this period in the amount of
+                        You earned a net profit during this period of
                     {% endif %}
                     <strong id="total" data-value="{{ netAmount }}">${{ netAmount|number_format(2) }}</strong>
                 {% else %}

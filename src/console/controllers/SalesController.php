@@ -20,11 +20,19 @@ class SalesController extends Controller
     {
         $this->stdout(Craft::t('plugin-sales', 'Refreshing sales...').PHP_EOL, Console::FG_YELLOW);
 
-        if (PluginSales::$plugin->sales->refresh()) {
-            $this->stdout(Craft::t('plugin-sales', 'Plugin sales successfully refreshed.').PHP_EOL, Console::FG_GREEN);
+        $refreshed = PluginSales::$plugin->sales->refresh();
+
+        if ($refreshed !== false) {
+            $this->stdout(
+                Craft::t('plugin-sales', '{count} plugin sales successfully refreshed.', ['count' => $refreshed]).PHP_EOL,
+                Console::FG_GREEN
+            );
         }
         else {
-            $this->stderr(Craft::t('plugin-sales', 'Plugin sales could not be refreshed. Check the credentials and network connection.').PHP_EOL, Console::FG_RED);
+            $this->stderr(
+                Craft::t('plugin-sales', 'Plugin sales could not be refreshed. Check the credentials and network connection.').PHP_EOL,
+                Console::FG_RED
+            );
         }
 
         return ExitCode::OK;
