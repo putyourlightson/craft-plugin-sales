@@ -1,6 +1,9 @@
 # Release Notes for Plugin Sales
 
-## 1.1.4 - Unreleased
+## 1.1.4 - 2020-03-13
+### Changed
+- General UI improvements.
+
 ### Fixed
 - Fixed localisation of last refresh date.
 
