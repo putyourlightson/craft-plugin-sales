@@ -62,16 +62,16 @@
         {% include 'plugin-sales/_charts/pie-charts' %}
 
         <div class="chart">
-            <table id="plugin-sales" class="fullwidth chart stripe responsive" style="width: 100%;">
+            <table id="plugin-sales" class="display responsive nowrap" style="width: 100%;">
                 <thead>
                     <tr>
-                        <th>{{ 'Plugin'|t('plugin-sales') }}</th>
+                        <th data-priority="1">{{ 'Plugin'|t('plugin-sales') }}</th>
                         <th>{{ 'Edition'|t('plugin-sales') }}</th>
                         <th>{{ 'Type'|t('plugin-sales') }}</th>
                         <th>{{ 'Customer'|t('plugin-sales') }}</th>
-                        <th>{{ 'Gross Amount'|t('plugin-sales') }}</th>
-                        <th>{{ 'Net Amount'|t('plugin-sales') }}</th>
-                        <th>{{ 'Date'|t('plugin-sales') }}</th>
+                        <th data-priority="2">{{ 'Gross Amount'|t('plugin-sales') }}</th>
+                        <th data-priority="3">{{ 'Net Amount'|t('plugin-sales') }}</th>
+                        <th data-priority="4">{{ 'Date'|t('plugin-sales') }}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -152,6 +152,7 @@
             data: {{ craft.pluginSales.reports.getSalesData(start, end)|raw }},
             order: [[ 6, 'desc' ]],
             deferRender: true,
+            responsive: true,
             language: {
                 lengthMenu: '_MENU_ sales displayed',
                 search: '',
