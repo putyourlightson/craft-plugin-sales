@@ -1,8 +1,9 @@
 # Release Notes for Plugin Sales
 
-## 1.2.0 - Unreleased
+## 1.2.0 - 2020-03-16
 ### Added
 - Added a currency setting so that sales are converted to a live exchange rate.
+- Added progress status to refresh sales jobs in the control panel.
 
 ### Fixed
 - Fixed formatting of licenses in monthly sales chart tooltip.
