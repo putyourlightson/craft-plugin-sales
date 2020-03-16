@@ -1,5 +1,9 @@
 # Release Notes for Plugin Sales
 
+## 1.1.5 - Unreleased
+### Fixed
+- Fixed formatting of licenses in monthly sales chart tooltip.
+
 ## 1.1.4 - 2020-03-13
 ### Changed
 - General UI improvements.

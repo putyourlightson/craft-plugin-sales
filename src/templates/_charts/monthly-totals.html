@@ -24,9 +24,14 @@
             text: 'Monthly Sales',
         },
         tooltip: {
-            y: {
-                formatter: (value) => formatCurrency(value),
-            },
+            y: [
+                {
+                    formatter: (value) => formatCurrency(value),
+                },
+                {
+                    formatter: (value) => formatCurrency(value),
+                },
+            ],
         },
         series: [
             {
@@ -93,7 +98,7 @@
                         colors: '#888',
                     },
                     formatter: function(value) {
-                        return value.toLocaleString('{{ currentSite.language }}');
+                        return parseInt(value);
                     },
                 }
             }
