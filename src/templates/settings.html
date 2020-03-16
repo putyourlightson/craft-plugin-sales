@@ -21,6 +21,50 @@
     required: true,
 }) }}
 
+{{ forms.selectField({
+    label: 'Currency'|t('plugin-sales'),
+    instructions: 'The currency to use when displaying sales data (uses [exchangeratesapi.io](https://exchangeratesapi.io/)).'|t('plugin-sales'),
+    name: 'currency',
+    options: [
+        { value: 'USD', label: 'US dollar'|t('plugin-sales') },
+        { value: 'EUR', label: 'Euro'|t('plugin-sales') },
+        { value: 'JPY', label: 'Japanese yen'|t('plugin-sales') },
+        { value: 'BGN', label: 'Bulgarian lev'|t('plugin-sales') },
+        { value: 'CZK', label: 'Czech koruna'|t('plugin-sales') },
+        { value: 'DKK', label: 'Danish krone'|t('plugin-sales') },
+        { value: 'GBP', label: 'Pound sterling'|t('plugin-sales') },
+        { value: 'HUF', label: 'Hungarian forint'|t('plugin-sales') },
+        { value: 'PLN', label: 'Polish zloty'|t('plugin-sales') },
+        { value: 'RON', label: 'Romanian leu'|t('plugin-sales') },
+        { value: 'SEK', label: 'Swedish krona'|t('plugin-sales') },
+        { value: 'CHF', label: 'Swiss franc'|t('plugin-sales') },
+        { value: 'ISK', label: 'Icelandic krona'|t('plugin-sales') },
+        { value: 'NOK', label: 'Norwegian krone'|t('plugin-sales') },
+        { value: 'HRK', label: 'Croatian kuna'|t('plugin-sales') },
+        { value: 'RUB', label: 'Russian rouble'|t('plugin-sales') },
+        { value: 'TRY', label: 'Turkish lira'|t('plugin-sales') },
+        { value: 'AUD', label: 'Australian dollar'|t('plugin-sales') },
+        { value: 'BRL', label: 'Brazilian real'|t('plugin-sales') },
+        { value: 'CAD', label: 'Canadian dollar'|t('plugin-sales') },
+        { value: 'CNY', label: 'Chinese yuan renminbi'|t('plugin-sales') },
+        { value: 'HKD', label: 'Hong Kong dollar'|t('plugin-sales') },
+        { value: 'IDR', label: 'Indonesian rupiah'|t('plugin-sales') },
+        { value: 'ILS', label: 'Israeli shekel'|t('plugin-sales') },
+        { value: 'INR', label: 'Indian rupee'|t('plugin-sales') },
+        { value: 'KRW', label: 'South Korean won'|t('plugin-sales') },
+        { value: 'MXN', label: 'Mexican peso'|t('plugin-sales') },
+        { value: 'MYR', label: 'Malaysian ringgit'|t('plugin-sales') },
+        { value: 'NZD', label: 'New Zealand dollar'|t('plugin-sales') },
+        { value: 'PHP', label: 'Philippine peso'|t('plugin-sales') },
+        { value: 'SGD', label: 'Singapore dollar'|t('plugin-sales') },
+        { value: 'THB', label: 'Thai baht'|t('plugin-sales') },
+        { value: 'ZAR', label: 'South African rand'|t('plugin-sales') },
+    ],
+    value: settings.currency,
+    errors: settings.getErrors('currency'),
+    required: true,
+}) }}
+
 {% set input %}
     <div class='flex'>
         {% for i in 0..9 %}

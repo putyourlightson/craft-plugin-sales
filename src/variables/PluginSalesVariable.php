@@ -5,6 +5,7 @@
 
 namespace putyourlightson\pluginsales\variables;
 
+use craft\helpers\DateTimeHelper;
 use DateTime;
 use putyourlightson\pluginsales\PluginSales;
 use putyourlightson\pluginsales\services\ReportsService;
@@ -22,13 +23,51 @@ class PluginSalesVariable
     }
 
     /**
-     * Returns last refresh date.
+     * Returns refresh date.
      *
      * @return DateTime|bool
      */
-    public function getLastRefreshDate()
+    public function getRefreshDate()
     {
-        return PluginSales::$plugin->sales->getLastRefreshDate();
+        $lastRefresh = PluginSales::$plugin->sales->getLastRefresh();
+
+        if ($lastRefresh === null) {
+            return false;
+        }
+
+        return DateTimeHelper::toDateTime($lastRefresh['dateCreated']);
+    }
+
+    /**
+     * Returns currency
+     *
+     * @return string
+     */
+    public function getCurrency(): string
+    {
+        $lastRefresh = PluginSales::$plugin->sales->getLastRefresh();
+
+        if ($lastRefresh === null) {
+            return 'USD';
+        }
+
+        return $lastRefresh['currency'];
+    }
+
+    /**
+     * Returns exchange rate
+     *
+     * @return float
+     */
+    public function getExchangeRate(): float
+    {
+        $lastRefresh = PluginSales::$plugin->sales->getLastRefresh();
+
+        if ($lastRefresh === null) {
+            return 1;
+        }
+
+        return $lastRefresh['exchangeRate'];
     }
 
     /**

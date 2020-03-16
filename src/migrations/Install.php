@@ -21,6 +21,8 @@ class Install extends Migration
             $this->createTable(RefreshRecord::tableName(), [
                 'id' => $this->primaryKey(),
                 'refreshed' => $this->integer()->notNull(),
+                'currency' => $this->string(3),
+                'exchangeRate' => $this->float(),
                 'dateCreated' => $this->dateTime()->notNull(),
                 'dateUpdated' => $this->dateTime()->notNull(),
                 'uid' => $this->uid(),

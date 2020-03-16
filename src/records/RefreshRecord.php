@@ -10,6 +10,8 @@ use craft\db\ActiveRecord;
 /**
  * @property int $id
  * @property int $refreshed
+ * @property string $currency
+ * @property float $exchangeRate
  */
 class RefreshRecord extends ActiveRecord
 {

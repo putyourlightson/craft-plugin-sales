@@ -31,14 +31,14 @@
                 {% endif %}
             </p>
             <p class="light">
-                {% set lastRefreshDate = craft.pluginSales.getLastRefreshDate(start, end) %}
-                {% if lastRefreshDate %}
-                    Plugin sales last refreshed on {{ lastRefreshDate|datetime('long') }}
+                {% set refreshDate = craft.pluginSales.getRefreshDate() %}
+                {% if refreshDate %}
+                    Plugin sales last refreshed on {{ refreshDate|datetime('long') }}
                 {% else %}
                     Plugin sales not yet refreshed.
                 {% endif %}
             </p>
-            {% if netAmount and lastRefreshDate and not craft.pluginSales.hasValidLicense() %}
+            {% if netAmount and refreshDate and not craft.pluginSales.hasValidLicense() %}
                 <p class="warning">
                     <strong>
                         Please support development of this plugin by buying a license<a href="{{ url('plugin-store/buy/plugin-sales/standard') }}" class="go"></a>
@@ -69,8 +69,8 @@
                         <th>{{ 'Edition'|t('plugin-sales') }}</th>
                         <th>{{ 'Type'|t('plugin-sales') }}</th>
                         <th>{{ 'Customer'|t('plugin-sales') }}</th>
-                        <th data-priority="2">{{ 'Gross Amount'|t('plugin-sales') }}</th>
-                        <th data-priority="3">{{ 'Net Amount'|t('plugin-sales') }}</th>
+                        <th data-priority="2">{{ 'Gross Amount'|t('plugin-sales') }} ($)</th>
+                        <th data-priority="3">{{ 'Net Amount'|t('plugin-sales') }} ($)</th>
                         <th data-priority="4">{{ 'Date'|t('plugin-sales') }}</th>
                     </tr>
                 </thead>
@@ -85,6 +85,8 @@
 
 {% js %}
 
+    var currency = '{{ craft.pluginSales.getCurrency() }}';
+    var rate = {{ craft.pluginSales.getExchangeRate() }};
     var palette = {{ craft.pluginSales.getColourPalette()|json_encode|raw }};
 
     {% set origin = '2018-04-01' %}
@@ -138,9 +140,10 @@
     });
 
     function formatCurrency(value) {
+        value = value * rate;
         return value.toLocaleString('{{ currentSite.language }}', {
             style: 'currency',
-            currency: 'USD',
+            currency: currency,
             minimumFractionDigits: (value == parseInt(value) ? 0 : 2),
         });
     }

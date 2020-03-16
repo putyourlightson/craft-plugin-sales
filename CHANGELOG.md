@@ -1,6 +1,9 @@
 # Release Notes for Plugin Sales
 
-## 1.1.5 - Unreleased
+## 1.2.0 - Unreleased
+### Added
+- Added a currency setting so that sales are converted to a live exchange rate.
+
 ### Fixed
 - Fixed formatting of licenses in monthly sales chart tooltip.
 

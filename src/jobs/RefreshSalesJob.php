@@ -7,19 +7,37 @@ namespace putyourlightson\pluginsales\jobs;
 
 use Craft;
 use craft\queue\BaseJob;
+use craft\queue\Queue;
 use putyourlightson\pluginsales\PluginSales;
 
 class RefreshSalesJob extends BaseJob
 {
     /**
+     * @var Queue
+     */
+    private $_queue;
+
+    /**
      * @inheritdoc
      */
     public function execute($queue)
     {
-        // Set progress so it at least looks like something is happening
-        $this->setProgress($queue, 0.3);
+        $this->_queue = $queue;
 
-        PluginSales::$plugin->sales->refresh();
+        PluginSales::$plugin->sales->refresh([$this, 'setProgressHandler']);
+    }
+
+    /**
+     * Handles setting the progress.
+     *
+     * @param int $count
+     * @param int $total
+     */
+    public function setProgressHandler(int $count, int $total)
+    {
+        $progress = $total > 0 ? ($count / $total) : 0;
+
+        $this->setProgress($this->_queue, $progress);
     }
 
     /**

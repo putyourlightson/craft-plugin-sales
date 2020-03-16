@@ -8,8 +8,6 @@ namespace putyourlightson\pluginsales\services;
 use Craft;
 use craft\base\Component;
 use craft\helpers\App;
-use craft\helpers\DateTimeHelper;
-use DateTime;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use putyourlightson\logtofile\LogToFile;
@@ -22,10 +20,15 @@ use yii\web\ForbiddenHttpException;
 
 /**
  * @property SaleModel[] $sales
- * @property null|string|false $lastRefreshDate
+ * @property array|null $lastRefresh
  */
 class SalesService extends Component
 {
+    /**
+     * @var array|null
+     */
+    private $_lastRefresh;
+
     /**
      * Returns plugin sales.
      *
@@ -54,31 +57,33 @@ class SalesService extends Component
     }
 
     /**
-     * Returns last refresh date.
+     * Returns last refresh.
      *
-     * @return DateTime|bool
+     * @return array|null
      */
-    public function getLastRefreshDate()
+    public function getLastRefresh()
     {
-        $date = RefreshRecord::find()
-            ->select(['dateCreated'])
-            ->orderBy(['dateCreated' => SORT_DESC])
-            ->scalar();
-
-        if (empty($date)) {
-            return false;
+        if ($this->_lastRefresh !== null) {
+            return $this->_lastRefresh;
         }
 
-        return DateTimeHelper::toDateTime($date);
+        $this->_lastRefresh = RefreshRecord::find()
+            ->orderBy(['dateCreated' => SORT_DESC])
+            ->asArray()
+            ->one();
+
+        return $this->_lastRefresh;
     }
 
     /**
      * Refreshes plugin sales.
      *
+     * @param callable|null $setProgressHandler
+     *
      * @return int|bool
      * @throws ForbiddenHttpException
      */
-    public function refresh()
+    public function refresh(callable $setProgressHandler = null)
     {
         App::maxPowerCaptain();
 
@@ -142,11 +147,12 @@ class SalesService extends Component
 
         $result = json_decode($response->getBody(), true);
         $total = $result['total'];
-        $count = SaleRecord::find()->count();
+        $stored = SaleRecord::find()->count();
         $sales = [];
 
-        if ($total > $count) {
-            $limit = $total - $count;
+        if ($total > $stored) {
+            // Add 1 because one too few sales were being returned for some strange reason
+            $limit = $total - $stored + 1;
 
             // Get new sales
             $response = $client->get('index.php?p=actions//craftnet/id/sales/get-sales&per_page='.$limit, [
@@ -155,6 +161,7 @@ class SalesService extends Component
 
             $result = json_decode($response->getBody(), true);
             $sales = $result['data'];
+            $count = 0;
 
             // Save sale records
             foreach ($sales as $sale) {
@@ -184,6 +191,11 @@ class SalesService extends Component
                 ], false);
 
                 $saleRecord->save();
+
+                if (is_callable($setProgressHandler)) {
+                    $count++;
+                    call_user_func($setProgressHandler, $count, $limit);
+                }
             }
         }
 
@@ -191,6 +203,34 @@ class SalesService extends Component
 
         $refreshRecord = new RefreshRecord();
         $refreshRecord->refreshed = $refreshed;
+        $refreshRecord->currency = PluginSales::$plugin->settings->currency;
+        $refreshRecord->exchangeRate = 1;
+
+        // Get live exchange rate if not USD
+        if (PluginSales::$plugin->settings->currency != 'USD') {
+            try {
+                $response = $client->get('https://api.exchangeratesapi.io/latest?base=USD');
+            }
+            catch (GuzzleException $exception) {
+                LogToFile::error($exception->getMessage());
+
+                return false;
+            }
+
+            $result = json_decode($response->getBody(), true);
+            $rate = $result['rates'][PluginSales::$plugin->settings->currency] ?? false;
+
+            if ($rate === false) {
+                LogToFile::error(Craft::t('plugin-sales', 'Could not find exchange rate for {currency}.', [
+                    'currency' => PluginSales::$plugin->settings->currency,
+                ]));
+
+                return false;
+            }
+
+            $refreshRecord->exchangeRate = $rate;
+        }
+
         $refreshRecord->save();
 
         return $refreshed;
