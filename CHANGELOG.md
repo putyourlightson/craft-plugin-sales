@@ -1,5 +1,9 @@
 # Release Notes for Plugin Sales
 
+## 1.2.1 - Unreleased
+### Changed
+- Changed predefined selectable date ranges.
+
 ## 1.2.0 - 2020-03-16
 ### Added
 - Added a currency setting so that sales are converted to a live exchange rate.

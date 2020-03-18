@@ -117,9 +117,10 @@
         maxDate: moment(),
         ranges: {
            'All Time': [moment('{{ origin }}'), moment()],
-            {% for i in range(now|date('Y'), 2018) %}
-                ' {{ i }}': [moment('{{ i }}-01-01'), moment('{{ i }}-12-31')],
-            {% endfor %}
+           'This Month': [moment().startOf('month'), moment().endOf('month')],
+           'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
+           'This Year': [moment().startOf('year'), moment().endOf('year')],
+           'Last Year': [moment().subtract(1, 'year').startOf('year'), moment().subtract(1, 'year').endOf('year')],
         }
     }, updateDaterange);
 

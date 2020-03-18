@@ -24,7 +24,7 @@ class SalesController extends Controller
 
         if ($refreshed !== false) {
             $this->stdout(
-                Craft::t('plugin-sales', '{count} plugin sales successfully refreshed.', ['count' => $refreshed]).PHP_EOL,
+                Craft::t('plugin-sales', '{count} plugin sale(s) refreshed.', ['count' => $refreshed]).PHP_EOL,
                 Console::FG_GREEN
             );
         }
