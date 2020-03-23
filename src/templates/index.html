@@ -141,10 +141,10 @@
         $('.spinner').show();
     });
 
-    function formatCurrency(locale, currency, value) {
+    function formatCurrency(value, cur = currency) {
         return value.toLocaleString(locale, {
             style: 'currency',
-            currency: currency,
+            currency: cur,
             minimumFractionDigits: (value == parseInt(value) ? 0 : 2),
         });
     }
@@ -152,11 +152,11 @@
     var value = parseFloat($('#total').attr('data-value'));
 
     if (rate != 1) {
-        $('#total').after('<span class="info">Converted from <strong>' + formatCurrency(locale, 'USD', value) + '</strong> at an exchange rate of <strong>' + rate + '</strong></span>');
+        $('#total').after('<span class="info">Converted from <strong>' + formatCurrency(value, 'USD') + '</strong> at an exchange rate of <strong>' + rate + '</strong></span>');
         value = value * rate;
     }
 
-    $('#total').text(formatCurrency(locale, currency, value) + ' ');
+    $('#total').text(formatCurrency(value) + ' ');
 
     {% if netAmount %}
         $('#plugin-sales').DataTable({
