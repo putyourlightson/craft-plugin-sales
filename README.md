@@ -5,12 +5,12 @@
 Beautiful charts and reports of *your* Craft CMS plugin sales in the control panel.
 
 - The most relevant charts for quick and insightful overviews.
-- Filter plugin sales by date ranges.
+- See plugin sales in your currency and filtered by date range.
 - Export plugin sales in CSV format.
 
 Requires a [Craft ID](https://id.craftcms.com/) developer account.
 
-![Plugin sales](https://putyourlightson.com/assets/images/plugins/plugin-sales/plugin-sales.png)  
+![Plugin sales](https://putyourlightson.com/assets/images/plugins/plugin-sales/plugin-sales-121.png)  
 
 ## Documentation
 
