@@ -21,7 +21,7 @@
                     {% else %}
                         You earned a net profit during this period of
                     {% endif %}
-                    <strong id="total" data-value="{{ netAmount }}">${{ netAmount|number_format(2) }}</strong>
+                    <strong id="total" data-value="{{ netAmount }}">${{ netAmount|number_format(2) }} </strong>
                 {% else %}
                     {% if not start and not end %}
                         No earnings yet, keep on truckin!
@@ -85,6 +85,7 @@
 
 {% js %}
 
+    var locale = '{{ currentSite.language }}';
     var currency = '{{ craft.pluginSales.getCurrency() }}';
     var rate = {{ craft.pluginSales.getExchangeRate() }};
     var palette = {{ craft.pluginSales.getColourPalette()|json_encode|raw }};
@@ -140,16 +141,22 @@
         $('.spinner').show();
     });
 
-    function formatCurrency(value) {
-        value = value * rate;
-        return value.toLocaleString('{{ currentSite.language }}', {
+    function formatCurrency(locale, currency, value) {
+        return value.toLocaleString(locale, {
             style: 'currency',
             currency: currency,
             minimumFractionDigits: (value == parseInt(value) ? 0 : 2),
         });
     }
 
-    $('#total').text(formatCurrency(parseFloat($('#total').attr('data-value'))));
+    var value = parseFloat($('#total').attr('data-value'));
+
+    if (rate != 1) {
+        $('#total').after('<span class="info">Converted from <strong>' + formatCurrency(locale, 'USD', value) + '</strong> at an exchange rate of <strong>' + rate + '</strong></span>');
+        value = value * rate;
+    }
+
+    $('#total').text(formatCurrency(locale, currency, value) + ' ');
 
     {% if netAmount %}
         $('#plugin-sales').DataTable({

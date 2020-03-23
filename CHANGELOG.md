@@ -1,6 +1,9 @@
 # Release Notes for Plugin Sales
 
-## 1.2.1 - Unreleased
+## 1.2.1 - 2020-03-23
+### Added
+- Added info window with total net profit in original currency and exchange rate if not USD.
+
 ### Changed
 - Changed predefined selectable date ranges.
 
