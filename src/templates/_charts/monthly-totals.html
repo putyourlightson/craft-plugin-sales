@@ -43,7 +43,7 @@
                 data: {{ netAmounts|json_encode|raw }},
             },
             {
-                name: 'Licenses',
+                name: 'Number of Sales',
                 data: {{ count|json_encode|raw }},
             },
         ],
@@ -88,10 +88,10 @@
                 show: false,
             },
             {
-                seriesName: 'Licenses',
+                seriesName: 'Number of Sales',
                 opposite: true,
                 title: {
-                    text: "Licenses"
+                    text: "Number of Sales"
                 },
                 labels: {
                     style: {

@@ -1,5 +1,9 @@
 # Release Notes for Plugin Sales
 
+## 1.2.3 - Unreleased
+### Changed
+- Changed wording of number of sales.
+
 ## 1.2.2 - 2020-03-23
 ### Fixed
 - Fixed bug in format value method.
