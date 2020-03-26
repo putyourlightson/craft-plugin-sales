@@ -4,6 +4,9 @@
 ### Changed
 - Changed wording of number of sales.
 
+### Fixed
+- Fixed undefined currency error when settings were not saved after a recent update.
+
 ## 1.2.2 - 2020-03-23
 ### Fixed
 - Fixed bug in format value method.
