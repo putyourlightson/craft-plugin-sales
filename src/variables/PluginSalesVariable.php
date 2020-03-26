@@ -31,11 +31,7 @@ class PluginSalesVariable
     {
         $lastRefresh = PluginSales::$plugin->sales->getLastRefresh();
 
-        if ($lastRefresh === null) {
-            return false;
-        }
-
-        return DateTimeHelper::toDateTime($lastRefresh['dateCreated']);
+        return $lastRefresh['dateCreated'] ? DateTimeHelper::toDateTime($lastRefresh['dateCreated']) : false;
     }
 
     /**
@@ -47,11 +43,7 @@ class PluginSalesVariable
     {
         $lastRefresh = PluginSales::$plugin->sales->getLastRefresh();
 
-        if ($lastRefresh === null) {
-            return 'USD';
-        }
-
-        return $lastRefresh['currency'];
+        return $lastRefresh['currency'] ?? 'USD';
     }
 
     /**
@@ -63,11 +55,7 @@ class PluginSalesVariable
     {
         $lastRefresh = PluginSales::$plugin->sales->getLastRefresh();
 
-        if ($lastRefresh === null) {
-            return 1;
-        }
-
-        return $lastRefresh['exchangeRate'];
+        return $lastRefresh['exchangeRate'] ?? 1;
     }
 
     /**

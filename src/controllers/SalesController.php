@@ -20,7 +20,7 @@ class SalesController extends Controller
 
         if ($refreshed !== false) {
             Craft::$app->getSession()->setNotice(
-                Craft::t('plugin-sales', '{count} plugin sales successfully refreshed.', ['count' => $refreshed])
+                Craft::t('plugin-sales', '{count} plugin sale(s) refreshed.', ['count' => $refreshed])
             );
         }
         else {
