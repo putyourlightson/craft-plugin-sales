@@ -1,5 +1,9 @@
 # Release Notes for Plugin Sales
 
+## 1.3.1 - 2020-04-06
+### Fixed
+- Fixed amounts in charts not being converted using the exchange rate.
+
 ## 1.3.0 - 2020-04-06
 ### Added
 - Added renewals to monthly sales report.

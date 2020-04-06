@@ -7,13 +7,14 @@
 {% set start = craft.app.request.get('start') %}
 {% set end = craft.app.request.get('end') %}
 {% set months = craft.pluginSales.reports.getMonths(start, end) %}
-{% set netAmount = craft.pluginSales.reports.getTotals(start, end).netAmount %}
 
 {% set monthlyTotals = craft.pluginSales.reports.getMonthlyTotals(start, end) %}
 {% set monthlyLicenseRenewalTotals = craft.pluginSales.reports.getMonthlyLicenseRenewalTotals(start, end) %}
 {% set totals = craft.pluginSales.reports.getTotals(start, end) %}
 {% set pluginTotals = craft.pluginSales.reports.getPluginTotals(start, end) %}
 {% set licenseRenewalTotals = craft.pluginSales.reports.getLicenseRenewalTotals(start, end) %}
+
+{% set netAmount = totals.netAmount %}
 
 {% block content %}
 
@@ -154,14 +155,17 @@
         });
     }
 
+    function convertCurrency(value, cur = currency) {
+        return formatCurrency(value * rate, cur);
+    }
+
     var value = parseFloat($('#total').attr('data-value'));
 
     if (rate != 1) {
         $('#total').after('<span class="info">Converted from <strong>' + formatCurrency(value, 'USD') + '</strong> at an exchange rate of <strong>' + rate + '</strong></span>');
-        value = value * rate;
     }
 
-    $('#total').text(formatCurrency(value) + ' ');
+    $('#total').text(convertCurrency(value) + ' ');
 
     {% if netAmount %}
         $('#plugin-sales').DataTable({
