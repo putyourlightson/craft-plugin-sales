@@ -9,6 +9,11 @@
 {% set months = craft.pluginSales.reports.getMonths(start, end) %}
 {% set netAmount = craft.pluginSales.reports.getTotals(start, end).netAmount %}
 
+{% set monthlyTotals = craft.pluginSales.reports.getMonthlyTotals(start, end) %}
+{% set monthlyLicenseRenewalTotals = craft.pluginSales.reports.getMonthlyLicenseRenewalTotals(start, end) %}
+{% set totals = craft.pluginSales.reports.getTotals(start, end) %}
+{% set pluginTotals = craft.pluginSales.reports.getPluginTotals(start, end) %}
+{% set licenseRenewalTotals = craft.pluginSales.reports.getLicenseRenewalTotals(start, end) %}
 
 {% block content %}
 

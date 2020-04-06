@@ -1,11 +1,15 @@
 {% set grossAmounts = [] %}
 {% set netAmounts = [] %}
-{% set count = [] %}
+{% set sales = [] %}
+{% set renewals = [] %}
 
-{% for monthlyTotal in craft.pluginSales.reports.getMonthlyTotals(start, end) %}
+{% for monthlyTotal in monthlyTotals %}
     {% set grossAmounts = grossAmounts|merge([monthlyTotal.grossAmount]) %}
     {% set netAmounts = netAmounts|merge([monthlyTotal.netAmount]) %}
-    {% set count = count|merge([monthlyTotal.count]) %}
+    {% set sales = sales|merge([monthlyTotal.count]) %}
+{% endfor %}
+{% for monthlyRenewalTotal in monthlyLicenseRenewalTotals.renewals %}
+    {% set renewals = renewals|merge([monthlyRenewalTotal]) %}
 {% endfor %}
 
 <div id="chart-monthly-totals" class="chart"></div>
@@ -31,6 +35,10 @@
                 {
                     formatter: (value) => formatCurrency(value),
                 },
+                {},
+                {
+                    formatter: (value) => formatCurrency(value),
+                },
             ],
         },
         series: [
@@ -44,7 +52,11 @@
             },
             {
                 name: 'Number of Sales',
-                data: {{ count|json_encode|raw }},
+                data: {{ sales|json_encode|raw }},
+            },
+            {
+                name: 'Renewals',
+                data: {{ renewals|json_encode|raw }},
             },
         ],
         dataLabels: {
@@ -101,7 +113,11 @@
                         return parseInt(value);
                     },
                 }
-            }
+            },
+            {
+                seriesName: 'Gross Sales',
+                show: false,
+            },
         ],
         legend: {
             position: 'top',
