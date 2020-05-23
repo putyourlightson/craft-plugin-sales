@@ -1,5 +1,9 @@
 # Release Notes for Plugin Sales
 
+## 1.3.2 - 2020-05-23
+### Changed
+- Updated ApexCharts to v3.19.2 which fixes a minor bug in the `Download CSV` feature.
+
 ## 1.3.1 - 2020-04-06
 ### Fixed
 - Fixed amounts in charts not being converted using the exchange rate.
