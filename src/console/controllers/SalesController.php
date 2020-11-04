@@ -11,10 +11,17 @@ use putyourlightson\pluginsales\PluginSales;
 use yii\console\Controller;
 use yii\console\ExitCode;
 
+/**
+ * Allows you to perform actions on sales.
+ *
+ * @author    PutYourLightsOn
+ * @package   Campaign
+ * @since     1.3.0
+ */
 class SalesController extends Controller
 {
     /**
-     * @return int
+     * Refreshes all plugin sales.
      */
     public function actionRefresh(): int
     {
@@ -39,7 +46,7 @@ class SalesController extends Controller
     }
 
     /**
-     * @return int
+     * Deletes all plugin sales.
      */
     public function actionDelete(): int
     {

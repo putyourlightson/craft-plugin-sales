@@ -1,5 +1,9 @@
 # Release Notes for Plugin Sales
 
+## 1.3.3 - Unreleased
+### Changed
+- Improved help text for console commands.
+
 ## 1.3.2 - 2020-05-23
 ### Changed
 - Updated ApexCharts to v3.19.2 which fixes a minor bug in the `Download CSV` feature.
