@@ -1,5 +1,9 @@
 # Release Notes for Plugin Sales
 
+## 1.3.4 - 2021-05-11
+### Changed
+- Switched from using exchangeratesapi.io to ratesapi.io for converting currencies.
+
 ## 1.3.3 - 2021-05-11
 ### Changed
 - Improved the help text for console commands.
