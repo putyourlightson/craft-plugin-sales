@@ -45,7 +45,7 @@
                 {% endif %}
             </p>
             {% if netAmount and refreshDate and not craft.pluginSales.hasValidLicense() %}
-                <p class="warning">
+                <p class="warning" data-icon="alert">
                     <strong>
                         Please support development of this plugin by buying a license<a href="{{ url('plugin-store/buy/plugin-sales/standard') }}" class="go"></a>
                     </strong>

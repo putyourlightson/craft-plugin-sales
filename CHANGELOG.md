@@ -1,8 +1,11 @@
 # Release Notes for Plugin Sales
 
-## 1.3.3 - Unreleased
+## 1.3.3 - 2021-05-11
 ### Changed
-- Improved help text for console commands.
+- Improved the help text for console commands.
+
+### Fixed
+- Fixed colour palette values not being prefixed with a hash.
 
 ## 1.3.2 - 2020-05-23
 ### Changed
