@@ -1,5 +1,9 @@
 # Release Notes for Plugin Sales
 
+## 1.3.5 - Unreleased
+### Changed
+- Improved wording of search results in DataTables.
+
 ## 1.3.4 - 2021-05-11
 ### Changed
 - Switched from using exchangeratesapi.io to ratesapi.io for converting currencies.
