@@ -155,17 +155,14 @@
         });
     }
 
-    function convertCurrency(value, cur = currency) {
-        return formatCurrency(value * rate, cur);
-    }
-
     var value = parseFloat($('#total').attr('data-value'));
 
     if (rate != 1) {
-        $('#total').after('<span class="info">Converted from <strong>' + formatCurrency(value, 'USD') + '</strong> at an exchange rate of <strong>' + rate + '</strong></span>');
+        var originalValue = value / rate;
+        $('#total').after('<span class="info">Converted from <strong>' + formatCurrency(originalValue, 'USD') + '</strong> at an exchange rate of <strong>' + rate + '</strong></span>');
     }
 
-    $('#total').text(convertCurrency(value) + ' ');
+    $('#total').text(formatCurrency(value) + ' ');
 
     {% if netAmount %}
         $('#plugin-sales').DataTable({

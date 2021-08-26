@@ -76,6 +76,18 @@ class SalesService extends Component
     }
 
     /**
+     * Returns exchange rate.
+     *
+     * @return float
+     */
+    public function getExchangeRate(): float
+    {
+        $lastRefresh = $this->getLastRefresh();
+
+        return $lastRefresh['exchangeRate'] ?? 1;
+    }
+
+    /**
      * Refreshes plugin sales.
      *
      * @param callable|null $setProgressHandler

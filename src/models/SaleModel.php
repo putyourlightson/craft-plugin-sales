@@ -41,12 +41,12 @@ class SaleModel extends Model
     public $email;
 
     /**
-     * @var double
+     * @var float
      */
     public $grossAmount;
 
     /**
-     * @var double
+     * @var float
      */
     public $netAmount;
 

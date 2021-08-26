@@ -53,9 +53,7 @@ class PluginSalesVariable
      */
     public function getExchangeRate(): float
     {
-        $lastRefresh = PluginSales::$plugin->sales->getLastRefresh();
-
-        return $lastRefresh['exchangeRate'] ?? 1;
+        return PluginSales::$plugin->sales->getExchangeRate();
     }
 
     /**

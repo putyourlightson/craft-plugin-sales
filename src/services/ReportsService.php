@@ -51,8 +51,8 @@ class ReportsService extends Component
                 ucfirst($sale['edition']),
                 Craft::t('plugin-sales', $sale['renewal'] ? 'Renewal' : 'License'),
                 $sale['email'],
-                number_format($sale['grossAmount'], 2),
-                number_format($sale['netAmount'], 2),
+                $this->_prepareAmount($sale['grossAmount']),
+                $this->_prepareAmount($sale['netAmount']),
                 $sale['dateSold'],
             ];
         }
@@ -77,8 +77,8 @@ class ReportsService extends Component
         $sales = $this->_getTotalsQuery($start, $end)->all();
 
         foreach ($sales as $sale) {
-            $totals['grossAmount'] = $sale['grossAmount'];
-            $totals['netAmount'] = $sale['netAmount'];
+            $totals['grossAmount'] = $this->_prepareAmount($sale['grossAmount']);
+            $totals['netAmount'] = $this->_prepareAmount($sale['netAmount']);
         }
 
         return $totals;
@@ -103,7 +103,7 @@ class ReportsService extends Component
             ->all();
 
         foreach ($sales as $sale) {
-            $totals[$sale['name']] = $sale['grossAmount'];
+            $totals[$sale['name']] = $this->_prepareAmount($sale['grossAmount']);
         }
 
         return $totals;
@@ -128,7 +128,7 @@ class ReportsService extends Component
 
         foreach ($sales as $sale) {
             $key = $sale['renewal'] ? 'renewals' : 'licenses';
-            $totals[$key] = $sale['grossAmount'];
+            $totals[$key] = $this->_prepareAmount($sale['grossAmount']);
         }
 
         return $totals;
@@ -208,7 +208,7 @@ class ReportsService extends Component
             $key = $sale['name'];
             $currentMonth = new DateTime($sale['year'].'-'.$sale['month'].'-1');
 
-            $totals[$key][$currentMonth->format(self::MONTH_FORMAT)] = $sale['grossAmount'];
+            $totals[$key][$currentMonth->format(self::MONTH_FORMAT)] = $this->_prepareAmount($sale['grossAmount']);
         }
 
         foreach ($totals as $key => $values) {
@@ -246,7 +246,7 @@ class ReportsService extends Component
             $key = $sale['renewal'] ? 'renewals' : 'licenses';
             $currentMonth = new DateTime($sale['year'].'-'.$sale['month'].'-1');
 
-            $totals[$key][$currentMonth->format(self::MONTH_FORMAT)] = $sale['grossAmount'];
+            $totals[$key][$currentMonth->format(self::MONTH_FORMAT)] = $this->_prepareAmount($sale['grossAmount']);
         }
 
         foreach ($totals as $key => $values) {
@@ -317,6 +317,18 @@ class ReportsService extends Component
         $query = $this->_applyDataRange($query, $start, $end);
 
         return $query;
+    }
+
+    /**
+     * Converts and formats an amount.
+     *
+     * @param float $value
+     *
+     * @return float
+     */
+    private function _prepareAmount(float $value): float
+    {
+        return round($value * PluginSales::$plugin->sales->getExchangeRate(), 2);
     }
 
     /**

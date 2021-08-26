@@ -65,12 +65,26 @@
     float: none !important;
 }
 
+.dataTables_wrapper .dataTables_length select {
+    border: none;
+    background-color: rgba(96, 125, 159, 0.25);
+}
+
+.dataTables_wrapper .dataTables_length select:hover {
+    background-color: rgba(96, 125, 159, 0.5);
+}
+
 .dataTables_wrapper .dataTables_filter {
     float: none !important;
 }
 
 .dataTables_wrapper .dataTables_filter input {
     margin-left: 0 !important;
+    border-radius: 3px;
+    border: 1px solid rgba(96, 125, 159, 0.25);
+    background-color: #fbfcfe;
+    background-clip: padding-box;
+    padding: 6px 9px;
 }
 
 .dataTables_wrapper .dataTables_paginate .paginate_button.current,

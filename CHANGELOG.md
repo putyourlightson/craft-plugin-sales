@@ -2,7 +2,10 @@
 
 ## 1.3.6 - Unreleased
 ### Changed
-- Load all used library resources from a CDN.
+- Updated all JavaScript libraries and now load resources from a CDN.
+
+### Fixed
+- Fixed the y-axis labels when amounts were converted.
 
 ## 1.3.5 - 2021-08-26
 ### Changed
