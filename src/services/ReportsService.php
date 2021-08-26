@@ -176,7 +176,14 @@ class ReportsService extends Component
      */
     public function getMonthlyTotals(string $start = null, string $end = null): array
     {
-        return $this->_getMonthlyTotalsQuery($start, $end)->all();
+        $monthlyTotals = $this->_getMonthlyTotalsQuery($start, $end)->all();
+
+        foreach ($monthlyTotals as $key => $monthlyTotal) {
+            $monthlyTotals[$key]['grossAmount'] = $this->_prepareAmount($monthlyTotal['grossAmount']);
+            $monthlyTotals[$key]['netAmount'] = $this->_prepareAmount($monthlyTotal['netAmount']);
+        }
+
+        return $monthlyTotals;
     }
 
     /**
