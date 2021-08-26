@@ -1,11 +1,11 @@
 # Release Notes for Plugin Sales
 
-## 1.3.6 - Unreleased
+## 1.3.6 - 2021-08-26
 ### Changed
 - Updated all JavaScript libraries and now load resources from a CDN.
 
 ### Fixed
-- Fixed the y-axis labels when amounts were converted.
+- Fixed the Y-axis labels when amounts were being converted.
 
 ## 1.3.5 - 2021-08-26
 ### Changed
