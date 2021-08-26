@@ -4,6 +4,9 @@
 ### Changed
 - Improved wording of search results in DataTables.
 
+### Fixed
+- Fixed logs not being written to `plugin-sales.log` file.
+
 ## 1.3.4 - 2021-05-11
 ### Changed
 - Switched from using exchangeratesapi.io to ratesapi.io for converting currencies.

@@ -97,7 +97,7 @@ class SalesService extends Component
         }
 
         catch (GuzzleException $exception) {
-            LogToFile::error($exception->getMessage());
+            LogToFile::error($exception->getMessage(), 'plugin-sales');
 
             return false;
         }
@@ -140,7 +140,7 @@ class SalesService extends Component
             ]);
         }
         catch (GuzzleException $exception) {
-            LogToFile::error($exception->getMessage());
+            LogToFile::error($exception->getMessage(), 'plugin-sales');
 
             return false;
         }
@@ -212,7 +212,7 @@ class SalesService extends Component
                 $response = $client->get('https://api.ratesapi.io/api/latest?base=USD');
             }
             catch (GuzzleException $exception) {
-                LogToFile::error($exception->getMessage());
+                LogToFile::error($exception->getMessage(), 'plugin-sales');
 
                 return false;
             }
@@ -221,9 +221,7 @@ class SalesService extends Component
             $rate = $result['rates'][PluginSales::$plugin->settings->currency] ?? null;
 
             if ($rate === null) {
-                LogToFile::error(Craft::t('plugin-sales', 'Could not find exchange rate for {currency}.', [
-                    'currency' => PluginSales::$plugin->settings->currency,
-                ]));
+                LogToFile::error(Craft::t('plugin-sales', 'Could not find exchange rate for {currency}.', ['currency' => PluginSales::$plugin->settings->currency,]), 'plugin-sales');
 
                 return false;
             }
