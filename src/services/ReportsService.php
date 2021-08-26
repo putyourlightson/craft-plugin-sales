@@ -51,8 +51,9 @@ class ReportsService extends Component
                 ucfirst($sale['edition']),
                 Craft::t('plugin-sales', $sale['renewal'] ? 'Renewal' : 'License'),
                 $sale['email'],
-                $this->_prepareAmount($sale['grossAmount']),
-                $this->_prepareAmount($sale['netAmount']),
+                // Format amounts but don't convert them
+                number_format($sale['grossAmount'], 2),
+                number_format($sale['netAmount'], 2),
                 $sale['dateSold'],
             ];
         }
