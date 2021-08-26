@@ -1,5 +1,9 @@
 # Release Notes for Plugin Sales
 
+## 1.3.6 - Unreleased
+### Changed
+- Load all used library resources from a CDN.
+
 ## 1.3.5 - 2021-08-26
 ### Changed
 - Switched from using ratesapi.io to freecurrencyapi.net for converting currencies.

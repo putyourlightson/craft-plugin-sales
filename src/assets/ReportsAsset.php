@@ -26,15 +26,15 @@ class ReportsAsset extends AssetBundle
 
         // define the relative path to CSS/JS files that should be registered with the page when this asset bundle is registered
         $this->css = [
-            'css/daterangepicker.css',
-            'css/datatables.min.css',
+            'https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css',
+            'https://cdn.datatables.net/v/dt/dt-1.11.0/r-2.2.9/datatables.min.css',
             'css/cp.css',
         ];
         $this->js = [
-            'js/apexcharts.js',
-            'js/moment.min.js',
-            'js/daterangepicker.js',
-            'js/datatables.min.js',
+            'https://cdn.jsdelivr.net/npm/apexcharts/dist/apexcharts.min.js',
+            'https://cdn.jsdelivr.net/npm/moment/moment.min.js',
+            'https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js',
+            'https://cdn.datatables.net/v/dt/dt-1.11.0/r-2.2.9/datatables.min.js',
         ];
 
         parent::init();
