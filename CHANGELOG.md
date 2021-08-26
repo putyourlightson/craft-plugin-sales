@@ -1,7 +1,8 @@
 # Release Notes for Plugin Sales
 
-## 1.3.5 - Unreleased
+## 1.3.5 - 2021-08-26
 ### Changed
+- Switched from using ratesapi.io to freecurrencyapi.net for converting currencies.
 - Improved wording of search results in DataTables.
 
 ### Fixed

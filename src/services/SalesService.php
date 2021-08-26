@@ -209,7 +209,7 @@ class SalesService extends Component
         // Get live exchange rate if not USD
         if (PluginSales::$plugin->settings->currency != 'USD') {
             try {
-                $response = $client->get('https://api.ratesapi.io/api/latest?base=USD');
+                $response = $client->get('https://freecurrencyapi.net/api/v1/rates?base_currency=USD');
             }
             catch (GuzzleException $exception) {
                 LogToFile::error($exception->getMessage(), 'plugin-sales');
@@ -218,7 +218,8 @@ class SalesService extends Component
             }
 
             $result = json_decode($response->getBody(), true);
-            $rate = $result['rates'][PluginSales::$plugin->settings->currency] ?? null;
+            $rates = reset($result['data']) ?? null;
+            $rate = $rates[PluginSales::$plugin->settings->currency] ?? null;
 
             if ($rate === null) {
                 LogToFile::error(Craft::t('plugin-sales', 'Could not find exchange rate for {currency}.', ['currency' => PluginSales::$plugin->settings->currency,]), 'plugin-sales');
