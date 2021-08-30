@@ -31,9 +31,9 @@ class ReportsAsset extends AssetBundle
             'css/cp.css',
         ];
         $this->js = [
-            'https://cdn.jsdelivr.net/npm/apexcharts@3/dist/apexcharts.min.js',
-            'https://cdn.jsdelivr.net/npm/moment@2/moment.min.js',
-            'https://cdn.jsdelivr.net/npm/daterangepicker@3/daterangepicker.min.js',
+            'https://cdn.jsdelivr.net/npm/apexcharts@3',
+            'https://cdn.jsdelivr.net/npm/moment@2',
+            'https://cdn.jsdelivr.net/npm/daterangepicker@3',
             'https://cdn.datatables.net/v/dt/dt-1.11.0/r-2.2.9/datatables.min.js',
         ];
 
