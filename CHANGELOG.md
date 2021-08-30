@@ -1,5 +1,9 @@
 # Release Notes for Plugin Sales
 
+## 1.3.8 - Unreleased
+### Changed
+- Improved outputting of converted net amount.  
+
 ## 1.3.7 - 2021-08-26
 ### Fixed
 - Fixed individual sales being converted when they shouldn't be.

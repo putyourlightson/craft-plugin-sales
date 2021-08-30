@@ -13,8 +13,8 @@
 {% set totals = craft.pluginSales.reports.getTotals(start, end) %}
 {% set pluginTotals = craft.pluginSales.reports.getPluginTotals(start, end) %}
 {% set licenseRenewalTotals = craft.pluginSales.reports.getLicenseRenewalTotals(start, end) %}
-
 {% set netAmount = totals.netAmount %}
+
 
 {% block content %}
 
@@ -27,7 +27,9 @@
                     {% else %}
                         You earned a net profit during this period of
                     {% endif %}
-                    <strong id="total" data-value="{{ netAmount }}">${{ netAmount|number_format(2) }} </strong>
+                    <strong id="total" data-value="{{ netAmount }}">
+                        {{ craft.pluginSales.getFormattedAmount(netAmount) }}
+                    </strong>
                 {% else %}
                     {% if not start and not end %}
                         No earnings yet, keep on truckin!
@@ -161,8 +163,6 @@
         var originalValue = value / rate;
         $('#total').after('<span class="info">Converted from <strong>' + formatCurrency(originalValue, 'USD') + '</strong> at an exchange rate of <strong>' + rate + '</strong></span>');
     }
-
-    $('#total').text(formatCurrency(value) + ' ');
 
     {% if netAmount %}
         $('#plugin-sales').DataTable({

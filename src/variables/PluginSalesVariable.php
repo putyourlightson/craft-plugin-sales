@@ -5,8 +5,10 @@
 
 namespace putyourlightson\pluginsales\variables;
 
+use Craft;
 use craft\helpers\DateTimeHelper;
 use DateTime;
+use NumberFormatter;
 use putyourlightson\pluginsales\PluginSales;
 use putyourlightson\pluginsales\services\ReportsService;
 
@@ -47,6 +49,20 @@ class PluginSalesVariable
     }
 
     /**
+     * Returns formatted amount
+     *
+     * @param float $amount
+     * @return string
+     */
+    public function getFormattedAmount(float $amount): string
+    {
+        $formatter =  new NumberFormatter(Craft::$app->locale, NumberFormatter::CURRENCY);
+        $currency = $this->getCurrency();
+
+        return $formatter->formatCurrency($amount, $currency);
+    }
+
+    /**
      * Returns exchange rate
      *
      * @return float
@@ -77,7 +93,7 @@ class PluginSalesVariable
      *
      * @return bool
      */
-    public function hasValidLicense()
+    public function hasValidLicense(): bool
     {
         return PluginSales::$plugin->hasValidLicense();
     }
