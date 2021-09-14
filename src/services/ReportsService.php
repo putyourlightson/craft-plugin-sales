@@ -282,9 +282,7 @@ class ReportsService extends Component
             ])
             ->asArray();
 
-        $query = $this->_applyDataRange($query, $start, $end);
-
-        return $query;
+        return $this->_applyDataRange($query, $start, $end);
     }
 
     /**
@@ -322,9 +320,7 @@ class ReportsService extends Component
             ->orderBy(['year' => SORT_ASC, 'month' => SORT_ASC])
             ->asArray();
 
-        $query = $this->_applyDataRange($query, $start, $end);
-
-        return $query;
+        return $this->_applyDataRange($query, $start, $end);
     }
 
     /**
@@ -334,7 +330,7 @@ class ReportsService extends Component
      *
      * @return float
      */
-    private function _prepareAmount(float $value): float
+    private function _prepareAmount($value = 0): float
     {
         return round($value * PluginSales::$plugin->sales->getExchangeRate(), 2);
     }
