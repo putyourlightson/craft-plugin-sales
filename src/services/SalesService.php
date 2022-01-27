@@ -8,6 +8,8 @@ namespace putyourlightson\pluginsales\services;
 use Craft;
 use craft\base\Component;
 use craft\helpers\App;
+use craft\helpers\DateTimeHelper;
+use DateTime;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use putyourlightson\logtofile\LogToFile;
@@ -19,8 +21,11 @@ use putyourlightson\pluginsales\records\SaleRecord;
 use yii\web\ForbiddenHttpException;
 
 /**
- * @property SaleModel[] $sales
- * @property array|null $lastRefresh
+ *
+ *
+ * @property-read float $exchangeRate
+ * @property-read null|array $lastRefresh
+ * @property-read SaleModel[] $sales
  */
 class SalesService extends Component
 {
@@ -38,6 +43,7 @@ class SalesService extends Component
     {
         $saleModels = [];
 
+        /** @var SaleRecord[] $saleRecords */
         $saleRecords = SaleRecord::find()
             ->with('plugin')
             ->all();
@@ -220,26 +226,7 @@ class SalesService extends Component
 
         // Get live exchange rate if not USD
         if (PluginSales::$plugin->settings->currency != 'USD') {
-            try {
-                $response = $client->get('https://freecurrencyapi.net/api/v1/rates?base_currency=USD');
-            }
-            catch (GuzzleException $exception) {
-                LogToFile::error($exception->getMessage(), 'plugin-sales');
-
-                return false;
-            }
-
-            $result = json_decode($response->getBody(), true);
-            $rates = reset($result['data']) ?? null;
-            $rate = $rates[PluginSales::$plugin->settings->currency] ?? null;
-
-            if ($rate === null) {
-                LogToFile::error(Craft::t('plugin-sales', 'Could not find exchange rate for {currency}.', ['currency' => PluginSales::$plugin->settings->currency,]), 'plugin-sales');
-
-                return false;
-            }
-
-            $refreshRecord->exchangeRate = $rate;
+            $refreshRecord->exchangeRate = $this->_getExchangeRateFromApi($client);
         }
 
         $refreshRecord->save();
@@ -254,5 +241,48 @@ class SalesService extends Component
     {
         SaleRecord::deleteAll();
         PluginRecord::deleteAll();
+    }
+
+    /**
+     * Returns the exchange rate from the API, at most once per day.
+     *
+     * @return float|null
+     */
+    private function _getExchangeRateFromApi(Client $client): float
+    {
+        $lastExchangeRate = 1;
+        $lastRefresh = $this->getLastRefresh();
+
+        if ($lastRefresh !== null) {
+            $lastExchangeRate = $lastRefresh['exchangeRate'];
+
+            $lastRefreshDate = DateTimeHelper::toDateTime($lastRefresh['dateCreated']);
+            $now = new DateTime();
+
+            if ($lastRefreshDate->format('Y-m-d') == $now->format('Y-m-d')) {
+                return $lastExchangeRate;
+            }
+        }
+
+        try {
+            $response = $client->get('https://freecurrencyapi.net/api/v1/rates?base_currency=USD');
+        }
+        catch (GuzzleException $exception) {
+            LogToFile::error($exception->getMessage(), 'plugin-sales');
+
+            return $lastExchangeRate;
+        }
+
+        $result = json_decode($response->getBody(), true);
+        $rates = reset($result['data']) ?? null;
+        $rate = $rates[PluginSales::$plugin->settings->currency] ?? null;
+
+        if ($rate === null) {
+            LogToFile::error(Craft::t('plugin-sales', 'Could not find exchange rate for {currency}.', ['currency' => PluginSales::$plugin->settings->currency,]), 'plugin-sales');
+
+            return $lastExchangeRate;
+        }
+
+        return $rate;
     }
 }

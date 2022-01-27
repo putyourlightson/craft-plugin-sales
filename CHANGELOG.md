@@ -1,5 +1,9 @@
 # Release Notes for Plugin Sales
 
+## 1.3.10 - 2022-01-26
+### Changed
+- Exchange rates are now fetched from the API at most once per day, to help avoid exceeding monthly request limits.  
+
 ## 1.3.9 - 2021-09-14
 ### Fixed
 - Fixed a bug that was throwing an error when a plugin did not have any sales.  
