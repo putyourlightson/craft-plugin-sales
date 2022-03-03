@@ -12,15 +12,15 @@ class PluginModel extends Model
     /**
      * @var int
      */
-    public $id;
+    public int $id;
 
     /**
      * @var string
      */
-    public $name;
+    public string $name;
 
     /**
      * @var bool
      */
-    public $hasMultipleEditions;
+    public bool $hasMultipleEditions;
 }

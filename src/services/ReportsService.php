@@ -24,15 +24,10 @@ use yii\db\ActiveQuery;
  */
 class ReportsService extends Component
 {
-    const MONTH_FORMAT = 'M Y';
+    public const MONTH_FORMAT = 'M Y';
 
     /**
      * Returns plugin sales data.
-     *
-     * @param string|null $start
-     * @param string|null $end
-     *
-     * @return string
      */
     public function getSalesData(string $start = null, string $end = null): string
     {
@@ -58,18 +53,11 @@ class ReportsService extends Component
             ];
         }
 
-        $data = json_encode($data);
-
-        return $data;
+        return json_encode($data);
     }
 
     /**
      * Returns totals.
-     *
-     * @param string|null $start
-     * @param string|null $end
-     *
-     * @return array
      */
     public function getTotals(string $start = null, string $end = null): array
     {
@@ -87,11 +75,6 @@ class ReportsService extends Component
 
     /**
      * Returns plugin totals.
-     *
-     * @param string|null $start
-     * @param string|null $end
-     *
-     * @return array
      */
     public function getPluginTotals(string $start = null, string $end = null): array
     {
@@ -112,11 +95,6 @@ class ReportsService extends Component
 
     /**
      * Returns license and renewal totals.
-     *
-     * @param string|null $start
-     * @param string|null $end
-     *
-     * @return array
      */
     public function getLicenseRenewalTotals(string $start = null, string $end = null): array
     {
@@ -137,11 +115,6 @@ class ReportsService extends Component
 
     /**
      * Returns all months of plugin sales.
-     *
-     * @param string|null $start
-     * @param string|null $end
-     *
-     * @return array
      */
     public function getMonths(string $start = null, string $end = null): array
     {
@@ -155,7 +128,7 @@ class ReportsService extends Component
         $lastMonth = end($sales);
         $firstMonth = reset($sales);
         $currentMonth = new DateTime($firstMonth['year'].'-'.$firstMonth['month'].'-1');
-        $i = 0;
+
         while (
             ($currentMonth->format('n') <= $lastMonth['month'] && $currentMonth->format('Y') == $lastMonth['year'])
             || $currentMonth->format('Y') < $lastMonth['year']
@@ -169,11 +142,6 @@ class ReportsService extends Component
 
     /**
      * Returns monthly totals.
-     *
-     * @param string|null $start
-     * @param string|null $end
-     *
-     * @return array
      */
     public function getMonthlyTotals(string $start = null, string $end = null): array
     {
@@ -189,11 +157,6 @@ class ReportsService extends Component
 
     /**
      * Returns monthly plugin totals.
-     *
-     * @param string|null $start
-     * @param string|null $end
-     *
-     * @return array
      */
     public function getMonthlyPluginTotals(string $start = null, string $end = null): array
     {
@@ -228,11 +191,6 @@ class ReportsService extends Component
 
     /**
      * Returns monthly license and renewal totals.
-     *
-     * @param string|null $start
-     * @param string|null $end
-     *
-     * @return array
      */
     public function getMonthlyLicenseRenewalTotals(string $start = null, string $end = null): array
     {
@@ -266,11 +224,6 @@ class ReportsService extends Component
 
     /**
      * Returns totals query.
-     *
-     * @param string|null $start
-     * @param string|null $end
-     *
-     * @return ActiveQuery
      */
     private function _getTotalsQuery(string $start = null, string $end = null): ActiveQuery
     {
@@ -287,11 +240,6 @@ class ReportsService extends Component
 
     /**
      * Returns monthly totals query.
-     *
-     * @param string|null $start
-     * @param string|null $end
-     *
-     * @return ActiveQuery
      */
     private function _getMonthlyTotalsQuery(string $start = null, string $end = null): ActiveQuery
     {
@@ -325,23 +273,14 @@ class ReportsService extends Component
 
     /**
      * Converts and formats an amount.
-     *
-     * @param float $value
-     *
-     * @return float
      */
-    private function _prepareAmount($value = 0): float
+    private function _prepareAmount(float|int $value = 0): float
     {
         return round($value * PluginSales::$plugin->sales->getExchangeRate(), 2);
     }
 
     /**
      * Populates an array with zero values.
-     *
-     * @param array $keys
-     * @param array|null $subkeys
-     *
-     * @return array
      */
     private function _populateZeroValues(array $keys, array $subkeys = null): array
     {
@@ -363,12 +302,6 @@ class ReportsService extends Component
 
     /**
      * Applies a date range condition to a query.
-     *
-     * @param ActiveQuery $query
-     * @param string|null $start
-     * @param string|null $end
-     *
-     * @return ActiveQuery
      */
     private function _applyDataRange(ActiveQuery $query, string $start = null, string $end = null): ActiveQuery
     {

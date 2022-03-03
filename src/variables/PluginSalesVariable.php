@@ -16,8 +16,6 @@ class PluginSalesVariable
 {
     /**
      * Returns reports service
-     *
-     * @return ReportsService
      */
     public function getReports(): ReportsService
     {
@@ -26,10 +24,8 @@ class PluginSalesVariable
 
     /**
      * Returns refresh date.
-     *
-     * @return DateTime|bool
      */
-    public function getRefreshDate()
+    public function getRefreshDate(): DateTime|bool
     {
         $lastRefresh = PluginSales::$plugin->sales->getLastRefresh();
 
@@ -38,8 +34,6 @@ class PluginSalesVariable
 
     /**
      * Returns currency
-     *
-     * @return string
      */
     public function getCurrency(): string
     {
@@ -50,9 +44,6 @@ class PluginSalesVariable
 
     /**
      * Returns formatted amount
-     *
-     * @param float $amount
-     * @return string
      */
     public function getFormattedAmount(float $amount): string
     {
@@ -64,8 +55,6 @@ class PluginSalesVariable
 
     /**
      * Returns exchange rate
-     *
-     * @return float
      */
     public function getExchangeRate(): float
     {
@@ -74,8 +63,6 @@ class PluginSalesVariable
 
     /**
      * Returns colour palette
-     *
-     * @return array
      */
     public function getColourPalette(): array
     {
@@ -90,8 +77,6 @@ class PluginSalesVariable
 
     /**
      * Returns whether the plugin has a valid license.
-     *
-     * @return bool
      */
     public function hasValidLicense(): bool
     {

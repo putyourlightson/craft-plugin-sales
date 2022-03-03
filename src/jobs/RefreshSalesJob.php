@@ -15,12 +15,12 @@ class RefreshSalesJob extends BaseJob
     /**
      * @var Queue
      */
-    private $_queue;
+    private Queue $_queue;
 
     /**
      * @inheritdoc
      */
-    public function execute($queue)
+    public function execute($queue): void
     {
         $this->_queue = $queue;
 
@@ -29,9 +29,6 @@ class RefreshSalesJob extends BaseJob
 
     /**
      * Handles setting the progress.
-     *
-     * @param int $count
-     * @param int $total
      */
     public function setProgressHandler(int $count, int $total)
     {

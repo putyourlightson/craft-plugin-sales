@@ -8,13 +8,14 @@ namespace putyourlightson\pluginsales\controllers;
 use Craft;
 use craft\web\Controller;
 use putyourlightson\pluginsales\PluginSales;
+use yii\web\Response;
 
 class SalesController extends Controller
 {
     /**
      * Refreshes plugin sales.
      */
-    public function actionRefresh()
+    public function actionRefresh(): Response
     {
         $refreshed = PluginSales::$plugin->sales->refresh();
 
@@ -35,7 +36,7 @@ class SalesController extends Controller
     /**
      * Exports sales to CSV.
      */
-    public function actionExport()
+    public function actionExport(): Response
     {
         $csv = '';
 

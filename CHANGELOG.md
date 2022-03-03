@@ -1,5 +1,9 @@
 # Release Notes for Plugin Sales
 
+## 2.0.0-alpha.1 - 2022-03-03
+### Added
+- Added compatibility with Craft 4.
+
 ## 1.3.10 - 2022-01-26
 ### Changed
 - Exchange rates are now fetched from the API at most once per day, to help avoid exceeding monthly request limits.  

@@ -25,8 +25,6 @@ class SaleRecord extends ActiveRecord
 {
      /**
      * @inheritdoc
-     *
-     * @return string
      */
     public static function tableName(): string
     {
@@ -35,8 +33,6 @@ class SaleRecord extends ActiveRecord
 
     /**
      * Returns the plugin model.
-     *
-     * @return ActiveQuery
      */
     public function getPlugin(): ActiveQuery
     {

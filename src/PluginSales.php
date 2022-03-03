@@ -10,6 +10,7 @@ use craft\base\Plugin;
 use craft\events\PluginEvent;
 use craft\helpers\UrlHelper;
 use craft\services\Plugins;
+use craft\services\ProjectConfig;
 use craft\web\twig\variables\CraftVariable;
 use putyourlightson\pluginsales\jobs\RefreshSalesJob;
 use putyourlightson\pluginsales\models\SettingsModel;
@@ -23,17 +24,35 @@ use yii\base\Event;
  * @property PluginsService $plugins
  * @property ReportsService $reports
  * @property SalesService $sales
+ *
  * @property SettingsModel $settings
  * @property mixed $settingsResponse
- *
- * @method SettingsModel getSettings()
  */
 class PluginSales extends Plugin
 {
     /**
      * @var PluginSales
      */
-    public static $plugin;
+    public static PluginSales $plugin;
+
+    /**
+     * @inheritdoc
+     */
+    public bool $hasCpSettings = true;
+
+    /**
+     * @inheritdoc
+     */
+    public bool $hasCpSection = true;
+    /**
+     * @inheritdoc
+     */
+    public string $schemaVersion = '1.2.0';
+
+    /**
+     * @inheritdoc
+     */
+    public string $minVersionRequired = '1.2.0';
 
     /**
      * @inheritdoc
@@ -52,13 +71,11 @@ class PluginSales extends Plugin
 
     /**
      * Returns whether the plugin has a valid license.
-     *
-     * @return bool
      */
-    public function hasValidLicense()
+    public function hasValidLicense(): bool
     {
         $projectConfig = Craft::$app->getProjectConfig();
-        $configKey = Plugins::CONFIG_PLUGINS_KEY .'.'.$this->handle;
+        $configKey = ProjectConfig::PATH_PLUGINS.'.'.$this->handle;
         $data = $projectConfig->get($configKey) ?? $projectConfig->get($configKey, true);
 
         return !empty($data['licenseKey']);
@@ -75,7 +92,7 @@ class PluginSales extends Plugin
     /**
      * @inheritdoc
      */
-    protected function settingsHtml()
+    protected function settingsHtml(): ?string
     {
         return Craft::$app->getView()->renderTemplate('plugin-sales/settings', [
             'settings' => $this->getSettings()

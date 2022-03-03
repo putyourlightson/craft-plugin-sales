@@ -21,8 +21,6 @@ use putyourlightson\pluginsales\records\SaleRecord;
 use yii\web\ForbiddenHttpException;
 
 /**
- *
- *
  * @property-read float $exchangeRate
  * @property-read null|array $lastRefresh
  * @property-read SaleModel[] $sales
@@ -32,7 +30,7 @@ class SalesService extends Component
     /**
      * @var array|null
      */
-    private $_lastRefresh;
+    private ?array $_lastRefresh = null;
 
     /**
      * Returns plugin sales.
@@ -64,10 +62,8 @@ class SalesService extends Component
 
     /**
      * Returns last refresh.
-     *
-     * @return array|null
      */
-    public function getLastRefresh()
+    public function getLastRefresh(): ?array
     {
         if ($this->_lastRefresh !== null) {
             return $this->_lastRefresh;
@@ -83,8 +79,6 @@ class SalesService extends Component
 
     /**
      * Returns exchange rate.
-     *
-     * @return float
      */
     public function getExchangeRate(): float
     {
@@ -95,13 +89,8 @@ class SalesService extends Component
 
     /**
      * Refreshes plugin sales.
-     *
-     * @param callable|null $setProgressHandler
-     *
-     * @return int|bool
-     * @throws ForbiddenHttpException
      */
-    public function refresh(callable $setProgressHandler = null)
+    public function refresh(callable $setProgressHandler = null): bool|int
     {
         App::maxPowerCaptain();
 
@@ -142,11 +131,11 @@ class SalesService extends Component
             'multipart' => [
                 [
                     'name' => 'loginName',
-                    'contents' => Craft::parseEnv(PluginSales::$plugin->settings->email),
+                    'contents' => App::parseEnv(PluginSales::$plugin->settings->email),
                 ],
                 [
                     'name' => 'password',
-                    'contents' => Craft::parseEnv(PluginSales::$plugin->settings->password),
+                    'contents' => App::parseEnv(PluginSales::$plugin->settings->password),
                 ],
             ],
         ]);
@@ -245,8 +234,6 @@ class SalesService extends Component
 
     /**
      * Returns the exchange rate from the API, at most once per day.
-     *
-     * @return float|null
      */
     private function _getExchangeRateFromApi(Client $client): float
     {

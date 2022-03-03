@@ -13,50 +13,50 @@ class SaleModel extends Model
     /**
      * @var int
      */
-    public $id;
+    public int $id;
 
     /**
      * @var int
      */
-    public $saleId;
+    public int $saleId;
 
     /**
      * @var int
      */
-    public $pluginId;
+    public int $pluginId;
 
     /**
      * @var string
      */
-    public $edition;
+    public string $edition;
 
     /**
      * @var bool
      */
-    public $renewal;
+    public bool $renewal;
 
     /**
      * @var string
      */
-    public $email;
+    public string $email;
 
     /**
      * @var float
      */
-    public $grossAmount;
+    public float $grossAmount;
 
     /**
      * @var float
      */
-    public $netAmount;
+    public float $netAmount;
 
     /**
      * @var DateTime
      */
-    public $dateSold;
+    public DateTime $dateSold;
 
     /**
      * @var string|null
      */
-    public $pluginName;
+    public ?string $pluginName;
 }

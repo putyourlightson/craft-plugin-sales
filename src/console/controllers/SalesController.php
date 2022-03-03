@@ -10,6 +10,7 @@ use craft\helpers\Console;
 use putyourlightson\pluginsales\PluginSales;
 use yii\console\Controller;
 use yii\console\ExitCode;
+use yii\helpers\BaseConsole;
 
 /**
  * Allows you to perform actions on sales.
@@ -25,20 +26,20 @@ class SalesController extends Controller
      */
     public function actionRefresh(): int
     {
-        $this->stdout(Craft::t('plugin-sales', 'Refreshing sales...').PHP_EOL, Console::FG_YELLOW);
+        $this->stdout(Craft::t('plugin-sales', 'Refreshing sales...').PHP_EOL, BaseConsole::FG_YELLOW);
 
         $refreshed = PluginSales::$plugin->sales->refresh();
 
         if ($refreshed !== false) {
             $this->stdout(
                 Craft::t('plugin-sales', '{count} plugin sale(s) refreshed.', ['count' => $refreshed]).PHP_EOL,
-                Console::FG_GREEN
+                BaseConsole::FG_GREEN
             );
         }
         else {
             $this->stderr(
                 Craft::t('plugin-sales', 'Plugin sales could not be refreshed. Check the credentials and network connection.').PHP_EOL,
-                Console::FG_RED
+                BaseConsole::FG_RED
             );
         }
 
@@ -52,7 +53,7 @@ class SalesController extends Controller
     {
         PluginSales::$plugin->sales->delete();
 
-        $this->stdout(Craft::t('plugin-sales', 'Plugin sales successfully deleted.').PHP_EOL, Console::FG_GREEN);
+        $this->stdout(Craft::t('plugin-sales', 'Plugin sales successfully deleted.').PHP_EOL, BaseConsole::FG_GREEN);
 
         return ExitCode::OK;
     }

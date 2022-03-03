@@ -18,7 +18,7 @@ class PluginsService extends Component
     /**
      * @var int[]|null
      */
-    private $_pluginIds;
+    private ?array $_pluginIds = null;
 
     /**
      * Returns plugins.
@@ -53,10 +53,6 @@ class PluginsService extends Component
 
     /**
      * Creates a plugin if it doesn't already exist.
-     *
-     * @param int $id
-     * @param string $name
-     * @param bool $hasMultipleEditions
      */
     public function create(int $id, string $name, bool $hasMultipleEditions)
     {

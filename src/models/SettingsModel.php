@@ -13,22 +13,22 @@ class SettingsModel extends Model
     /**
      * @var string
      */
-    public $email;
+    public string $email = '';
 
     /**
      * @var string
      */
-    public $password;
+    public string $password = '';
 
     /**
      * @var string
      */
-    public $currency = 'USD';
+    public string $currency = 'USD';
 
     /**
      * @var array
      */
-    public $colourPalette = ['#008FFB', '#00E396', '#FEB019', '#FF4560', '#775DD0', '#1b24ae', '#4dc6cb'];
+    public array $colourPalette = ['#008FFB', '#00E396', '#FEB019', '#FF4560', '#775DD0', '#1b24ae', '#4dc6cb'];
 
     /**
      * @inheritdoc
@@ -46,7 +46,7 @@ class SettingsModel extends Model
     /**
      * @inheritdoc
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             [['email', 'password'], 'required'],
