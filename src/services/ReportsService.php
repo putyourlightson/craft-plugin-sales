@@ -61,8 +61,10 @@ class ReportsService extends Component
         $sales = $this->_getTotalsQuery($start, $end)->all();
 
         foreach ($sales as $sale) {
-            $totals['grossAmount'] = $this->_prepareAmount($sale['grossAmount']);
-            $totals['netAmount'] = $this->_prepareAmount($sale['netAmount']);
+            if ($sale['count'] > 0) {
+                $totals['grossAmount'] = $this->_prepareAmount($sale['grossAmount']);
+                $totals['netAmount'] = $this->_prepareAmount($sale['netAmount']);
+            }
         }
 
         return $totals;
