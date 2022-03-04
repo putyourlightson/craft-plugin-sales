@@ -6,7 +6,6 @@
 namespace putyourlightson\pluginsales\console\controllers;
 
 use Craft;
-use craft\helpers\Console;
 use putyourlightson\pluginsales\PluginSales;
 use yii\console\Controller;
 use yii\console\ExitCode;

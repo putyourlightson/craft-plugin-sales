@@ -14,16 +14,11 @@ use putyourlightson\pluginsales\PluginSales;
 use putyourlightson\pluginsales\records\SaleRecord;
 use yii\db\ActiveQuery;
 
-/**
- *
- * @property string $salesData
- * @property array $monthlyTotals
- * @property array $monthlyLicenseTotals
- * @property array $monthlyRenewalTotals
- * @property array $months
- */
 class ReportsService extends Component
 {
+    /**
+     * The month format to use in reports.
+     */
     public const MONTH_FORMAT = 'M Y';
 
     /**
