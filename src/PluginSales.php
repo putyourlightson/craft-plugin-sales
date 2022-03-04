@@ -21,12 +21,10 @@ use putyourlightson\pluginsales\variables\PluginSalesVariable;
 use yii\base\Event;
 
 /**
- * @property PluginsService $plugins
- * @property ReportsService $reports
- * @property SalesService $sales
- *
- * @property SettingsModel $settings
- * @property mixed $settingsResponse
+ * @property-read PluginsService $plugins
+ * @property-read ReportsService $reports
+ * @property-read SalesService $sales
+ * @property-read SettingsModel $settings
  */
 class PluginSales extends Plugin
 {
