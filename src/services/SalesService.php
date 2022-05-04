@@ -251,7 +251,7 @@ class SalesService extends Component
         }
 
         try {
-            $response = $client->get('https://freecurrencyapi.net/api/v1/rates?base_currency=USD');
+            $response = $client->get('https://api.currencyapi.com/v1/rates?base_currency=USD');
         }
         catch (GuzzleException $exception) {
             Craft::getLogger()->log($exception->getMessage(), Logger::LEVEL_ERROR, 'plugin-sales');
