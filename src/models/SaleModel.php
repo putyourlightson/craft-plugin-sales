@@ -41,14 +41,14 @@ class SaleModel extends Model
     public string $email;
 
     /**
-     * @var float
+     * @var string|float
      */
-    public float $grossAmount;
+    public string|float $grossAmount;
 
     /**
-     * @var float
+     * @var string|float
      */
-    public float $netAmount;
+    public string|float $netAmount;
 
     /**
      * @var DateTime

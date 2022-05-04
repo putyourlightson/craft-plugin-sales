@@ -1,6 +1,6 @@
 # Release Notes for Plugin Sales
 
-## 2.0.0-alpha.1 - 2022-03-03
+## 2.0.0 - 2022-05-04
 ### Added
 - Added compatibility with Craft 4.
 

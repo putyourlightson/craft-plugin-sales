@@ -9,9 +9,12 @@ use Craft;
 use craft\base\Plugin;
 use craft\events\PluginEvent;
 use craft\helpers\UrlHelper;
+use craft\log\MonologTarget;
 use craft\services\Plugins;
 use craft\services\ProjectConfig;
 use craft\web\twig\variables\CraftVariable;
+use Monolog\Formatter\LineFormatter;
+use Psr\Log\LogLevel;
 use putyourlightson\pluginsales\jobs\RefreshSalesJob;
 use putyourlightson\pluginsales\models\SettingsModel;
 use putyourlightson\pluginsales\services\PluginsService;
@@ -63,6 +66,7 @@ class PluginSales extends Plugin
 
         $this->_registerComponents();
         $this->_registerVariables();
+        $this->_registerLogTarget();
         $this->_registerRedirectAfterInstall();
         $this->_registerRefreshAfterSettingsSaved();
     }
@@ -73,7 +77,7 @@ class PluginSales extends Plugin
     public function hasValidLicense(): bool
     {
         $projectConfig = Craft::$app->getProjectConfig();
-        $configKey = ProjectConfig::PATH_PLUGINS.'.'.$this->handle;
+        $configKey = ProjectConfig::PATH_PLUGINS . '.' . $this->handle;
         $data = $projectConfig->get($configKey) ?? $projectConfig->get($configKey, true);
 
         return !empty($data['licenseKey']);
@@ -93,7 +97,7 @@ class PluginSales extends Plugin
     protected function settingsHtml(): ?string
     {
         return Craft::$app->getView()->renderTemplate('plugin-sales/settings', [
-            'settings' => $this->getSettings()
+            'settings' => $this->getSettings(),
         ]);
     }
 
@@ -121,6 +125,24 @@ class PluginSales extends Plugin
                 $variable->set('pluginSales', PluginSalesVariable::class);
             }
         );
+    }
+
+    /**
+     * Registers a custom log target, keeping the format as simple as possible.
+     *
+     * @see LineFormatter::SIMPLE_FORMAT
+     */
+    private function _registerLogTarget(): void
+    {
+        Craft::getLogger()->dispatcher->targets[] = new MonologTarget([
+            'name' => 'blitz',
+            'categories' => ['blitz'],
+            'level' => LogLevel::INFO,
+            'formatter' => new LineFormatter(
+                format: "[%datetime%] %message%\n",
+                dateFormat: 'Y-m-d H:i:s',
+            ),
+        ]);
     }
 
     /**

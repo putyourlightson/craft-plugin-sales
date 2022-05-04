@@ -12,12 +12,12 @@ use craft\helpers\DateTimeHelper;
 use DateTime;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
-use putyourlightson\logtofile\LogToFile;
 use putyourlightson\pluginsales\models\SaleModel;
 use putyourlightson\pluginsales\PluginSales;
 use putyourlightson\pluginsales\records\PluginRecord;
 use putyourlightson\pluginsales\records\RefreshRecord;
 use putyourlightson\pluginsales\records\SaleRecord;
+use yii\log\Logger;
 use yii\web\ForbiddenHttpException;
 
 /**
@@ -102,9 +102,8 @@ class SalesService extends Component
         try {
             $response = $client->get('login');
         }
-
         catch (GuzzleException $exception) {
-            LogToFile::error($exception->getMessage(), 'plugin-sales');
+            Craft::getLogger()->log($exception->getMessage(), Logger::LEVEL_ERROR, 'plugin-sales');
 
             return false;
         }
@@ -114,7 +113,7 @@ class SalesService extends Component
         // Extract CSRF token value
         preg_match('/csrfTokenValue:\s* "([\s\S]*?)"/', $body, $matches);
         $csrfTokenValue = $matches[1] ?? null;
-        $csrfTokenValue = json_decode('"'.$csrfTokenValue.'"');
+        $csrfTokenValue = json_decode('"' . $csrfTokenValue . '"');
 
         if ($csrfTokenValue === null) {
             throw new ForbiddenHttpException(Craft::t('plugin-sales', 'Could not fetch a valid CSRF token.'));
@@ -147,7 +146,7 @@ class SalesService extends Component
             ]);
         }
         catch (GuzzleException $exception) {
-            LogToFile::error($exception->getMessage(), 'plugin-sales');
+            Craft::getLogger()->log($exception->getMessage(), Logger::LEVEL_ERROR, 'plugin-sales');
 
             return false;
         }
@@ -162,7 +161,7 @@ class SalesService extends Component
             $limit = $total - $stored + 1;
 
             // Get new sales
-            $response = $client->get('index.php?p=actions//craftnet/id/sales/get-sales&per_page='.$limit, [
+            $response = $client->get('index.php?p=actions//craftnet/id/sales/get-sales&per_page=' . $limit, [
                 'headers' => $headers,
             ]);
 
@@ -255,7 +254,7 @@ class SalesService extends Component
             $response = $client->get('https://freecurrencyapi.net/api/v1/rates?base_currency=USD');
         }
         catch (GuzzleException $exception) {
-            LogToFile::error($exception->getMessage(), 'plugin-sales');
+            Craft::getLogger()->log($exception->getMessage(), Logger::LEVEL_ERROR, 'plugin-sales');
 
             return $lastExchangeRate;
         }
@@ -265,7 +264,7 @@ class SalesService extends Component
         $rate = $rates[PluginSales::$plugin->settings->currency] ?? null;
 
         if ($rate === null) {
-            LogToFile::error(Craft::t('plugin-sales', 'Could not find exchange rate for {currency}.', ['currency' => PluginSales::$plugin->settings->currency,]), 'plugin-sales');
+            Craft::getLogger()->log(Craft::t('plugin-sales', 'Could not find exchange rate for {currency}.', ['currency' => PluginSales::$plugin->settings->currency, ]), 'plugin-sales');
 
             return $lastExchangeRate;
         }

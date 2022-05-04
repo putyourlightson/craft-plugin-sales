@@ -124,7 +124,7 @@ class ReportsService extends Component
 
         $lastMonth = end($sales);
         $firstMonth = reset($sales);
-        $currentMonth = new DateTime($firstMonth['year'].'-'.$firstMonth['month'].'-1');
+        $currentMonth = new DateTime($firstMonth['year'] . '-' . $firstMonth['month'] . '-1');
 
         while (
             ($currentMonth->format('n') <= $lastMonth['month'] && $currentMonth->format('Y') == $lastMonth['year'])
@@ -174,7 +174,7 @@ class ReportsService extends Component
 
         foreach ($sales as $sale) {
             $key = $sale['name'];
-            $currentMonth = new DateTime($sale['year'].'-'.$sale['month'].'-1');
+            $currentMonth = new DateTime($sale['year'] . '-' . $sale['month'] . '-1');
 
             $totals[$key][$currentMonth->format(self::MONTH_FORMAT)] = $this->_prepareAmount($sale['grossAmount']);
         }
@@ -207,7 +207,7 @@ class ReportsService extends Component
 
         foreach ($sales as $sale) {
             $key = $sale['renewal'] ? 'renewals' : 'licenses';
-            $currentMonth = new DateTime($sale['year'].'-'.$sale['month'].'-1');
+            $currentMonth = new DateTime($sale['year'] . '-' . $sale['month'] . '-1');
 
             $totals[$key][$currentMonth->format(self::MONTH_FORMAT)] = $this->_prepareAmount($sale['grossAmount']);
         }
@@ -302,13 +302,13 @@ class ReportsService extends Component
      */
     private function _applyDataRange(ActiveQuery $query, string $start = null, string $end = null): ActiveQuery
     {
-        $start = $start ? Db::prepareDateForDb($start.' 00:00:00') : null;
+        $start = $start ? Db::prepareDateForDb($start . ' 00:00:00') : null;
 
         if ($start) {
             $query->andWhere(['>=', 'dateSold', $start]);
         }
 
-        $end = $end ? Db::prepareDateForDb($end.' 23:59:59') : null;
+        $end = $end ? Db::prepareDateForDb($end . ' 23:59:59') : null;
 
         if ($end) {
             $query->andWhere(['<=', 'dateSold', $end]);

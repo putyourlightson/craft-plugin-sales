@@ -45,7 +45,7 @@ class SalesController extends Controller
         $data = json_decode($data);
 
         foreach ($data as $row) {
-            $csv .= implode(',', $row).PHP_EOL;
+            $csv .= implode(',', $row) . PHP_EOL;
         }
 
         return Craft::$app->getResponse()->sendContentAsFile($csv, 'plugin-sales.csv');

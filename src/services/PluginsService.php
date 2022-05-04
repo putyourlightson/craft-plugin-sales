@@ -32,7 +32,7 @@ class PluginsService extends Component
 
         foreach ($pluginRecords as $pluginRecord) {
             $pluginModel = new PluginModel();
-            $pluginModel->setAttributes($pluginRecord, false);
+            $pluginModel->setAttributes($pluginRecord->getAttributes(), false);
             $pluginModels[] = $pluginModel;
         }
 

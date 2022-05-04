@@ -6,8 +6,8 @@
 namespace putyourlightson\pluginsales\migrations;
 
 use craft\db\Migration;
-use putyourlightson\pluginsales\records\RefreshRecord;
 use putyourlightson\pluginsales\records\PluginRecord;
+use putyourlightson\pluginsales\records\RefreshRecord;
 use putyourlightson\pluginsales\records\SaleRecord;
 
 class Install extends Migration

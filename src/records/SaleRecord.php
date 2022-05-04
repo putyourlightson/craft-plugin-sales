@@ -23,9 +23,9 @@ use yii\db\ActiveQuery;
  */
 class SaleRecord extends ActiveRecord
 {
-     /**
-     * @inheritdoc
-     */
+    /**
+    * @inheritdoc
+    */
     public static function tableName(): string
     {
         return '{{%pluginsales_sales}}';

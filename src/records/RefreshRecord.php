@@ -15,9 +15,9 @@ use craft\db\ActiveRecord;
  */
 class RefreshRecord extends ActiveRecord
 {
-     /**
-     * @inheritdoc
-     */
+    /**
+    * @inheritdoc
+    */
     public static function tableName(): string
     {
         return '{{%pluginsales_refreshes}}';

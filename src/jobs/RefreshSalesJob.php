@@ -7,15 +7,16 @@ namespace putyourlightson\pluginsales\jobs;
 
 use Craft;
 use craft\queue\BaseJob;
-use craft\queue\Queue;
+use craft\queue\QueueInterface;
 use putyourlightson\pluginsales\PluginSales;
+use yii\queue\Queue;
 
 class RefreshSalesJob extends BaseJob
 {
     /**
-     * @var Queue
+     * @var Queue|QueueInterface
      */
-    private Queue $_queue;
+    private Queue|QueueInterface $_queue;
 
     /**
      * @inheritdoc

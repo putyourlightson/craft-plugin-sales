@@ -18,9 +18,11 @@
  */
 
 return [
-    // The email address associated with your Craft ID account
-    //'email' => 'me@email.com',
+    '*' => [
+        // The email address associated with your Craft ID account
+        //'email' => 'me@email.com',
 
-    // Your Craft ID account password
-    //'password' => 'aBcDeFgHiJkLmNoP',
+        // Your Craft ID account password
+        //'password' => 'aBcDeFgHiJkLmNoP',
+    ],
 ];

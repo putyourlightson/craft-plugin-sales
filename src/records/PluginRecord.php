@@ -14,9 +14,9 @@ use craft\db\ActiveRecord;
  */
 class PluginRecord extends ActiveRecord
 {
-     /**
-     * @inheritdoc
-     */
+    /**
+    * @inheritdoc
+    */
     public static function tableName(): string
     {
         return '{{%pluginsales_plugins}}';

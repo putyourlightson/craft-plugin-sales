@@ -29,6 +29,10 @@ class PluginSalesVariable
     {
         $lastRefresh = PluginSales::$plugin->sales->getLastRefresh();
 
+        if ($lastRefresh === null) {
+            return false;
+        }
+
         return $lastRefresh['dateCreated'] ? DateTimeHelper::toDateTime($lastRefresh['dateCreated']) : false;
     }
 
@@ -47,7 +51,7 @@ class PluginSalesVariable
      */
     public function getFormattedAmount(float $amount): string
     {
-        $formatter =  new NumberFormatter(Craft::$app->locale, NumberFormatter::CURRENCY);
+        $formatter = new NumberFormatter(Craft::$app->locale, NumberFormatter::CURRENCY);
         $currency = $this->getCurrency();
 
         return $formatter->formatCurrency($amount, $currency);
@@ -69,7 +73,7 @@ class PluginSalesVariable
         $colourPalette = PluginSales::$plugin->settings->colourPalette;
 
         foreach ($colourPalette as &$colour) {
-            $colour = '#'.trim($colour, '#');
+            $colour = '#' . trim($colour, '#');
         }
 
         return $colourPalette;

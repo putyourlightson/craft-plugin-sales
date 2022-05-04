@@ -33,7 +33,7 @@ class SettingsModel extends Model
     /**
      * @inheritdoc
      */
-    public function behaviors(): array
+    protected function defineBehaviors(): array
     {
         return [
             'parser' => [
@@ -46,11 +46,11 @@ class SettingsModel extends Model
     /**
      * @inheritdoc
      */
-    public function defineRules(): array
+    protected function defineRules(): array
     {
         return [
             [['email', 'password'], 'required'],
-            ['email', 'email']
+            ['email', 'email'],
         ];
     }
 }
