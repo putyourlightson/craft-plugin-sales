@@ -103,7 +103,7 @@ class SalesService extends Component
             $response = $client->get('login');
         }
         catch (GuzzleException $exception) {
-            Craft::getLogger()->log($exception->getMessage(), Logger::LEVEL_ERROR, 'plugin-sales');
+            PluginSales::$plugin->log($exception->getMessage(), [], Logger::LEVEL_ERROR);
 
             return false;
         }
@@ -146,7 +146,7 @@ class SalesService extends Component
             ]);
         }
         catch (GuzzleException $exception) {
-            Craft::getLogger()->log($exception->getMessage(), Logger::LEVEL_ERROR, 'plugin-sales');
+            PluginSales::$plugin->log($exception->getMessage(), [], Logger::LEVEL_ERROR);
 
             return false;
         }
@@ -254,7 +254,7 @@ class SalesService extends Component
             $response = $client->get('https://api.currencyapi.com/v1/rates?base_currency=USD');
         }
         catch (GuzzleException $exception) {
-            Craft::getLogger()->log($exception->getMessage(), Logger::LEVEL_ERROR, 'plugin-sales');
+            PluginSales::$plugin->log($exception->getMessage(), [], Logger::LEVEL_ERROR);
 
             return $lastExchangeRate;
         }
@@ -264,7 +264,7 @@ class SalesService extends Component
         $rate = $rates[PluginSales::$plugin->settings->currency] ?? null;
 
         if ($rate === null) {
-            Craft::getLogger()->log(Craft::t('plugin-sales', 'Could not find exchange rate for {currency}.', ['currency' => PluginSales::$plugin->settings->currency, ]), Logger::LEVEL_ERROR, 'plugin-sales');
+            PluginSales::$plugin->log('Could not find exchange rate for {currency}.', ['currency' => PluginSales::$plugin->settings->currency, ], Logger::LEVEL_ERROR);
 
             return $lastExchangeRate;
         }

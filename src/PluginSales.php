@@ -22,6 +22,7 @@ use putyourlightson\pluginsales\services\ReportsService;
 use putyourlightson\pluginsales\services\SalesService;
 use putyourlightson\pluginsales\variables\PluginSalesVariable;
 use yii\base\Event;
+use yii\log\Logger;
 
 /**
  * @property-read PluginsService $plugins
@@ -84,6 +85,16 @@ class PluginSales extends Plugin
     }
 
     /**
+     * Logs a message.
+     */
+    public function log(string $message, array $params = [], int $type = Logger::LEVEL_INFO): void
+    {
+        $message = Craft::t('plugin-sales', $message, $params);
+
+        Craft::getLogger()->log($message, $type, 'plugin-sales');
+    }
+
+    /**
      * @inheritdoc
      */
     protected function createSettingsModel(): SettingsModel
@@ -135,8 +146,8 @@ class PluginSales extends Plugin
     private function _registerLogTarget(): void
     {
         Craft::getLogger()->dispatcher->targets[] = new MonologTarget([
-            'name' => 'blitz',
-            'categories' => ['blitz'],
+            'name' => 'plugin-sales',
+            'categories' => ['plugin-sales'],
             'level' => LogLevel::INFO,
             'formatter' => new LineFormatter(
                 format: "[%datetime%] %message%\n",
