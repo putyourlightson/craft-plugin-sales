@@ -264,7 +264,7 @@ class SalesService extends Component
         $rate = $rates[PluginSales::$plugin->settings->currency] ?? null;
 
         if ($rate === null) {
-            Craft::getLogger()->log(Craft::t('plugin-sales', 'Could not find exchange rate for {currency}.', ['currency' => PluginSales::$plugin->settings->currency, ]), 'plugin-sales');
+            Craft::getLogger()->log(Craft::t('plugin-sales', 'Could not find exchange rate for {currency}.', ['currency' => PluginSales::$plugin->settings->currency, ]), Logger::LEVEL_ERROR, 'plugin-sales');
 
             return $lastExchangeRate;
         }
