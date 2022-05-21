@@ -38,6 +38,20 @@ class PluginSales extends Plugin
     public static PluginSales $plugin;
 
     /**
+     * @inerhitdoc
+     */
+    public static function config(): array
+    {
+        return [
+            'components' => [
+                'plugins' => ['class' => PluginsService::class],
+                'reports' => ['class' => ReportsService::class],
+                'sales' => ['class' => SalesService::class],
+            ],
+        ];
+    }
+
+    /**
      * @inheritdoc
      */
     public bool $hasCpSettings = true;
@@ -62,10 +76,8 @@ class PluginSales extends Plugin
     public function init()
     {
         parent::init();
-
         self::$plugin = $this;
 
-        $this->_registerComponents();
         $this->_registerVariables();
         $this->_registerLogTarget();
         $this->_registerRedirectAfterInstall();
@@ -113,18 +125,6 @@ class PluginSales extends Plugin
     }
 
     /**
-     * Registers the components.
-     */
-    private function _registerComponents()
-    {
-        $this->setComponents([
-            'plugins' => PluginsService::class,
-            'reports' => ReportsService::class,
-            'sales' => SalesService::class,
-        ]);
-    }
-
-    /**
      * Registers the variables.
      */
     private function _registerVariables()
@@ -149,6 +149,8 @@ class PluginSales extends Plugin
             'name' => 'plugin-sales',
             'categories' => ['plugin-sales'],
             'level' => LogLevel::INFO,
+            'logContext' => false,
+            'allowLineBreaks' => false,
             'formatter' => new LineFormatter(
                 format: "[%datetime%] %message%\n",
                 dateFormat: 'Y-m-d H:i:s',
