@@ -1,6 +1,9 @@
+[![Stable Version](https://img.shields.io/packagist/v/putyourlightson/craft-plugin-sales?label=stable)]((https://packagist.org/packages/putyourlightson/craft-plugin-sales))
+[![Total Downloads](https://img.shields.io/packagist/dt/putyourlightson/craft-plugin-sales)](https://packagist.org/packages/putyourlightson/craft-plugin-sales)
+
 <p align="center"><img width="130" src="https://putyourlightson.com/assets/logos/plugin-sales.svg"></p>
 
-# Plugin Sales for Craft CMS 3
+# Plugin Sales for Craft CMS
 
 Beautiful charts and reports of *your* Craft CMS plugin sales in the control panel.
 
@@ -22,14 +25,16 @@ This plugin requires a commercial license purchasable through the [Craft Plugin 
 
 ## Requirements
 
-This plugin requires [Craft CMS](https://craftcms.com/) 3.4.0 or later.
+This plugin requires [Craft CMS](https://craftcms.com/) 3.4.0 or later, or 4.0.0 or later.
 
 ## Installation
 
 To install the plugin, search for “Plugin Sales” in the Craft Plugin Store, or install manually using composer.
 
-```
+```shell
 composer require putyourlightson/craft-plugin-sales
 ```
+
+---
 
 Created by [PutYourLightsOn](https://putyourlightson.com/).
