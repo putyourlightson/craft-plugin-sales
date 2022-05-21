@@ -33,6 +33,10 @@ class PluginSalesVariable
     {
         $lastRefresh = PluginSales::$plugin->sales->getLastRefresh();
 
+        if ($lastRefresh === null) {
+            return false;
+        }
+
         return $lastRefresh['dateCreated'] ? DateTimeHelper::toDateTime($lastRefresh['dateCreated']) : false;
     }
 
