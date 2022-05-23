@@ -1,5 +1,15 @@
 # Release Notes for Plugin Sales
 
+## 2.1.0 - 2022-05-23
+> {note} This update modifies the default colour palette. If you've customised either of the first 2 colours then the update will have no effect.
+
+### Added
+- Added a config setting that controls the number of colours to display in the colour palette.
+
+### Changed
+- Updated the default colour palette ([#2](https://github.com/putyourlightson/craft-campaign/issues/2)). 
+- Updated the plugin icon to match the new default colour palette 
+
 ## 2.0.1 - 2022-05-21
 ### Changed
 - Aligned pie charts horizontally on desktop screens. 

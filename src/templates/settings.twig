@@ -67,10 +67,10 @@
 
 {% set input %}
     <div class='flex'>
-        {% for i in 0..9 %}
+        {% for i in 1..settings.colours %}
             {{ forms.color({
                 name: 'colourPalette[]',
-                value: settings.colourPalette[i] ?? '',
+                value: settings.colourPalette[loop.index0] ?? '',
             }) }}
         {% endfor %}
     </div>

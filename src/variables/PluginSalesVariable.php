@@ -70,13 +70,10 @@ class PluginSalesVariable
      */
     public function getColourPalette(): array
     {
-        $colourPalette = PluginSales::$plugin->settings->colourPalette;
-
-        foreach ($colourPalette as &$colour) {
-            $colour = '#' . trim($colour, '#');
-        }
-
-        return $colourPalette;
+        return array_map(
+            fn($colour) => '#' . trim($colour, '#'),
+            PluginSales::$plugin->settings->colourPalette,
+        );
     }
 
     /**

@@ -24,5 +24,8 @@ return [
 
         // Your Craft ID account password
         //'password' => 'aBcDeFgHiJkLmNoP',
+
+        // The number of colours to display in the colour palette
+        //'colours' => 10,
     ],
 ];

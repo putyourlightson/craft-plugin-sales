@@ -26,9 +26,15 @@ class SettingsModel extends Model
     public string $currency = 'USD';
 
     /**
-     * @var array
+     * @var int
      */
-    public array $colourPalette = ['#008FFB', '#00E396', '#FEB019', '#FF4560', '#775DD0', '#1b24ae', '#4dc6cb'];
+    public int $colours = 10;
+
+    /**
+     * @var array
+     * https://tailwindcss.com/docs/customizing-colors
+     */
+    public array $colourPalette = ['3B82F6', '4ADE80', 'FBBF24', 'F43F5E', '7DD3FC', '059669', 'FB923C', 'D946EF', 'A16207', '94A3B8'];
 
     /**
      * @inheritdoc
