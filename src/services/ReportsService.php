@@ -52,6 +52,32 @@ class ReportsService extends Component
     }
 
     /**
+     * Returns customer data.
+     */
+    public function getCustomerData(string $start = null, string $end = null): string
+    {
+        $data = [];
+
+        $customers = $this->_getTotalsQuery($start, $end)
+            ->addSelect(['email'])
+            ->groupBy(['email'])
+            ->orderBy(['netAmount' => SORT_DESC])
+            ->all();
+
+        foreach ($customers as $customer) {
+            $data[] = [
+                $customer['email'],
+                $customer['count'],
+                // Format amounts but don't convert them
+                number_format($customer['grossAmount'], 2),
+                number_format($customer['netAmount'], 2),
+            ];
+        }
+
+        return json_encode($data);
+    }
+
+    /**
      * Returns totals.
      */
     public function getTotals(string $start = null, string $end = null): array

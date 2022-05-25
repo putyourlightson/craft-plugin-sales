@@ -18,7 +18,7 @@
 
 {% block content %}
 
-    <div class="flex" style="justify-content: space-between; align-items: flex-start;">
+    <div class="flex" style="justify-content: space-between; align-items: flex-start; margin-bottom: 40px;">
         <div>
             <p>
                 {% if netAmount %}
@@ -69,6 +69,7 @@
         {% include 'plugin-sales/_charts/plugins-licenses-renewals' %}
         {% include 'plugin-sales/_charts/pie-charts' %}
 
+        <h2>Sales</h2>
         <div class="chart">
             <table id="plugin-sales" class="display responsive nowrap" style="width: 100%;">
                 <thead>
@@ -80,6 +81,22 @@
                         <th data-priority="2">{{ 'Gross Amount'|t('plugin-sales') }} ($)</th>
                         <th data-priority="3">{{ 'Net Amount'|t('plugin-sales') }} ($)</th>
                         <th data-priority="4">{{ 'Date'|t('plugin-sales') }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+
+        <h2 style="margin-top: 40px;">Customers</h2>
+        <div class="chart">
+            <table id="customers" class="display responsive nowrap" style="width: 100%;">
+                <thead>
+                    <tr>
+                        <th data-priority="1">{{ 'Customer'|t('plugin-sales') }}</th>
+                        <th data-priority="2">{{ 'Purchases'|t('plugin-sales') }}</th>
+                        <th data-priority="3">{{ 'Gross Amount'|t('plugin-sales') }} ($)</th>
+                        <th data-priority="4">{{ 'Net Amount'|t('plugin-sales') }} ($)</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -179,18 +196,37 @@
                 zeroRecords: 'No matching sales found',
             },
         });
-
         $('#plugin-sales_wrapper select').wrap('<div class="select"></div>');
-
         $('#plugin-sales_filter input').addClass('text fullwidth')
             .attr('autocomplete', 'off')
             .attr('placeholder', 'Search')
             .wrap('<div class="flex-grow texticon search icon clearable"></div>');
-
         $('#plugin-sales_wrapper').prepend('<div class="toolbar"></div>');
-
         $('#plugin-sales_length').appendTo('#plugin-sales_wrapper .toolbar');
         $('#plugin-sales_filter').appendTo('#plugin-sales_wrapper .toolbar');
+
+        $('#customers').DataTable({
+            data: {{ craft.pluginSales.reports.getCustomerData(start, end)|raw }},
+            order: [[ 3, 'desc' ]],
+            deferRender: true,
+            responsive: true,
+            language: {
+                lengthMenu: '_MENU_ customers displayed',
+                search: '',
+                info: '_START_-_END_ of _TOTAL_ customers',
+                infoEmpty: 'Showing 0 to 0 of 0 customers',
+                infoFiltered: '(filtered from _MAX_ total customers)',
+                zeroRecords: 'No matching customers found',
+            },
+        });
+        $('#customers_wrapper select').wrap('<div class="select"></div>');
+        $('#customers_filter input').addClass('text fullwidth')
+            .attr('autocomplete', 'off')
+            .attr('placeholder', 'Search')
+            .wrap('<div class="flex-grow texticon search icon clearable"></div>');
+        $('#customers_wrapper').prepend('<div class="toolbar"></div>');
+        $('#customers_length').appendTo('#customers_wrapper .toolbar');
+        $('#customers_filter').appendTo('#customers_wrapper .toolbar');
     {% endif %}
 
 {% endjs %}

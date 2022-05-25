@@ -1,5 +1,9 @@
 # Release Notes for Plugin Sales
 
+## 2.2.0 - 2022-05-25
+### Added
+- Added a new customers report showing aggregated sales.
+
 ## 2.1.0 - 2022-05-23
 > {note} This update modifies the default colour palette. If you've customised either of the first 2 colours then the update will have no effect.
 

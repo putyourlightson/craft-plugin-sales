@@ -21,7 +21,7 @@
     padding-left: 0px;
 }
 
-#plugin-sales_filter {
+.dataTables_filter {
     flex-grow: 1;
     margin-left: 20px;
 }

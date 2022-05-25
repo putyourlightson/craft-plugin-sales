@@ -15,6 +15,11 @@
             type: 'bar',
             stacked: true,
         },
+        title: {
+            style: {
+                fontSize: '16px',
+            },
+        },
         tooltip: {
             y: {
                 formatter: (value) => formatCurrency(value),
@@ -60,9 +65,7 @@
         },
     };
 
-    options.title = {
-        text: 'Plugin Sales',
-    };
+    options.title.text = 'Plugin Sales';
     options.series = [
         {% for key, values in monthlyPluginTotals %}
             {
@@ -74,9 +77,7 @@
     var chart = new ApexCharts(document.querySelector("#chart-plugins"), options);
     chart.render();
 
-    options.title = {
-        text: 'Licenses vs. Renewals',
-    };
+    options.title.text = 'Licenses vs. Renewals';
     options.series = [
         {% for key, values in monthlyLicenseRenewalTotals %}
             {
