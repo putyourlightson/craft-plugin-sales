@@ -19,11 +19,14 @@
 
 return [
     '*' => [
-        // The email address associated with your Craft ID account
+        // The email address associated with your Craft Console account
         //'email' => 'me@email.com',
 
-        // Your Craft ID account password
+        // Your Craft Console account password
         //'password' => 'aBcDeFgHiJkLmNoP',
+
+        // The organisation ID that is used for plugin sales (defaults to the first organisation found in the account)
+        //'organisationId' => '123456789',
 
         // The number of colours to display in the colour palette
         //'colours' => 10,

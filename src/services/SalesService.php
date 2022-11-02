@@ -139,9 +139,35 @@ class SalesService extends Component
             ],
         ]);
 
+        // Get organisation ID
+        $organisationId = PluginSales::$plugin->settings->organisationId;
+        if (empty($organisationId)) {
+            try {
+                $response = $client->get('orgs', [
+                    'headers' => $headers,
+                ]);
+            }
+            catch (GuzzleException $exception) {
+                PluginSales::$plugin->log($exception->getMessage(), [], Logger::LEVEL_ERROR);
+
+                return false;
+            }
+
+            $result = json_decode($response->getBody(), true);
+            $organisationId = $result['orgs'][0]['id'] ?? null;
+
+            if ($organisationId === null) {
+                PluginSales::$plugin->log('No organisation found.', [], Logger::LEVEL_ERROR);
+
+                return false;
+            }
+        }
+
+        $baseSalesUri = 'index.php?p=actions/craftnet/console/sales/get-sales&orgId=' . $organisationId . '&per_page=';
+
         // Get total
         try {
-            $response = $client->get('index.php?p=actions/craftnet/console/sales/get-sales&orgId=989727&per_page=1', [
+            $response = $client->get($baseSalesUri . '1', [
                 'headers' => $headers,
             ]);
         }
@@ -161,7 +187,7 @@ class SalesService extends Component
             $limit = $total - $stored + 1;
 
             // Get new sales
-            $response = $client->get('index.php?p=actions/craftnet/console/sales/get-sales&orgId=989727&per_page=' . $limit, [
+            $response = $client->get($baseSalesUri . $limit, [
                 'headers' => $headers,
             ]);
 

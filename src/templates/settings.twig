@@ -1,8 +1,8 @@
 {% import '_includes/forms' as forms %}
 
 {{ forms.autosuggestField({
-    label: 'Craft ID Email'|t('plugin-sales'),
-    instructions: 'The email address you use to login to your Craft ID account.'|t('plugin-sales'),
+    label: 'Craft Console Email'|t('plugin-sales'),
+    instructions: 'The email address you use to login to your Craft Console account.'|t('plugin-sales'),
     name: 'email',
     suggestEnvVars: true,
     value: settings.email,
@@ -12,13 +12,22 @@
 }) }}
 
 {{ forms.autosuggestField({
-    label: 'Craft ID Password'|t('plugin-sales'),
-    instructions: 'The password you use to login to your Craft ID account.'|t('plugin-sales'),
+    label: 'Craft Console Password'|t('plugin-sales'),
+    instructions: 'The password you use to login to your Craft Console account.'|t('plugin-sales'),
     name: 'password',
     suggestEnvVars: true,
     value: settings.password,
     errors: settings.getErrors('password'),
     required: true,
+}) }}
+
+{{ forms.autosuggestField({
+    label: 'Organisation ID'|t('plugin-sales'),
+    instructions: 'The organisation ID that is used for plugin sales (defaults to the first organisation found in the account). '|t('plugin-sales'),
+    name: 'organisationId',
+    suggestEnvVars: true,
+    value: settings.organisationId,
+    errors: settings.getErrors('organisationId'),
 }) }}
 
 {{ forms.selectField({

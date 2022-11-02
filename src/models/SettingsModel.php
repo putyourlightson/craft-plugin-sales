@@ -11,14 +11,19 @@ use craft\behaviors\EnvAttributeParserBehavior;
 class SettingsModel extends Model
 {
     /**
-     * @var string
+     * @var string|null
      */
-    public string $email = '';
+    public ?string $email = null;
 
     /**
-     * @var string
+     * @var string|null
      */
-    public string $password = '';
+    public ?string $password = null;
+
+    /**
+     * @var string|null
+     */
+    public ?string $organisationId = null;
 
     /**
      * @var string

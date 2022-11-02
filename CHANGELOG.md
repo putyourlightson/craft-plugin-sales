@@ -1,8 +1,11 @@
 # Release Notes for Plugin Sales
 
-## 2.2.1 - 2022-11-02
+## 2.3.0 - 2022-11-02
+### Added
+- Added a new optional organisation ID setting.
+
 ### Changed
-- Updated API URLs to use Craft Console.
+- Updated the API to use Craft Console and organisations.
 
 ## 2.2.0 - 2022-05-25
 ### Added
