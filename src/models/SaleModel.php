@@ -58,5 +58,5 @@ class SaleModel extends Model
     /**
      * @var string|null
      */
-    public ?string $pluginName;
+    public ?string $pluginName = null;
 }

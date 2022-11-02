@@ -1,5 +1,9 @@
 # Release Notes for Plugin Sales
 
+## 2.2.1 - 2022-11-02
+### Changed
+- Updated API URLs to use Craft Console.
+
 ## 2.2.0 - 2022-05-25
 ### Added
 - Added a new customers report showing aggregated sales.

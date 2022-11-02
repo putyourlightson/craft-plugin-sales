@@ -95,7 +95,7 @@ class SalesService extends Component
         App::maxPowerCaptain();
 
         $client = new Client([
-            'base_uri' => 'https://id.craftcms.com/',
+            'base_uri' => 'https://console.craftcms.com/',
             'cookies' => true,
         ]);
 
@@ -125,7 +125,7 @@ class SalesService extends Component
         ];
 
         // Authenticate
-        $client->post('index.php?p=actions//users/login', [
+        $client->post('index.php?p=actions/users/login', [
             'headers' => $headers,
             'multipart' => [
                 [
@@ -141,7 +141,7 @@ class SalesService extends Component
 
         // Get total
         try {
-            $response = $client->get('index.php?p=actions//craftnet/id/sales/get-sales&per_page=1', [
+            $response = $client->get('index.php?p=actions/craftnet/console/sales/get-sales&orgId=989727&per_page=1', [
                 'headers' => $headers,
             ]);
         }
@@ -161,7 +161,7 @@ class SalesService extends Component
             $limit = $total - $stored + 1;
 
             // Get new sales
-            $response = $client->get('index.php?p=actions//craftnet/id/sales/get-sales&per_page=' . $limit, [
+            $response = $client->get('index.php?p=actions/craftnet/console/sales/get-sales&orgId=989727&per_page=' . $limit, [
                 'headers' => $headers,
             ]);
 
