@@ -61,7 +61,6 @@ class SettingsModel extends Model
     {
         return [
             [['email', 'password'], 'required'],
-            ['email', 'email'],
         ];
     }
 }
