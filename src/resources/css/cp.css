@@ -18,7 +18,7 @@
 
 .daterangepicker table:not(.data) th:not(:first-child),
 .daterangepicker table:not(.data) td:not(:first-child) {
-    padding-left: 0px;
+    padding-left: 0;
 }
 
 .dataTables_filter {

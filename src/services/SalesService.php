@@ -198,7 +198,7 @@ class SalesService extends Component
                 ]);
 
                 $result = json_decode($response->getBody(), true);
-                $refreshed += $this->_saveSales($result['data'], $setProgressHandler);
+                $refreshed += $this->_saveSales($result['data']);
 
                 if (is_callable($setProgressHandler)) {
                     call_user_func($setProgressHandler, $refreshed, $amount);
@@ -228,6 +228,10 @@ class SalesService extends Component
     {
         SaleRecord::deleteAll();
         PluginRecord::deleteAll();
+
+        // Reset the auto increment values
+        Craft::$app->getDb()->createCommand()->executeResetSequence(SaleRecord::tableName());
+        Craft::$app->getDb()->createCommand()->executeResetSequence(PluginRecord::tableName());
     }
 
     /**
@@ -271,7 +275,7 @@ class SalesService extends Component
         return $rate;
     }
 
-    private function _saveSales(array $sales, callable $setProgressHandler = null): int
+    private function _saveSales(array $sales): int
     {
         $count = 0;
 
