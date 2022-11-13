@@ -1,5 +1,9 @@
 # Release Notes for Plugin Sales
 
+## 2.3.1 - 2022-11-13
+### Changed
+- Auto increment values are now reset when deleting all rows in database tables.
+
 ## 2.3.0 - 2022-11-04
 ### Added
 - Added a new optional organisation ID setting.
