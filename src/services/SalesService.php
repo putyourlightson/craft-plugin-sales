@@ -254,7 +254,7 @@ class SalesService extends Component
         }
 
         try {
-            $response = $client->get('https://api.currencyapi.com/v1/rates?base_currency=USD');
+            $response = $client->get('https://api.exchangerate.host/latest?base=USD');
         }
         catch (GuzzleException $exception) {
             PluginSales::$plugin->log($exception->getMessage(), [], Logger::LEVEL_ERROR);
@@ -263,7 +263,7 @@ class SalesService extends Component
         }
 
         $result = json_decode($response->getBody(), true);
-        $rates = reset($result['data']) ?? null;
+        $rates = $result['rates'] ?? null;
         $rate = $rates[PluginSales::$plugin->settings->currency] ?? null;
 
         if ($rate === null) {

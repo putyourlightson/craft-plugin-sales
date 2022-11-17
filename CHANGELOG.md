@@ -1,5 +1,9 @@
 # Release Notes for Plugin Sales
 
+## 2.3.2 - 2022-11-17
+### Changed
+- Switched from using currencyapi.com to exchangerate.host for converting currencies.
+
 ## 2.3.1 - 2022-11-13
 ### Changed
 - Auto increment values are now reset when deleting all rows in database tables.
@@ -58,7 +62,7 @@
 
 ## 1.3.5 - 2021-08-26
 ### Changed
-- Switched from using ratesapi.io to freecurrencyapi.net for converting currencies.
+- Switched from using ratesapi.io to currencyapi.com for converting currencies.
 - Improved wording of search results in DataTables.
 
 ### Fixed
