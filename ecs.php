@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 use putyourlightson\ecs\SetList;
 use Symplify\EasyCodingStandard\Config\ECSConfig;
 

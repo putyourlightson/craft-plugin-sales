@@ -33,15 +33,17 @@ class ReportsService extends Component
             ->orderBy(['dateSold' => SORT_DESC])
             ->asArray();
 
-        $query = $this->_applyDataRange($query, $start, $end);
+        $this->_applyDataRange($query, $start, $end);
+        $sales = $query->all();
 
-        foreach ($query->all() as $sale) {
+        /** @var SaleRecord[] $sales */
+        foreach ($sales as $sale) {
             $data[] = [
                 $sale['plugin']['name'],
                 ucfirst($sale['edition']),
                 Craft::t('plugin-sales', $sale['renewal'] ? 'Renewal' : 'License'),
                 $sale['email'],
-                // Format amounts but don't convert them
+                // Format but don't convert amounts
                 number_format($sale['grossAmount'], 2),
                 number_format($sale['netAmount'], 2),
                 $sale['dateSold'],
@@ -165,6 +167,8 @@ class ReportsService extends Component
 
     /**
      * Returns monthly totals.
+     *
+     * @return
      */
     public function getMonthlyTotals(string $start = null, string $end = null): array
     {
@@ -258,7 +262,9 @@ class ReportsService extends Component
             ])
             ->asArray();
 
-        return $this->_applyDataRange($query, $start, $end);
+        $this->_applyDataRange($query, $start, $end);
+
+        return $query;
     }
 
     /**
@@ -291,7 +297,10 @@ class ReportsService extends Component
             ->orderBy(['year' => SORT_ASC, 'month' => SORT_ASC])
             ->asArray();
 
-        return $this->_applyDataRange($query, $start, $end);
+
+        $this->_applyDataRange($query, $start, $end);
+
+        return $query;
     }
 
     /**
@@ -326,7 +335,7 @@ class ReportsService extends Component
     /**
      * Applies a date range condition to a query.
      */
-    private function _applyDataRange(ActiveQuery $query, string $start = null, string $end = null): ActiveQuery
+    private function _applyDataRange(ActiveQuery $query, string $start = null, string $end = null): void
     {
         $start = $start ? Db::prepareDateForDb($start . ' 00:00:00') : null;
 
@@ -339,7 +348,5 @@ class ReportsService extends Component
         if ($end) {
             $query->andWhere(['<=', 'dateSold', $end]);
         }
-
-        return $query;
     }
 }
