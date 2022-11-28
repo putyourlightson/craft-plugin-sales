@@ -303,6 +303,7 @@ class SalesService extends Component
                 'grossAmount' => $sale['grossAmount'],
                 'netAmount' => $sale['netAmount'],
                 'email' => $sale['customer']['email'],
+                'notice' => $sale['adjustments'][0]['name'] ?? null,
                 'dateSold' => $sale['saleTime'],
             ], false);
 

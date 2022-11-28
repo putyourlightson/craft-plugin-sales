@@ -48,6 +48,7 @@ class Install extends Migration
                 'edition' => $this->string(),
                 'renewal' => $this->boolean(),
                 'email' => $this->string(),
+                'notice' => $this->string(),
                 'grossAmount' => $this->float()->notNull(),
                 'netAmount' => $this->float()->notNull(),
                 'dateSold' => $this->dateTime()->notNull(),

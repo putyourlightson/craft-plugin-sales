@@ -8,6 +8,7 @@ namespace putyourlightson\pluginsales\services;
 use Craft;
 use craft\base\Component;
 use craft\helpers\Db;
+use craft\helpers\Html;
 use DateInterval;
 use DateTime;
 use putyourlightson\pluginsales\PluginSales;
@@ -38,10 +39,19 @@ class ReportsService extends Component
 
         /** @var SaleRecord[] $sales */
         foreach ($sales as $sale) {
+            $type = Craft::t('plugin-sales', $sale['renewal'] ? 'Renewal' : 'License');
+
+            if ($sale['notice']) {
+                $type .= Html::tag('span', '', [
+                    'title' => $sale['notice'],
+                    'class' => 'notice with-icon',
+                ]);
+            }
+
             $data[] = [
                 $sale['plugin']['name'],
                 ucfirst($sale['edition']),
-                Craft::t('plugin-sales', $sale['renewal'] ? 'Renewal' : 'License'),
+                $type,
                 $sale['email'],
                 // Format but don't convert amounts
                 number_format($sale['grossAmount'], 2),

@@ -16,6 +16,7 @@ use yii\db\ActiveQuery;
  * @property string $edition
  * @property bool $renewal
  * @property string $email
+ * @property string $notice
  * @property float $grossAmount
  * @property float $netAmount
  * @property DateTime $dateSold

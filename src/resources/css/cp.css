@@ -21,6 +21,10 @@
     padding-left: 0;
 }
 
+.dataTable .notice {
+    margin-left: 2px;
+}
+
 .dataTables_filter {
     flex-grow: 1;
     margin-left: 20px;

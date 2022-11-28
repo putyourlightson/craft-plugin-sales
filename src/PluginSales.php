@@ -63,7 +63,7 @@ class PluginSales extends Plugin
     /**
      * @inheritdoc
      */
-    public string $schemaVersion = '2.1.0';
+    public string $schemaVersion = '2.4.0';
 
     /**
      * @inheritdoc

@@ -1,5 +1,9 @@
 # Release Notes for Plugin Sales
 
+## 2.4.0 - Unreleased
+### Added
+- Added a notice for upgrade discounts and extended licenses.
+
 ## 2.3.2 - 2022-11-17
 ### Changed
 - Switched from using currencyapi.com to exchangerate.host for converting currencies.
