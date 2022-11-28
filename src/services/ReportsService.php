@@ -177,8 +177,6 @@ class ReportsService extends Component
 
     /**
      * Returns monthly totals.
-     *
-     * @return
      */
     public function getMonthlyTotals(string $start = null, string $end = null): array
     {
