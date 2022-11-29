@@ -5,7 +5,6 @@
 
 namespace putyourlightson\pluginsales\controllers;
 
-use Craft;
 use craft\web\Controller;
 use putyourlightson\pluginsales\PluginSales;
 use yii\web\Response;
