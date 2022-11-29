@@ -25,7 +25,8 @@ function initSalesDataTable(id, data) {
 }
 
 function openCustomerSlideout(email) {
-    const slideout = new Craft.CpScreenSlideout('plugin-sales/slideout/render?email=' + email);
+    const action = 'plugin-sales/slideout/render?email=' + encodeURIComponent(email);
+    const slideout = new Craft.CpScreenSlideout(action);
     slideout.open();
     slideout.$saveBtn.remove();
     slideout.on('load', () => {

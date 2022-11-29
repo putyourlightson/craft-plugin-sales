@@ -17,8 +17,6 @@ class SlideoutController extends Controller
      */
     public function actionRender(): Response
     {
-//        Craft::$app->getView()->registerAssetBundle(Asset::class);
-
         $email = $this->request->getRequiredParam('email');
         $sales = PluginSales::$plugin->reports->getSalesData(email: $email);
 
