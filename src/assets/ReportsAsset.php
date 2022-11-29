@@ -7,6 +7,7 @@ namespace putyourlightson\pluginsales\assets;
 
 use craft\web\AssetBundle;
 use craft\web\assets\cp\CpAsset;
+use craft\web\View;
 
 /**
  * ReportsAsset bundle

@@ -1,5 +1,9 @@
 # Release Notes for Plugin Sales
 
+## 2.5.1 - 2022-11-29
+### Changed
+- Changed "Cancel" button to read "Close" in slideout.
+
 ## 2.5.0 - 2022-11-29
 ### Added
 - Added detailed customer views that open in a slideout.

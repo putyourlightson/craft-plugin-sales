@@ -29,6 +29,7 @@ function openCustomerSlideout(email) {
     const slideout = new Craft.CpScreenSlideout(action);
     slideout.open();
     slideout.$saveBtn.remove();
+    slideout.$cancelBtn.text(Craft.t('app', 'Close'));
     slideout.on('load', () => {
         document.activeElement.blur();
         const id = slideout.namespace + '-customer-sales';
