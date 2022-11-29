@@ -180,7 +180,7 @@ class SalesService extends Component
         $result = json_decode($response->getBody(), true);
         $total = $result['total'];
         $stored = SaleRecord::find()->count();
-        $refreshed = 0;
+        $refreshCount = 0;
 
         if ($total > $stored) {
             // Divide total into pages to avoid timeouts
@@ -198,16 +198,16 @@ class SalesService extends Component
                 ]);
 
                 $result = json_decode($response->getBody(), true);
-                $refreshed += $this->_saveSales($result['data']);
+                $refreshCount += $this->_saveSales($result['data']);
 
                 if (is_callable($setProgressHandler)) {
-                    call_user_func($setProgressHandler, $refreshed, $amount);
+                    call_user_func($setProgressHandler, $refreshCount, $amount);
                 }
             }
         }
 
         $refreshRecord = new RefreshRecord();
-        $refreshRecord->refreshed = $refreshed;
+        $refreshRecord->refreshed = $refreshCount;
         $refreshRecord->currency = PluginSales::$plugin->settings->currency;
         $refreshRecord->exchangeRate = 1;
 
@@ -218,7 +218,7 @@ class SalesService extends Component
 
         $refreshRecord->save();
 
-        return $refreshed;
+        return $refreshCount;
     }
 
     /**
