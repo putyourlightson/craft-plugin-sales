@@ -47,17 +47,16 @@ class ReportsService extends Component
                 ]);
             }
 
-            $row = [
-                $sale['plugin']['name'],
-                ucfirst($sale['edition']),
-                $type,
-            ];
-
+            $row = [];
             if ($email == null) {
                 $row[] = Html::tag('a', $sale['email'], [
                     'onclick' => 'openCustomerSlideout("' . $sale['email'] . '")',
                 ]);
             }
+
+            $row[] = $sale['plugin']['name'];
+            $row[] = ucfirst($sale['edition']);
+            $row[] = $type;
 
             // Format but don't convert amounts
             $row[] = number_format($sale['grossAmount'], 2);
