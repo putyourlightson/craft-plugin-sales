@@ -50,7 +50,7 @@ class ReportsService extends Component
             $row = [];
             if ($email == null) {
                 $row[] = Html::tag('a', $sale['email'], [
-                    'onclick' => 'openCustomerSlideout("' . $sale['email'] . '")',
+                    'onclick' => 'openCustomerSlideout(this.text)',
                 ]);
             }
 
