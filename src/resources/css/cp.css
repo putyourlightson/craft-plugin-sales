@@ -35,11 +35,6 @@
     padding-left: 12px !important;
 }
 
-.dataTables_wrapper table:not(.data) th:first-child,
-.dataTables_wrapper table:not(.data) td:first-child {
-    max-width: 300px;
-}
-
 .dataTables_wrapper table.dataTable thead th,
 .dataTables_wrapper table.dataTable thead td,
 .dataTables_wrapper table.dataTable.no-footer {
