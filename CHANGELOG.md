@@ -1,5 +1,9 @@
 # Release Notes for Plugin Sales
 
+## 2.5.0 - Unreleased
+### Added
+- Added detailed customer views that open in a slideout.
+
 ## 2.4.0 - 2022-11-27
 ### Added
 - Added a notice for upgrade discounts and extended licenses.

@@ -182,28 +182,7 @@
     }
 
     {% if netAmount %}
-        $('#plugin-sales').DataTable({
-            data: {{ craft.pluginSales.reports.getSalesData(start, end)|raw }},
-            order: [[ 6, 'desc' ]],
-            deferRender: true,
-            responsive: true,
-            language: {
-                lengthMenu: '_MENU_ sales displayed',
-                search: '',
-                info: '_START_-_END_ of _TOTAL_ sales',
-                infoEmpty: 'Showing 0 to 0 of 0 sales',
-                infoFiltered: '(filtered from _MAX_ total sales)',
-                zeroRecords: 'No matching sales found',
-            },
-        });
-        $('#plugin-sales_wrapper select').wrap('<div class="select"></div>');
-        $('#plugin-sales_filter input').addClass('text fullwidth')
-            .attr('autocomplete', 'off')
-            .attr('placeholder', 'Search')
-            .wrap('<div class="flex-grow texticon search icon clearable"></div>');
-        $('#plugin-sales_wrapper').prepend('<div class="toolbar"></div>');
-        $('#plugin-sales_length').appendTo('#plugin-sales_wrapper .toolbar');
-        $('#plugin-sales_filter').appendTo('#plugin-sales_wrapper .toolbar');
+        initSalesDataTable('plugin-sales', {{ craft.pluginSales.reports.getSalesData(start, end)|raw }});
 
         $('#customers').DataTable({
             data: {{ craft.pluginSales.reports.getCustomerData(start, end)|raw }},

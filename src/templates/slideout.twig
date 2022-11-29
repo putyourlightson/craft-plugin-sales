@@ -1,0 +1,20 @@
+<h2>{{ email }}</h2>
+
+<div class="chart">
+    <table id="customer-sales" class="display responsive nowrap" style="width: 100%;">
+        <thead>
+            <tr>
+                <th data-priority="1">{{ 'Plugin'|t('plugin-sales') }}</th>
+                <th>{{ 'Edition'|t('plugin-sales') }}</th>
+                <th>{{ 'Type'|t('plugin-sales') }}</th>
+                <th data-priority="2">{{ 'Gross Amount'|t('plugin-sales') }} ($)</th>
+                <th data-priority="3">{{ 'Net Amount'|t('plugin-sales') }} ($)</th>
+                <th data-priority="4">{{ 'Date'|t('plugin-sales') }}</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+</div>
+
+{{ hiddenInput('customer-sales-data', craft.pluginSales.reports.getSalesData(null, null, email)|raw) }}

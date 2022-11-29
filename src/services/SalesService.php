@@ -37,12 +37,14 @@ class SalesService extends Component
      *
      * @return SaleModel[]
      */
-    public function getSales(): array
+    public function getSales(string $email = null): array
     {
         $saleModels = [];
+        $condition = $email ? ['email' => $email] : [];
 
         /** @var SaleRecord[] $saleRecords */
         $saleRecords = SaleRecord::find()
+            ->where($condition)
             ->with('plugin')
             ->all();
 

@@ -25,7 +25,7 @@ class ReportsService extends Component
     /**
      * Returns plugin sales data.
      */
-    public function getSalesData(string $start = null, string $end = null): string
+    public function getSalesData(string $start = null, string $end = null, string $email = null): string
     {
         $data = [];
 
@@ -34,13 +34,12 @@ class ReportsService extends Component
             ->orderBy(['dateSold' => SORT_DESC])
             ->asArray();
 
-        $this->_applyDataRange($query, $start, $end);
+        $this->_applyConditions($query, $start, $end, $email);
         $sales = $query->all();
 
         /** @var SaleRecord[] $sales */
         foreach ($sales as $sale) {
             $type = Craft::t('plugin-sales', $sale['renewal'] ? 'Renewal' : 'License');
-
             if ($sale['notice']) {
                 $type .= Html::tag('span', '', [
                     'title' => $sale['notice'],
@@ -48,16 +47,25 @@ class ReportsService extends Component
                 ]);
             }
 
-            $data[] = [
+            $row = [
                 $sale['plugin']['name'],
                 ucfirst($sale['edition']),
                 $type,
-                $sale['email'],
-                // Format but don't convert amounts
-                number_format($sale['grossAmount'], 2),
-                number_format($sale['netAmount'], 2),
-                $sale['dateSold'],
             ];
+
+            if ($email == null) {
+                $row[] = Html::tag('a', $sale['email'], [
+                    'onclick' => 'openCustomerSlideout("' . $sale['email'] . '")',
+                ]);
+            }
+
+            // Format but don't convert amounts
+            $row[] = number_format($sale['grossAmount'], 2);
+            $row[] = number_format($sale['netAmount'], 2);
+
+            $row[] = $sale['dateSold'];
+
+            $data[] = $row;
         }
 
         return json_encode($data);
@@ -66,19 +74,22 @@ class ReportsService extends Component
     /**
      * Returns customer data.
      */
-    public function getCustomerData(string $start = null, string $end = null): string
+    public function getCustomerData(string $start = null, string $end = null, string $email = null): string
     {
         $data = [];
 
-        $customers = $this->_getTotalsQuery($start, $end)
+        $customers = $this->_getTotalsQuery($start, $end, $email)
             ->addSelect(['email'])
             ->groupBy(['email'])
             ->orderBy(['netAmount' => SORT_DESC])
             ->all();
 
         foreach ($customers as $customer) {
+            $email = Html::tag('a', $customer['email'], [
+                'onclick' => 'openCustomerSlideout("' . $customer['email'] . '")',
+            ]);
             $data[] = [
-                $customer['email'],
+                $email,
                 $customer['count'],
                 // Format amounts but don't convert them
                 number_format($customer['grossAmount'], 2),
@@ -260,7 +271,7 @@ class ReportsService extends Component
     /**
      * Returns totals query.
      */
-    private function _getTotalsQuery(string $start = null, string $end = null): ActiveQuery
+    private function _getTotalsQuery(string $start = null, string $end = null, string $email = null): ActiveQuery
     {
         $query = SaleRecord::find()
             ->select([
@@ -270,7 +281,7 @@ class ReportsService extends Component
             ])
             ->asArray();
 
-        $this->_applyDataRange($query, $start, $end);
+        $this->_applyConditions($query, $start, $end, $email);
 
         return $query;
     }
@@ -306,7 +317,7 @@ class ReportsService extends Component
             ->asArray();
 
 
-        $this->_applyDataRange($query, $start, $end);
+        $this->_applyConditions($query, $start, $end);
 
         return $query;
     }
@@ -341,9 +352,9 @@ class ReportsService extends Component
     }
 
     /**
-     * Applies a date range condition to a query.
+     * Applies condition to a sales query.
      */
-    private function _applyDataRange(ActiveQuery $query, string $start = null, string $end = null): void
+    private function _applyConditions(ActiveQuery $query, string $start = null, string $end = null, string $email = null): void
     {
         $start = $start ? Db::prepareDateForDb($start . ' 00:00:00') : null;
 
@@ -355,6 +366,10 @@ class ReportsService extends Component
 
         if ($end) {
             $query->andWhere(['<=', 'dateSold', $end]);
+        }
+
+        if ($email) {
+            $query->andWhere(['email' => $email]);
         }
     }
 }

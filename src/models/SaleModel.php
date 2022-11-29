@@ -11,54 +11,54 @@ use DateTime;
 class SaleModel extends Model
 {
     /**
-     * @var int
+     * @var int|null
      */
-    public int $id;
+    public ?int $id = null;
 
     /**
-     * @var int
+     * @var int|null
      */
-    public int $saleId;
+    public ?int $saleId = null;
 
     /**
-     * @var int
+     * @var int|null
      */
-    public int $pluginId;
+    public ?int $pluginId = null;
 
     /**
-     * @var string
+     * @var string|null
      */
-    public string $edition;
+    public ?string $edition = null;
 
     /**
-     * @var bool
+     * @var bool|null
      */
-    public bool $renewal;
+    public ?bool $renewal = null;
 
     /**
-     * @var string
+     * @var string|null
      */
-    public string $email;
+    public ?string $email = null;
 
     /**
-     * @var string
+     * @var string|null
      */
-    public string $notice;
+    public ?string $notice = null;
 
     /**
-     * @var string|float
+     * @var string|float|null
      */
-    public string|float $grossAmount;
+    public string|float|null $grossAmount = null;
 
     /**
-     * @var string|float
+     * @var string|float|null
      */
-    public string|float $netAmount;
+    public string|float|null $netAmount = null;
 
     /**
-     * @var DateTime
+     * @var DateTime|null
      */
-    public DateTime $dateSold;
+    public ?DateTime $dateSold = null;
 
     /**
      * @var string|null
