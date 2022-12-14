@@ -11,6 +11,18 @@
     display: flex;
 }
 
+.icon svg {
+    display: inline;
+    margin-left: 4px;
+    vertical-align: sub;
+    height: 14px;
+    width: 14px;
+}
+
+.icon svg path {
+    fill: #7f8a96;
+}
+
 .daterangepicker table:not(.data) th:not(:last-child),
 .daterangepicker table:not(.data) td:not(:last-child) {
     padding-right: 0;

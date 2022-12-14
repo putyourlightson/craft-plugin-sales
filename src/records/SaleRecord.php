@@ -15,6 +15,7 @@ use yii\db\ActiveQuery;
  * @property int $pluginId
  * @property string $edition
  * @property bool $renewal
+ * @property bool $first
  * @property string $email
  * @property string $notice
  * @property float $grossAmount

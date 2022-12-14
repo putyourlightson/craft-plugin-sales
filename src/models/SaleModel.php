@@ -36,6 +36,11 @@ class SaleModel extends Model
     public ?bool $renewal = null;
 
     /**
+     * @var bool|null
+     */
+    public ?bool $first = null;
+
+    /**
      * @var string|null
      */
     public ?string $email = null;

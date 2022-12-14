@@ -1,5 +1,9 @@
 # Release Notes for Plugin Sales
 
+## 2.6.0 - Unreleased
+### Added
+- Added a badge for first license purchases.
+
 ## 2.5.1 - 2022-11-29
 ### Changed
 - Changed "Cancel" button to read "Close" in slideout.

@@ -9,6 +9,7 @@ use Craft;
 use craft\base\Component;
 use craft\helpers\App;
 use craft\helpers\DateTimeHelper;
+use craft\helpers\Db;
 use DateTime;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
@@ -208,6 +209,8 @@ class SalesService extends Component
             }
         }
 
+        $this->_updateFirstSales();
+
         $refreshRecord = new RefreshRecord();
         $refreshRecord->refreshed = $refreshCount;
         $refreshRecord->currency = PluginSales::$plugin->settings->currency;
@@ -277,6 +280,9 @@ class SalesService extends Component
         return $rate;
     }
 
+    /**
+     * Updates or creates the provided sales as records.
+     */
     private function _saveSales(array $sales): int
     {
         $count = 0;
@@ -315,5 +321,27 @@ class SalesService extends Component
         }
 
         return $count;
+    }
+
+    /**
+     * Updates all first sale records.
+     */
+    private function _updateFirstSales(): void
+    {
+        $saleRecordIds = SaleRecord::find()
+            ->select(['MIN(id) as id', 'email', 'pluginId'])
+            ->groupBy(['email', 'pluginId'])
+            ->orderBy(['MIN(dateSold)' => SORT_ASC])
+            ->collect()
+            ->pluck('id');
+
+        Db::update(
+            SaleRecord::tableName(),
+            ['first' => true],
+            [
+                'id' => $saleRecordIds,
+                'first' => false,
+            ]
+        );
     }
 }

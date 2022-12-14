@@ -47,6 +47,7 @@ class Install extends Migration
                 'pluginId' => $this->integer()->notNull(),
                 'edition' => $this->string(),
                 'renewal' => $this->boolean(),
+                'first' => $this->boolean()->defaultValue(false),
                 'email' => $this->string(),
                 'notice' => $this->string(),
                 'grossAmount' => $this->float()->notNull(),

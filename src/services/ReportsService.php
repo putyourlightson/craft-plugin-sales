@@ -39,23 +39,25 @@ class ReportsService extends Component
 
         /** @var SaleRecord[] $sales */
         foreach ($sales as $sale) {
-            $type = Craft::t('plugin-sales', $sale['renewal'] ? 'Renewal' : 'License');
-            if ($sale['notice']) {
-                $type .= Html::tag('span', '', [
-                    'title' => $sale['notice'],
-                    'class' => 'notice with-icon',
-                ]);
-            }
-
             $row = [];
+
             if ($email == null) {
-                $row[] = Html::tag('a', $sale['email'], [
+                $value = Html::tag('a', $sale['email'], [
                     'onclick' => 'openCustomerSlideout(this.text)',
                 ]);
+                if ($sale['first']) {
+                    $value .= $this->_getIcon('excite', Craft::t('plugin-sales', 'First license purchase.'));
+                }
+                $row[] = $value;
             }
 
             $row[] = $sale['plugin']['name'];
             $row[] = ucfirst($sale['edition']);
+
+            $type = Craft::t('plugin-sales', $sale['renewal'] ? 'Renewal' : 'License');
+            if ($sale['notice']) {
+                $type .= $this->_getIcon('info', $sale['notice']);
+            }
             $row[] = $type;
 
             // Format but don't convert amounts
@@ -370,5 +372,19 @@ class ReportsService extends Component
         if ($email) {
             $query->andWhere(['email' => $email]);
         }
+    }
+
+    /**
+     * Returns an icon.
+     */
+    private function _getIcon(string $icon, string $title): string
+    {
+        return Html::tag('span',
+            Html::svg(Craft::getAlias('@putyourlightson/pluginsales/resources/icons/' . $icon . '.svg')),
+            [
+                'title' => $title,
+                'class' => 'icon',
+            ]
+        );
     }
 }
