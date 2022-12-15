@@ -328,12 +328,15 @@ class SalesService extends Component
      */
     private function _updateFirstSales(): void
     {
+        // Use a subquery to select first sale per customer per plugin
+        $subQuery = SaleRecord::find()
+            ->select('MIN(dateSold) as dateSold')
+            ->groupBy(['email', 'pluginId']);
+
         $saleRecordIds = SaleRecord::find()
-            ->select(['MIN(id) as id', 'email', 'pluginId'])
-            ->groupBy(['email', 'pluginId'])
-            ->orderBy(['MIN(dateSold)' => SORT_ASC])
-            ->collect()
-            ->pluck('id');
+            ->select('id')
+            ->where(['dateSold' => $subQuery])
+            ->column();
 
         Db::update(
             SaleRecord::tableName(),
