@@ -1,6 +1,6 @@
 # Release Notes for Plugin Sales
 
-## 2.6.0 - Unreleased
+## 2.6.0 - 2022-12-15
 ### Added
 - Added a badge for first license purchases.
 

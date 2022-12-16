@@ -341,7 +341,7 @@ class SalesService extends Component
         Db::update(
             SaleRecord::tableName(),
             [
-                'first' => true
+                'first' => true,
             ],
             [
                 'id' => $saleRecordIds,
