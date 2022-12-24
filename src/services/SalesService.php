@@ -104,8 +104,7 @@ class SalesService extends Component
 
         try {
             $response = $client->get('login');
-        }
-        catch (GuzzleException $exception) {
+        } catch (GuzzleException $exception) {
             PluginSales::$plugin->log($exception->getMessage(), [], Logger::LEVEL_ERROR);
 
             return false;
@@ -149,8 +148,7 @@ class SalesService extends Component
                 $response = $client->get('orgs', [
                     'headers' => $headers,
                 ]);
-            }
-            catch (GuzzleException $exception) {
+            } catch (GuzzleException $exception) {
                 PluginSales::$plugin->log($exception->getMessage(), [], Logger::LEVEL_ERROR);
 
                 return false;
@@ -173,8 +171,7 @@ class SalesService extends Component
             $response = $client->get($baseSalesUri . '&page=1&limit=1', [
                 'headers' => $headers,
             ]);
-        }
-        catch (GuzzleException $exception) {
+        } catch (GuzzleException $exception) {
             PluginSales::$plugin->log($exception->getMessage(), [], Logger::LEVEL_ERROR);
 
             return false;
@@ -260,8 +257,7 @@ class SalesService extends Component
 
         try {
             $response = $client->get('https://api.exchangerate.host/latest?base=USD');
-        }
-        catch (GuzzleException $exception) {
+        } catch (GuzzleException $exception) {
             PluginSales::$plugin->log($exception->getMessage(), [], Logger::LEVEL_ERROR);
 
             return $lastExchangeRate;

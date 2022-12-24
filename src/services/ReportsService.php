@@ -343,8 +343,7 @@ class ReportsService extends Component
                 foreach ($subkeys as $subkey) {
                     $values[$key][$subkey] = 0;
                 }
-            }
-            else {
+            } else {
                 $values[$key] = 0;
             }
         }

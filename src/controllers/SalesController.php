@@ -23,8 +23,7 @@ class SalesController extends Controller
             Craft::$app->getSession()->setNotice(
                 Craft::t('plugin-sales', '{count} plugin sale(s) refreshed.', ['count' => $refreshed])
             );
-        }
-        else {
+        } else {
             Craft::$app->getSession()->setError(
                 Craft::t('plugin-sales', 'Plugin sales could not be refreshed. Check the credentials and network connection.')
             );

@@ -34,8 +34,7 @@ class SalesController extends Controller
                 Craft::t('plugin-sales', '{count} plugin sale(s) refreshed.', ['count' => $refreshed]) . PHP_EOL,
                 BaseConsole::FG_GREEN
             );
-        }
-        else {
+        } else {
             $this->stderr(
                 Craft::t('plugin-sales', 'Plugin sales could not be refreshed. Check the credentials and network connection.') . PHP_EOL,
                 BaseConsole::FG_RED
