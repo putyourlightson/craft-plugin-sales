@@ -1,5 +1,9 @@
 # Release Notes for Plugin Sales
 
+## 2.6.1 - 2023-02-07
+### Changed
+- Hid x-axis lines which were enabled in recent versions of ApexCharts.
+
 ## 2.6.0 - 2022-12-15
 ### Added
 - Added a badge for first license purchases.

@@ -46,7 +46,7 @@ class ReportsService extends Component
                     'onclick' => 'openCustomerSlideout(this.text)',
                 ]);
                 if ($sale['first']) {
-                    $value .= $this->_getIcon('excite', Craft::t('plugin-sales', 'First license purchase.'));
+                    $value .= $this->_getIcon('excite', Craft::t('plugin-sales', 'First plugin license purchase.'));
                 }
                 $row[] = $value;
             }
