@@ -324,26 +324,38 @@ class SalesService extends Component
      */
     private function _updateFirstSales(): void
     {
-        // Use a subquery to select first sale per customer per plugin
-        $subQuery = SaleRecord::find()
-            ->select('MIN(dateSold) as dateSold')
-            ->groupBy(['email', 'pluginId']);
+        // Reset all firsts
+        Db::update(SaleRecord::tableName(), ['first' => false]);
 
-        $saleRecordIds = SaleRecord::find()
-            ->select('id')
-            ->where(['dateSold' => $subQuery])
-            ->column();
+        $pluginIds = PluginRecord::find()->select('id')->column();
 
-        Db::update(
-            SaleRecord::tableName(),
-            [
-                'first' => true,
-            ],
-            [
-                'id' => $saleRecordIds,
-                'renewal' => false,
-                'first' => false,
-            ]
-        );
+        foreach ($pluginIds as $pluginId) {
+            // Use a subquery to select first sale per customer per plugin
+            $dateSoldArray = SaleRecord::find()
+                ->select('MIN(dateSold) as dateSold')
+                ->where(['pluginId' => $pluginId])
+                ->groupBy(['email', 'pluginId'])
+                ->column();
+
+            $saleRecordIds = SaleRecord::find()
+                ->select('id')
+                ->where([
+                    'pluginId' => $pluginId,
+                    'dateSold' => $dateSoldArray,
+                ])
+                ->column();
+
+            Db::update(
+                SaleRecord::tableName(),
+                [
+                    'first' => true,
+                ],
+                [
+                    'id' => $saleRecordIds,
+                    'renewal' => false,
+                    'first' => false,
+                ]
+            );
+        }
     }
 }

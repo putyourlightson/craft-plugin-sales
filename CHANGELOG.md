@@ -1,5 +1,9 @@
 # Release Notes for Plugin Sales
 
+## 2.6.2 - 2023-02-13
+### Fixed
+- Fixed a bug in which plugins purchased together could inadvertently mark non-first purchases as first purchases.
+
 ## 2.6.1 - 2023-02-07
 ### Changed
 - Hid x-axis lines which were enabled in recent versions of ApexCharts.
