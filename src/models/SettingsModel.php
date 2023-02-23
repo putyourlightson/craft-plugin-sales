@@ -23,6 +23,11 @@ class SettingsModel extends Model
     /**
      * @var string
      */
+    public $organisationId;
+
+    /**
+     * @var string
+     */
     public $currency = 'USD';
 
     /**

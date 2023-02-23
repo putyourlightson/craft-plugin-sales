@@ -106,7 +106,7 @@ class SalesService extends Component
         App::maxPowerCaptain();
 
         $client = new Client([
-            'base_uri' => 'https://id.craftcms.com/',
+            'base_uri' => 'https://console.craftcms.com/',
             'cookies' => true,
         ]);
 
@@ -151,9 +151,35 @@ class SalesService extends Component
             ],
         ]);
 
+        // Get organisation ID
+        $organisationId = PluginSales::$plugin->settings->organisationId;
+        if (empty($organisationId)) {
+            try {
+                $response = $client->get('orgs', [
+                    'headers' => $headers,
+                ]);
+            }
+            catch (GuzzleException $exception) {
+                LogToFile::error($exception->getMessage(), 'plugin-sales');
+
+                return false;
+            }
+
+            $result = json_decode($response->getBody(), true);
+            $organisationId = $result['orgs'][0]['id'] ?? null;
+
+            if ($organisationId === null) {
+                LogToFile::error('No organisation found.', 'plugin-sales');
+
+                return false;
+            }
+        }
+
+        $baseSalesUri = 'index.php?p=actions/craftnet/console/sales/get-sales&orgId=' . $organisationId;
+
         // Get total
         try {
-            $response = $client->get('index.php?p=actions//craftnet/id/sales/get-sales&per_page=1', [
+            $response = $client->get($baseSalesUri . '&page=1&limit=1', [
                 'headers' => $headers,
             ]);
         }
@@ -173,7 +199,7 @@ class SalesService extends Component
             $limit = $total - $stored + 1;
 
             // Get new sales
-            $response = $client->get('index.php?p=actions//craftnet/id/sales/get-sales&per_page='.$limit, [
+            $response = $client->get($baseSalesUri . '&page=1&limit='.$limit, [
                 'headers' => $headers,
             ]);
 

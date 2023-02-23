@@ -1,5 +1,12 @@
 # Release Notes for Plugin Sales
 
+## 1.4.0 - 2022-02-22
+### Added
+- Added a new optional organisation ID setting.
+
+### Changed
+- Updated the API to use Craft Console and organisations.
+
 ## 1.3.10 - 2022-01-26
 ### Changed
 - Exchange rates are now fetched from the API at most once per day, to help avoid exceeding monthly request limits.  
