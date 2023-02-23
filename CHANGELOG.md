@@ -1,6 +1,6 @@
 # Release Notes for Plugin Sales
 
-## 1.4.0 - 2022-02-22
+## 1.4.0 - 2023-02-22
 ### Added
 - Added a new optional organisation ID setting.
 
