@@ -192,61 +192,34 @@ class SalesService extends Component
         $result = json_decode($response->getBody(), true);
         $total = $result['total'];
         $stored = SaleRecord::find()->count();
-        $sales = [];
+        $refreshCount = 0;
 
         if ($total > $stored) {
-            // Add 1 because one too few sales were being returned for some strange reason
-            $limit = $total - $stored + 1;
+            // Divide total into pages to avoid timeouts
+            $limit = 100;
+            $amount = $total - $stored;
+            $pages = (int)ceil($amount / $limit);
 
-            // Get new sales
-            $response = $client->get($baseSalesUri . '&page=1&limit='.$limit, [
-                'headers' => $headers,
-            ]);
-
-            $result = json_decode($response->getBody(), true);
-            $sales = $result['data'];
-            $count = 0;
-
-            // Save sale records
-            foreach ($sales as $sale) {
-                PluginSales::$plugin->plugins->create(
-                    $sale['plugin']['id'],
-                    $sale['plugin']['name'],
-                    $sale['plugin']['hasMultipleEditions']
-                );
-
-                $saleRecord = SaleRecord::find()
-                    ->where(['saleId' => $sale['id']])
-                    ->one();
-
-                if ($saleRecord === null) {
-                    $saleRecord = new SaleRecord();
+            for ($page = 1; $page <= $pages; $page++) {
+                if ($pages == 1) {
+                    $limit = $amount;
                 }
 
-                $saleRecord->setAttributes([
-                    'saleId' => $sale['id'],
-                    'pluginId' => $sale['plugin']['id'],
-                    'edition' => $sale['edition']['handle'],
-                    'renewal' => ($sale['purchasableType'] == 'craftnet\\plugins\\PluginRenewal'),
-                    'grossAmount' => $sale['grossAmount'],
-                    'netAmount' => $sale['netAmount'],
-                    'email' => $sale['customer']['email'],
-                    'dateSold' => $sale['saleTime'],
-                ], false);
+                $response = $client->get($baseSalesUri . '&page=' . $page . '&limit=' . $limit, [
+                    'headers' => $headers,
+                ]);
 
-                $saleRecord->save();
+                $result = json_decode($response->getBody(), true);
+                $refreshCount += $this->_saveSales($result['data']);
 
                 if (is_callable($setProgressHandler)) {
-                    $count++;
-                    call_user_func($setProgressHandler, $count, $limit);
+                    call_user_func($setProgressHandler, $refreshCount, $amount);
                 }
             }
         }
 
-        $refreshed = count($sales);
-
         $refreshRecord = new RefreshRecord();
-        $refreshRecord->refreshed = $refreshed;
+        $refreshRecord->refreshed = $refreshCount;
         $refreshRecord->currency = PluginSales::$plugin->settings->currency;
         $refreshRecord->exchangeRate = 1;
 
@@ -257,7 +230,7 @@ class SalesService extends Component
 
         $refreshRecord->save();
 
-        return $refreshed;
+        return $refreshCount;
     }
 
     /**
@@ -267,6 +240,10 @@ class SalesService extends Component
     {
         SaleRecord::deleteAll();
         PluginRecord::deleteAll();
+
+        // Reset the auto increment values
+        Craft::$app->getDb()->createCommand()->executeResetSequence(SaleRecord::tableName());
+        Craft::$app->getDb()->createCommand()->executeResetSequence(PluginRecord::tableName());
     }
 
     /**
@@ -310,5 +287,48 @@ class SalesService extends Component
         }
 
         return $rate;
+    }
+
+    /**
+     * Updates or creates the provided sales as records.
+     */
+    private function _saveSales(array $sales): int
+    {
+        $count = 0;
+
+        // Save sale records
+        foreach ($sales as $sale) {
+            PluginSales::$plugin->plugins->create(
+                $sale['plugin']['id'],
+                $sale['plugin']['name'],
+                $sale['plugin']['hasMultipleEditions']
+            );
+
+            $saleRecord = SaleRecord::find()
+                ->where(['saleId' => $sale['id']])
+                ->one();
+
+            if ($saleRecord === null) {
+                $saleRecord = new SaleRecord();
+            }
+
+            $saleRecord->setAttributes([
+                'saleId' => $sale['id'],
+                'pluginId' => $sale['plugin']['id'],
+                'edition' => $sale['edition']['handle'],
+                'renewal' => ($sale['purchasableType'] == 'craftnet\\plugins\\PluginRenewal'),
+                'grossAmount' => $sale['grossAmount'],
+                'netAmount' => $sale['netAmount'],
+                'email' => $sale['customer']['email'],
+                'notice' => $sale['adjustments'][0]['name'] ?? null,
+                'dateSold' => $sale['saleTime'],
+            ], false);
+
+            if ($saleRecord->save()) {
+                $count++;
+            }
+        }
+
+        return $count;
     }
 }

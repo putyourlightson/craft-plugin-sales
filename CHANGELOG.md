@@ -1,5 +1,10 @@
 # Release Notes for Plugin Sales
 
+## 1.4.1 - 2023-02-23
+### Changed
+- API requests are now made in batches of 100 items.
+- Auto increment values are now reset when deleting all rows in database tables.
+
 ## 1.4.0 - 2023-02-22
 ### Added
 - Added a new optional organisation ID setting.
