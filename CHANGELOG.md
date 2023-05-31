@@ -1,5 +1,9 @@
 # Release Notes for Plugin Sales
 
+## 2.6.3 - Unreleased
+### Fixed
+- Fixed the focus not being removed when the slideout opens.
+
 ## 2.6.2 - 2023-02-13
 ### Fixed
 - Fixed a bug in which plugins purchased together could inadvertently mark non-first purchases as first purchases.

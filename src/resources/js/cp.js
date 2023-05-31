@@ -31,9 +31,13 @@ function openCustomerSlideout(email) {
     slideout.$saveBtn.remove();
     slideout.$cancelBtn.text(Craft.t('app', 'Close'));
     slideout.on('load', () => {
-        document.activeElement.blur();
         const id = slideout.namespace + '-customer-sales';
         const data = $('input[name="' + slideout.namespace + '[customer-sales-data]"]').val();
         initSalesDataTable(id, JSON.parse(data));
+
+        // Defer removing the focus
+        setTimeout(() => {
+            document.activeElement.blur();
+        }, 0);
     });
 }
