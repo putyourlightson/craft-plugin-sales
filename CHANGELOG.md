@@ -1,6 +1,9 @@
 # Release Notes for Plugin Sales
 
-## 2.6.3 - Unreleased
+## 2.6.3 - 2023-06-12
+### Added
+- Added a link to the email domain name in slideouts.
+
 ### Fixed
 - Fixed the focus not being removed when the slideout opens.
 
