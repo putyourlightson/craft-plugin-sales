@@ -1,6 +1,6 @@
 # Release Notes for Plugin Sales
 
-## 2.6.3 - 2023-06-12
+## 2.7.0 - 2023-06-12
 ### Added
 - Added a link to the email domain name in slideouts.
 
