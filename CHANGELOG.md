@@ -1,5 +1,9 @@
 # Release Notes for Plugin Sales
 
+## 2.7.1 - Unreleased
+### Added
+- Added “Last 30 Days” and “Last 12 Months” options to the date range picker.
+
 ## 2.7.0 - 2023-06-12
 ### Added
 - Added a link to the email domain name in slideouts.

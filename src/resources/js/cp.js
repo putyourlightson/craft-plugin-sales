@@ -38,6 +38,6 @@ function openCustomerSlideout(email) {
         // Defer removing the focus
         setTimeout(() => {
             document.activeElement.blur();
-        }, 0);
+        }, 10);
     });
 }
