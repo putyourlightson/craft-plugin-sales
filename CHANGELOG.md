@@ -1,7 +1,8 @@
 # Release Notes for Plugin Sales
 
-## 2.7.1 - Unreleased
+## 2.7.1 - 2023-07-10
 ### Added
+- Added compatibility with the organisation customer feature in Craft Console.
 - Added “Last 30 Days” and “Last 12 Months” options to the date range picker.
 
 ## 2.7.0 - 2023-06-12
