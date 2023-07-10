@@ -1,5 +1,9 @@
 # Release Notes for Plugin Sales
 
+## 2.7.2 - 2023-07-10
+### Changed
+- Customer names are now only linked if a domain name is detected. 
+
 ## 2.7.1 - 2023-07-10
 ### Added
 - Added compatibility with the organisation customer feature in Craft Console.
