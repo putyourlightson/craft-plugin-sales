@@ -1,5 +1,9 @@
 # Release Notes for Plugin Sales
 
+## 1.4.2 - 2023-07-10
+### Added
+- Added compatibility with the organisation customer feature in Craft Console.
+
 ## 1.4.1 - 2023-02-23
 ### Changed
 - API requests are now made in batches of 100 items.

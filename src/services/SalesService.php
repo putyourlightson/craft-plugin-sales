@@ -319,7 +319,7 @@ class SalesService extends Component
                 'renewal' => ($sale['purchasableType'] == 'craftnet\\plugins\\PluginRenewal'),
                 'grossAmount' => $sale['grossAmount'],
                 'netAmount' => $sale['netAmount'],
-                'email' => $sale['customer']['email'],
+                'email' => $sale['customer']['ownerReference'],
                 'notice' => $sale['adjustments'][0]['name'] ?? null,
                 'dateSold' => $sale['saleTime'],
             ], false);
