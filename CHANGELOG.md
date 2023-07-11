@@ -1,5 +1,9 @@
 # Release Notes for Plugin Sales
 
+## 2.7.3 - 2023-07-11
+### Changed
+- Customer domain names are now only linked if not an email provider. 
+
 ## 2.7.2 - 2023-07-10
 ### Changed
 - Customer names are now only linked if a domain name is detected. 
