@@ -268,7 +268,7 @@ class SalesService extends Component
         $rate = $rates[PluginSales::$plugin->settings->currency] ?? null;
 
         if ($rate === null) {
-            PluginSales::$plugin->log('Could not find exchange rate for {currency}.', ['currency' => PluginSales::$plugin->settings->currency, ], Logger::LEVEL_ERROR);
+            PluginSales::$plugin->log('Could not find exchange rate for {currency}.', ['currency' => PluginSales::$plugin->settings->currency], Logger::LEVEL_ERROR);
 
             return $lastExchangeRate;
         }

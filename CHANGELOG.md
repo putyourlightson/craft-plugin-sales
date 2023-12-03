@@ -1,5 +1,9 @@
 # Release Notes for Plugin Sales
 
+## 2.7.4 - Unreleased
+### Changed
+- Redirecting to the plugin settings page is now only attempted when installing via the control panel. 
+
 ## 2.7.3 - 2023-07-11
 ### Changed
 - Customer domain names are now only linked if not an email provider. 

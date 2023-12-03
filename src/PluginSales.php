@@ -73,15 +73,19 @@ class PluginSales extends Plugin
     /**
      * @inheritdoc
      */
-    public function init()
+    public function init(): void
     {
         parent::init();
         self::$plugin = $this;
 
         $this->_registerVariables();
         $this->_registerLogTarget();
-        $this->_registerRedirectAfterInstall();
         $this->_registerRefreshAfterSettingsSaved();
+
+        // Register control panel events
+        if (Craft::$app->getRequest()->getIsCpRequest()) {
+            $this->_registerRedirectAfterInstall();
+        }
     }
 
     /**
@@ -161,7 +165,7 @@ class PluginSales extends Plugin
     /**
      * Registers redirect after install.
      */
-    private function _registerRedirectAfterInstall()
+    private function _registerRedirectAfterInstall(): void
     {
         Event::on(Plugins::class, Plugins::EVENT_AFTER_INSTALL_PLUGIN,
             function (PluginEvent $event) {
@@ -177,7 +181,7 @@ class PluginSales extends Plugin
     /**
      * Registers a refresh after settings are saved.
      */
-    private function _registerRefreshAfterSettingsSaved()
+    private function _registerRefreshAfterSettingsSaved(): void
     {
         Event::on(Plugins::class, Plugins::EVENT_AFTER_SAVE_PLUGIN_SETTINGS,
             function (PluginEvent $event) {
