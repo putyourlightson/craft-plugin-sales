@@ -127,10 +127,10 @@ class PluginSales extends Plugin
     /**
      * Registers the variables.
      */
-    private function _registerVariables()
+    private function _registerVariables(): void
     {
         Event::on(CraftVariable::class, CraftVariable::EVENT_INIT,
-            function(Event $event) {
+            function (Event $event) {
                 /** @var CraftVariable $variable */
                 $variable = $event->sender;
                 $variable->set('pluginSales', PluginSalesVariable::class);
@@ -164,7 +164,7 @@ class PluginSales extends Plugin
     private function _registerRedirectAfterInstall()
     {
         Event::on(Plugins::class, Plugins::EVENT_AFTER_INSTALL_PLUGIN,
-            function(PluginEvent $event) {
+            function (PluginEvent $event) {
                 if ($event->plugin === $this) {
                     Craft::$app->getResponse()->redirect(
                         UrlHelper::cpUrl('settings/plugins/plugin-sales')
@@ -180,7 +180,7 @@ class PluginSales extends Plugin
     private function _registerRefreshAfterSettingsSaved()
     {
         Event::on(Plugins::class, Plugins::EVENT_AFTER_SAVE_PLUGIN_SETTINGS,
-            function(PluginEvent $event) {
+            function (PluginEvent $event) {
                 if ($event->plugin === $this) {
                     PluginSales::$plugin->sales->delete();
 
