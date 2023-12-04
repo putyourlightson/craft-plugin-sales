@@ -23,82 +23,82 @@ class ReportsService extends Component
     public const MONTH_FORMAT = 'M Y';
 
     /**
-     * Returns plugin sales data.
+     * Returns sales data.
      */
-    public function getSalesData(string $start = null, string $end = null, string $email = null): string
+    public function getSalesData(string $email = null, string $start = null, string $end = null, string $orderBy = 'dateSold', string $sortBy = 'desc', string $offset = null, string $limit = null, string $search = null): array
     {
         $data = [];
 
         $query = SaleRecord::find()
-            ->with('plugin')
-            ->orderBy(['dateSold' => SORT_DESC])
-            ->asArray();
+            ->joinWith('plugin')
+            ->orderBy([$orderBy => ($sortBy == 'desc' ? SORT_DESC : SORT_ASC)])
+            ->offset($offset)
+            ->limit($limit);
 
-        $this->_applyConditions($query, $start, $end, $email);
-        $sales = $query->all();
+        $this->_applyConditions($query, $start, $end, $email, $search);
 
-        /** @var SaleRecord[] $sales */
-        foreach ($sales as $sale) {
-            $row = [];
+        /** @var SaleRecord[] $saleRecords */
+        $saleRecords = $query->all();
 
-            if ($email == null) {
-                $value = Html::tag('a', $sale['email'], [
-                    'onclick' => 'openCustomerSlideout(this.text)',
-                ]);
-                if ($sale['first']) {
-                    $value .= $this->_getIcon('excite', Craft::t('plugin-sales', 'First plugin license purchase.'));
-                }
-                $row[] = $value;
-            }
-
-            $row[] = $sale['plugin']['name'];
-            $row[] = ucfirst($sale['edition']);
-
-            $type = Craft::t('plugin-sales', $sale['renewal'] ? 'Renewal' : 'License');
-            if ($sale['notice']) {
-                $type .= $this->_getIcon('info', $sale['notice']);
-            }
-            $row[] = $type;
-
-            // Format but don't convert amounts
-            $row[] = number_format($sale['grossAmount'], 2);
-            $row[] = number_format($sale['netAmount'], 2);
-
-            $row[] = $sale['dateSold'];
-
-            $data[] = $row;
+        foreach ($saleRecords as $saleRecord) {
+            $sale = $saleRecord->toArray();
+            $sale['name'] = $saleRecord->plugin->name;
+            $data[] = $sale;
         }
 
-        return json_encode($data);
+        return $data;
     }
 
     /**
-     * Returns customer data.
+     * Returns sales count.
      */
-    public function getCustomerData(string $start = null, string $end = null, string $email = null): string
+    public function getSalesCount(string $email = null, string $start = null, string $end = null, string $search = null): int
     {
-        $data = [];
+        $query = SaleRecord::find()
+            ->joinWith('plugin');
 
-        $customers = $this->_getTotalsQuery($start, $end, $email)
+        $this->_applyConditions($query, $start, $end, $email, $search);
+
+        return $query->count();
+    }
+
+    /**
+     * Returns customers data.
+     */
+    public function getCustomersData(string $start = null, string $end = null, string $orderBy = null, string $sortBy = null, string $offset = null, string $limit = null, string $search = null): array
+    {
+        $query = $this->_getTotalsQuery($start, $end)
             ->addSelect(['email'])
             ->groupBy(['email'])
-            ->orderBy(['netAmount' => SORT_DESC])
-            ->all();
+            ->orderBy([$orderBy => ($sortBy == 'desc' ? SORT_DESC : SORT_ASC)])
+            ->offset($offset)
+            ->limit($limit);
 
-        foreach ($customers as $customer) {
-            $email = Html::tag('a', $customer['email'], [
-                'onclick' => 'openCustomerSlideout("' . $customer['email'] . '")',
-            ]);
-            $data[] = [
-                $email,
-                $customer['count'],
-                // Format amounts but don't convert them
-                number_format($customer['grossAmount'], 2),
-                number_format($customer['netAmount'], 2),
-            ];
+        if ($search) {
+            $query->andWhere(['like', 'email', $search]);
         }
 
-        return json_encode($data);
+        $this->_applyConditions($query, $start, $end, null, $search);
+
+        return $query->all();
+    }
+
+    /**
+     * Returns customers count.
+     */
+    public function getCustomersCount(string $start = null, string $end = null, string $search = null): int
+    {
+        $query = $this->_getTotalsQuery($start, $end)
+            ->addSelect(['email'])
+            ->groupBy(['email']);
+
+        if ($search) {
+            $query->andWhere(['like', 'email', $search]);
+        }
+
+        $this->_applyConditions($query, $start, $end, null, $search);
+
+        return $query->count();
     }
 
     /**
@@ -317,7 +317,6 @@ class ReportsService extends Component
             ->orderBy(['year' => SORT_ASC, 'month' => SORT_ASC])
             ->asArray();
 
-
         $this->_applyConditions($query, $start, $end);
 
         return $query;
@@ -352,9 +351,9 @@ class ReportsService extends Component
     }
 
     /**
-     * Applies condition to a sales query.
+     * Applies conditions to a sales query.
      */
-    private function _applyConditions(ActiveQuery $query, string $start = null, string $end = null, string $email = null): void
+    private function _applyConditions(ActiveQuery $query, string $start = null, string $end = null, string $email = null, string $search = null): void
     {
         $start = $start ? Db::prepareDateForDb($start . ' 00:00:00') : null;
 
@@ -370,6 +369,20 @@ class ReportsService extends Component
 
         if ($email) {
             $query->andWhere(['email' => $email]);
+        }
+
+        if ($search) {
+            $condition = [
+                'or',
+                ['like', 'name', $search],
+                ['like', 'edition', $search],
+            ];
+
+            if (empty($email)) {
+                $condition[] = ['like', 'email', $search];
+            }
+
+            $query->andWhere($condition);
         }
     }
 

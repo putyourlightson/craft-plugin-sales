@@ -1,0 +1,106 @@
+{% set start = start ?? null %}
+{% set end = end ?? null %}
+{% set orderBy = orderBy ?? 'netAmount' %}
+{% set sortBy = sortBy ?? 'desc' %}
+{% set offset = offset ?? 0 %}
+{% set limit = limit ?? 10 %}
+{% set search = search ?? null %}
+{% set customers = craft.pluginSales.reports.getCustomersData(start, end, orderBy, sortBy, offset, limit, search) %}
+{% set total = craft.pluginSales.reports.getCustomersCount(start, end, search) %}
+{% set maxVisible = customers|length + offset %}
+
+{{ hiddenInput('orderBy', orderBy) }}
+{{ hiddenInput('sortBy', sortBy) }}
+
+<div s-replace="#customer-results" s-indicator="#customer-results">
+    <div class="set-table flex">
+        <div class="select">
+            <select sprig name="limit">
+                <option value="10" {{ limit == 10 ? 'selected' }}>10</option>
+                <option value="25" {{ limit == 25 ? 'selected' }}>25</option>
+                <option value="50" {{ limit == 50 ? 'selected' }}>50</option>
+                <option value="100" {{ limit == 100 ? 'selected' }}>100</option>
+            </select>
+        </div>
+        customers displayed
+        <div class="search-container flex-grow texticon has-filter-btn">
+            <span class="texticon-icon search icon" aria-hidden="true"></span>
+            <input sprig s-trigger="keyup changed delay:400ms" name="search" type="text" class="clearable text fullwidth" autocomplete="off" placeholder="Search">
+        </div>
+    </div>
+    <div id="customer-results" class="elements" style="margin-top: 1rem;">
+        <div class="update-spinner spinner spinner-absolute"></div>
+        <table class="data fullwidth">
+            <thead>
+                <tr>
+                    <th class="{{ orderBy == 'email' ? 'ordered' }} {{ sortBy == 'desc' ? 'desc' }} orderable">
+                        <button sprig s-val:order-by="email" s-val:sort-by="{{ orderBy == 'email' and sortBy == 'asc' ? 'desc' : 'asc' }}">
+                            {{ 'Customer'|t('plugin-sales') }}
+                        </button>
+                    </th>
+                    <th class="{{ orderBy == 'count' ? 'ordered' }} {{ sortBy == 'desc' ? 'desc' }} orderable">
+                        <button sprig s-val:order-by="count" s-val:sort-by="{{ orderBy == 'count' and sortBy == 'asc' ? 'desc' : 'asc' }}">
+                            {{ 'Purchases'|t('plugin-sales') }}
+                        </button>
+                    </th>
+                    <th class="{{ orderBy == 'grossAmount' ? 'ordered' }} {{ sortBy == 'desc' ? 'desc' }} orderable">
+                        <button sprig s-val:order-by="grossAmount" s-val:sort-by="{{ orderBy == 'grossAmount' and sortBy == 'asc' ? 'desc' : 'asc' }}">
+                            {{ 'Gross'|t('plugin-sales') }} ($)
+                        </button>
+                    </th>
+                    <th class="{{ orderBy == 'netAmount' ? 'ordered' }} {{ sortBy == 'desc' ? 'desc' }} orderable">
+                        <button sprig s-val:order-by="netAmount" s-val:sort-by="{{ orderBy == 'netAmount' and sortBy == 'asc' ? 'desc' : 'asc' }}">
+                            {{ 'Net'|t('plugin-sales') }} ($)
+                        </button>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for customer in customers %}
+                    <tr>
+                        <td>
+                            <a onclick="openCustomerSlideout(this.text)">
+                                {{- customer.email -}}
+                            </a>
+                        </td>
+                        <td>
+                            {{ customer.count }}
+                        </td>
+                        <td>
+                            {{ customer.grossAmount|number(2) }}
+                        </td>
+                        <td>
+                            {{ customer.netAmount|number(2) }}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <div class="centeralign hidden">
+            <div class="spinner loadingmore"></div>
+        </div>
+        <div id="footer" class="flex flex-justify">
+            <div id="count-spinner" class="spinner small hidden"></div>
+            <div id="count-container" class="light">
+                <div class="flex pagination">
+                    <nav class="flex">
+                        {% if offset > 0 %}
+                            <button sprig s-val:offset="{{ offset - limit }}" class="page-link prev-page" title="Previous
+                             Page"></button>
+                        {% else %}
+                            <button class="page-link prev-page disabled" title="Previous
+                             Page"></button>
+                        {% endif %}
+                        {% if maxVisible < total %}
+                            <button sprig s-val:offset="{{ offset + limit }}" class="page-link next-page" title="Next
+                             Page"></button>
+                        {% else %}
+                            <button role="button" class="page-link next-page disabled" title="Next Page"></button>
+                        {% endif %}
+                    </nav>
+                    <div class="page-info">{{ offset + 1 }}–{{ maxVisible }} of {{ total }} customers</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

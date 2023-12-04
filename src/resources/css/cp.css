@@ -7,8 +7,9 @@
     margin: 25px 0;
 }
 
-.toolbar {
-    display: flex;
+#footer {
+    margin: 1px;
+    position: initial;
 }
 
 .icon svg {
@@ -31,89 +32,4 @@
 .daterangepicker table:not(.data) th:not(:first-child),
 .daterangepicker table:not(.data) td:not(:first-child) {
     padding-left: 0;
-}
-
-.dataTable .notice {
-    margin-left: 2px;
-}
-
-.dataTables_filter {
-    flex-grow: 1;
-    margin-left: 20px;
-}
-
-.dataTables_wrapper table:not(.data) th,
-.dataTables_wrapper table:not(.data) td {
-    padding-left: 12px !important;
-}
-
-.dataTables_wrapper table.dataTable thead th,
-.dataTables_wrapper table.dataTable thead td,
-.dataTables_wrapper table.dataTable.no-footer {
-    border-bottom-color: rgba(96, 125, 159, 0.25) !important;
-}
-
-.dataTables_wrapper table.dataTable.row-border tbody th,
-.dataTables_wrapper table.dataTable.row-border tbody td,
-.dataTables_wrapper table.dataTable.display tbody th,
-.dataTables_wrapper table.dataTable.display tbody td {
-    border-top-color: rgba(96, 125, 159, 0.25) !important;
-}
-
-.dataTables_wrapper table.dataTable.stripe tbody tr.odd,
-.dataTables_wrapper table.dataTable.display tbody tr.odd {
-    background: #f3f7fc !important;
-}
-
-.dataTables_wrapper .dataTables_length,
-.dataTables_wrapper .dataTables_filter,
-.dataTables_wrapper .dataTables_info,
-.dataTables_wrapper .dataTables_processing,
-.dataTables_wrapper .dataTables_paginate,
-.dataTables_wrapper .dataTables_paginate .paginate_button,
-.dataTables_wrapper .dataTables_paginate .paginate_button:hover,
-.dataTables_wrapper .dataTables_paginate .paginate_button.current,
-.dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
-    color: #7b8793 !important;
-}
-
-.dataTables_wrapper .dataTables_length {
-    float: none !important;
-}
-
-.dataTables_wrapper .dataTables_length select {
-    border: none;
-    background-color: rgba(96, 125, 159, 0.25);
-}
-
-.dataTables_wrapper .dataTables_length select:hover {
-    background-color: rgba(96, 125, 159, 0.5);
-}
-
-.dataTables_wrapper .dataTables_filter {
-    float: none !important;
-}
-
-.dataTables_wrapper .dataTables_filter input {
-    margin-left: 0 !important;
-    border-radius: 3px;
-    border: 1px solid rgba(96, 125, 159, 0.25);
-    background-color: #fbfcfe;
-    background-clip: padding-box;
-    padding: 6px 9px;
-}
-
-.dataTables_wrapper .dataTables_paginate .paginate_button.current,
-.dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
-    border-color: rgba(96, 125, 159, 0.25) !important;
-    background: rgba(96, 125, 159, 0.25) !important;
-}
-
-.dataTables_wrapper .dataTables_paginate .paginate_button:hover {
-    border-color: rgba(96, 125, 159, 0.25) !important;
-    background: #f3f7fc !important;
-}
-
-.dataTables_wrapper .dataTables_paginate .paginate_button {
-    border-radius: 5px !important;
 }

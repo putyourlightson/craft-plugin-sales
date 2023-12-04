@@ -40,8 +40,7 @@ class SalesController extends Controller
         $csv = '';
 
         $request = Craft::$app->getRequest();
-        $data = PluginSales::$plugin->reports->getSalesData($request->get('start'), $request->get('end'));
-        $data = json_decode($data);
+        $data = PluginSales::$plugin->reports->getSalesData(null, $request->get('start'), $request->get('end'));
 
         foreach ($data as $row) {
             $csv .= implode(',', $row) . PHP_EOL;

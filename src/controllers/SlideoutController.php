@@ -23,7 +23,7 @@ class SlideoutController extends Controller
         $sales = PluginSales::$plugin->reports->getSalesData(email: $email);
 
         return $this->asCpScreen()
-            ->contentTemplate('plugin-sales/slideout', [
+            ->contentTemplate('plugin-sales/_slideout', [
                 'email' => $email,
                 'url' => $url,
                 'sales' => $sales,
@@ -51,6 +51,6 @@ class SlideoutController extends Controller
             return null;
         }
 
-        return 'https://'.$domain;
+        return 'https://' . $domain;
     }
 }

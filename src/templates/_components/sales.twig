@@ -1,0 +1,148 @@
+{% set start = start ?? null %}
+{% set end = end ?? null %}
+{% set orderBy = orderBy ?? 'dateSold' %}
+{% set sortBy = sortBy ?? 'desc' %}
+{% set offset = offset ?? 0 %}
+{% set limit = limit ?? 10 %}
+{% set search = search ?? null %}
+{% set sales = craft.pluginSales.reports.getSalesData(email, start, end, orderBy, sortBy, offset, limit, search) %}
+{% set total = craft.pluginSales.reports.getSalesCount(email, start, end, search) %}
+{% set maxVisible = sales|length + offset %}
+{% set resultsId = 'sales-results' ~ (email ? '-slideout') %}
+
+{{ hiddenInput('orderBy', orderBy) }}
+{{ hiddenInput('sortBy', sortBy) }}
+{{ hiddenInput('resultsId', resultsId) }}
+
+<div s-replace="#{{ resultsId }}" s-indicator="#{{ resultsId }}">
+    <div class="set-table flex">
+        <div class="select">
+            <select sprig name="limit">
+                <option value="10" {{ limit == 10 ? 'selected' }}>10</option>
+                <option value="25" {{ limit == 25 ? 'selected' }}>25</option>
+                <option value="50" {{ limit == 50 ? 'selected' }}>50</option>
+                <option value="100" {{ limit == 100 ? 'selected' }}>100</option>
+            </select>
+        </div>
+        sales displayed
+        <div class="search-container flex-grow texticon has-filter-btn">
+            <span class="texticon-icon search icon" aria-hidden="true"></span>
+            <input sprig s-trigger="keyup changed delay:400ms" name="search" type="text" class="clearable text fullwidth" autocomplete="off" placeholder="Search">
+        </div>
+    </div>
+    <div id="{{ resultsId }}" class="elements" style="margin-top: 1rem;">
+        <div class="update-spinner spinner spinner-absolute"></div>
+        <table class="data fullwidth">
+            <thead>
+                <tr>
+                    {% if email is null %}
+                        <th class="{{ orderBy == 'email' ? 'ordered' }} {{ sortBy == 'desc' ? 'desc' }} orderable">
+                            <button type="button" sprig s-val:order-by="email" s-val:sort-by="{{ orderBy == 'email' and sortBy == 'asc' ? 'desc' : 'asc' }}">
+                                {{ 'Customer'|t('plugin-sales') }}
+                            </button>
+                        </th>
+                    {% endif %}
+                    <th class="{{ orderBy == 'name' ? 'ordered' }} {{ sortBy == 'desc' ? 'desc' }} orderable">
+                        <button type="button" sprig s-val:order-by="name" s-val:sort-by="{{ orderBy == 'name' and sortBy == 'asc' ? 'desc' : 'asc' }}">
+                            {{ 'Plugin'|t('plugin-sales') }}
+                        </button>
+                    </th>
+                    <th class="{{ orderBy == 'edition' ? 'ordered' }} {{ sortBy == 'desc' ? 'desc' }} orderable">
+                        <button type="button" sprig s-val:order-by="edition" s-val:sort-by="{{ orderBy == 'edition' and sortBy == 'asc' ? 'desc' : 'asc' }}">
+                            {{ 'Edition'|t('plugin-sales') }}
+                        </button>
+                    </th>
+                    <th class="{{ orderBy == 'renewal' ? 'ordered' }} {{ sortBy == 'desc' ? 'desc' }} orderable">
+                        <button type="button" sprig s-val:order-by="renewal" s-val:sort-by="{{ orderBy == 'renewal' and sortBy == 'asc' ? 'desc' : 'asc' }}">
+                            {{ 'Type'|t('plugin-sales') }}
+                        </button>
+                    </th>
+                    <th class="{{ orderBy == 'grossAmount' ? 'ordered' }} {{ sortBy == 'desc' ? 'desc' }} orderable">
+                        <button type="button" sprig s-val:order-by="grossAmount" s-val:sort-by="{{ orderBy == 'grossAmount' and sortBy == 'asc' ? 'desc' : 'asc' }}">
+                            {{ 'Gross'|t('plugin-sales') }} ($)
+                        </button>
+                    </th>
+                    <th class="{{ orderBy == 'netAmount' ? 'ordered' }} {{ sortBy == 'desc' ? 'desc' }} orderable">
+                        <button type="button" sprig s-val:order-by="netAmount" s-val:sort-by="{{ orderBy == 'netAmount' and sortBy == 'asc' ? 'desc' : 'asc' }}">
+                            {{ 'Net'|t('plugin-sales') }} ($)
+                        </button>
+                    </th>
+                    <th class="{{ orderBy == 'dateSold' ? 'ordered' }} {{ sortBy == 'desc' ? 'desc' }} orderable">
+                        <button type="button" sprig s-val:order-by="dateSold" s-val:sort-by="{{ orderBy == 'dateSold' and sortBy == 'asc' ? 'desc' : 'asc' }}">
+                            {{ 'Date'|t('plugin-sales') }}
+                        </button>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for sale in sales %}
+                    <tr>
+                        {% if email is null %}
+                            <td>
+                                <a onclick="openCustomerSlideout(this.text)">
+                                    {{- sale.email -}}
+                                </a>
+                                {% if sale.first %}
+                                    <span title="{{ 'First plugin license purchase.'|t('plugin-sales') }}" class="icon">
+                                            {{ svg('@putyourlightson/pluginsales/resources/icons/excite.svg') }}
+                                        </span>
+                                {% endif %}
+                            </td>
+                        {% endif %}
+                        <td>
+                            {{ sale.name }}
+                        </td>
+                        <td>
+                            {{ sale.edition|ucfirst }}
+                        </td>
+                        <td>
+                            {{ sale.renewal ? 'Renewal'|t('plugin-sales') : 'Licence'|t('plugin-sales') }}
+                            {% if sale.notice %}
+                                <span title="{{ sale.notice }}" class="icon">
+                                        {{ svg('@putyourlightson/pluginsales/resources/icons/info.svg') }}
+                                    </span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {{ sale.grossAmount|number(2) }}
+                        </td>
+                        <td>
+                            {{ sale.netAmount|number(2) }}
+                        </td>
+                        <td>
+                            {{ sale.dateSold|datetime }}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <div class="centeralign hidden">
+            <div class="spinner loadingmore"></div>
+        </div>
+        <div id="footer" class="flex flex-justify">
+            <div id="count-spinner" class="spinner small hidden"></div>
+            <div id="count-container" class="light">
+                <div class="flex pagination">
+                    <nav class="flex">
+                        {% if offset > 0 %}
+                            <button type="button" sprig s-val:offset="{{ offset - limit }}" class="page-link prev-page" title="Previous
+                             Page"></button>
+                        {% else %}
+                            <button type="button" class="page-link prev-page disabled" title="Previous
+                             Page"></button>
+                        {% endif %}
+                        {% if maxVisible < total %}
+                            <button type="button" sprig s-val:offset="{{ offset + limit }}" class="page-link next-page" title="Next
+                             Page"></button>
+                        {% else %}
+                            <button type="button" role="button" class="page-link next-page disabled" title="Next Page"></button>
+                        {% endif %}
+                    </nav>
+                    <div class="page-info">
+                        {{ maxVisible > 0 ? offset + 1 : 0 }}–{{ maxVisible }} of {{ total }} sales
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -21,6 +21,7 @@ use putyourlightson\pluginsales\services\PluginsService;
 use putyourlightson\pluginsales\services\ReportsService;
 use putyourlightson\pluginsales\services\SalesService;
 use putyourlightson\pluginsales\variables\PluginSalesVariable;
+use putyourlightson\sprig\Sprig;
 use yii\base\Event;
 use yii\log\Logger;
 
@@ -77,6 +78,8 @@ class PluginSales extends Plugin
     {
         parent::init();
         self::$plugin = $this;
+
+        Sprig::getInstance()->init();
 
         $this->_registerVariables();
         $this->_registerLogTarget();
