@@ -54,8 +54,7 @@ class ReportsService extends Component
      */
     public function getSalesCount(string $email = null, string $start = null, string $end = null, string $search = null): int
     {
-        $query = SaleRecord::find()
-            ->joinWith('plugin');
+        $query = SaleRecord::find();
 
         $this->_applyConditions($query, $start, $end, $email, $search);
 
@@ -382,7 +381,8 @@ class ReportsService extends Component
                 $condition[] = ['like', 'email', $search];
             }
 
-            $query->andWhere($condition);
+            $query->joinWith('plugin')
+                ->andWhere($condition);
         }
     }
 
