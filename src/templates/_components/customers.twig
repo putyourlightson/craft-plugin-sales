@@ -98,7 +98,7 @@
                             <button role="button" class="page-link next-page disabled" title="Next Page"></button>
                         {% endif %}
                     </nav>
-                    <div class="page-info">{{ offset + 1 }}–{{ maxVisible }} of {{ total }} customers</div>
+                    <div class="page-info">{{ maxVisible > 0 ? offset + 1 : 0 }}–{{ maxVisible }} of {{ total }} customers</div>
                 </div>
             </div>
         </div>
