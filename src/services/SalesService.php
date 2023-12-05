@@ -334,7 +334,7 @@ class SalesService extends Component
             $dateSoldArray = SaleRecord::find()
                 ->select('MIN(dateSold) as dateSold')
                 ->where(['pluginId' => $pluginId])
-                ->groupBy(['email', 'pluginId'])
+                ->groupBy(['customer', 'pluginId'])
                 ->column();
 
             $saleRecordIds = SaleRecord::find()
