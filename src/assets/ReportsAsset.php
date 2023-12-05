@@ -33,6 +33,7 @@ class ReportsAsset extends AssetBundle
             'https://cdn.jsdelivr.net/npm/apexcharts@3',
             'https://cdn.jsdelivr.net/npm/moment@2',
             'https://cdn.jsdelivr.net/npm/daterangepicker@3',
+            'js/PluginSales.js',
             'js/CustomerSlideout.js',
         ];
 

@@ -1,0 +1,4 @@
+/**
+ * PluginSales class
+ */
+PluginSales = {};

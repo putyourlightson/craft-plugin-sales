@@ -1,6 +1,6 @@
 /** global: Craft */
 /** global: Garnish */
-Craft.CustomerSlideout = Craft.CpScreenSlideout.extend(
+PluginSales.CustomerSlideout = Craft.CpScreenSlideout.extend(
     {
         init: function(customer) {
             const action = 'plugin-sales/slideout/render?customer=' + encodeURIComponent(customer);
