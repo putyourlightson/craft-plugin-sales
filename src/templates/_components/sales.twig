@@ -80,13 +80,13 @@
                     <tr>
                         {% if customer is null %}
                             <td>
-                                <a onclick="new PluginSales.CustomerSlideout(this.text)">
+                                <a onclick="new PluginSales.CustomerSlideout('{{ sale.customer }}')">
                                     {{- sale.customer -}}
                                 </a>
                                 {% if sale.first %}
                                     <span title="{{ 'First plugin license purchase.'|t('plugin-sales') }}" class="icon">
-                                            {{ svg('@putyourlightson/pluginsales/resources/icons/excite.svg') }}
-                                        </span>
+                                        {{ svg('@putyourlightson/pluginsales/resources/icons/excite.svg') }}
+                                    </span>
                                 {% endif %}
                             </td>
                         {% endif %}
