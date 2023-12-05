@@ -1,5 +1,11 @@
 # Release Notes for Plugin Sales
 
+## 2.8.1 - 2023-12-05
+
+### Fixed
+
+- Fixed a bug in which refreshing sales was throwing an exception.
+
 ## 2.8.0 - 2023-12-04
 
 ### Added
