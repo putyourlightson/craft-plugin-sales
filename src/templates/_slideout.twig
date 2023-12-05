@@ -1,5 +1,5 @@
 <h2>
-    {{ email }}
+    {{ customer }}
     {% if url %}
         <a href="{{ url }}" title="{{ url }}" target="_blank" rel="noreferrer">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" style="display: inline; width: 20px; height: 20px;">
@@ -10,4 +10,4 @@
     {% endif %}
 </h2>
 
-{{ sprig('plugin-sales/_components/sales', { email: email }) }}
+{{ sprig('plugin-sales/_components/sales', { customer: customer }) }}

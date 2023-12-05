@@ -38,10 +38,10 @@ class SalesService extends Component
      *
      * @return SaleModel[]
      */
-    public function getSales(string $email = null): array
+    public function getSales(string $customer = null): array
     {
         $saleModels = [];
-        $condition = $email ? ['email' => $email] : [];
+        $condition = $customer ? ['customer' => $customer] : [];
 
         /** @var SaleRecord[] $saleRecords */
         $saleRecords = SaleRecord::find()
@@ -306,7 +306,7 @@ class SalesService extends Component
                 'renewal' => ($sale['purchasableType'] == 'craftnet\\plugins\\PluginRenewal'),
                 'grossAmount' => $sale['grossAmount'],
                 'netAmount' => $sale['netAmount'],
-                'email' => $sale['customer']['ownerReference'],
+                'customer' => $sale['customer']['ownerReference'],
                 'notice' => $sale['adjustments'][0]['name'] ?? null,
                 'dateSold' => $sale['saleTime'],
             ], false);

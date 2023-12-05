@@ -25,7 +25,7 @@ class ReportsService extends Component
     /**
      * Returns sales data.
      */
-    public function getSalesData(string $email = null, string $start = null, string $end = null, string $orderBy = 'dateSold', string $sortBy = 'desc', string $offset = null, string $limit = null, string $search = null): array
+    public function getSalesData(string $customer = null, string $start = null, string $end = null, string $orderBy = 'dateSold', string $sortBy = 'desc', string $offset = null, string $limit = null, string $search = null): array
     {
         $data = [];
 
@@ -35,7 +35,7 @@ class ReportsService extends Component
             ->offset($offset)
             ->limit($limit);
 
-        $this->_applyConditions($query, $start, $end, $email, $search);
+        $this->_applyConditions($query, $start, $end, $customer, $search);
 
         /** @var SaleRecord[] $saleRecords */
         $saleRecords = $query->all();
@@ -52,11 +52,11 @@ class ReportsService extends Component
     /**
      * Returns sales count.
      */
-    public function getSalesCount(string $email = null, string $start = null, string $end = null, string $search = null): int
+    public function getSalesCount(string $customer = null, string $start = null, string $end = null, string $search = null): int
     {
         $query = SaleRecord::find();
 
-        $this->_applyConditions($query, $start, $end, $email, $search);
+        $this->_applyConditions($query, $start, $end, $customer, $search);
 
         return $query->count();
     }
@@ -67,14 +67,14 @@ class ReportsService extends Component
     public function getCustomersData(string $start = null, string $end = null, string $orderBy = null, string $sortBy = null, string $offset = null, string $limit = null, string $search = null): array
     {
         $query = $this->_getTotalsQuery($start, $end)
-            ->addSelect(['email'])
-            ->groupBy(['email'])
+            ->addSelect(['customer'])
+            ->groupBy(['customer'])
             ->orderBy([$orderBy => ($sortBy == 'desc' ? SORT_DESC : SORT_ASC)])
             ->offset($offset)
             ->limit($limit);
 
         if ($search) {
-            $query->andWhere(['like', 'email', $search]);
+            $query->andWhere(['like', 'customer', $search]);
         }
 
         $this->_applyConditions($query, $start, $end, null, $search);
@@ -88,11 +88,11 @@ class ReportsService extends Component
     public function getCustomersCount(string $start = null, string $end = null, string $search = null): int
     {
         $query = $this->_getTotalsQuery($start, $end)
-            ->addSelect(['email'])
-            ->groupBy(['email']);
+            ->addSelect(['customer'])
+            ->groupBy(['customer']);
 
         if ($search) {
-            $query->andWhere(['like', 'email', $search]);
+            $query->andWhere(['like', 'customer', $search]);
         }
 
         $this->_applyConditions($query, $start, $end, null, $search);
@@ -271,7 +271,7 @@ class ReportsService extends Component
     /**
      * Returns totals query.
      */
-    private function _getTotalsQuery(string $start = null, string $end = null, string $email = null): ActiveQuery
+    private function _getTotalsQuery(string $start = null, string $end = null, string $customer = null): ActiveQuery
     {
         $query = SaleRecord::find()
             ->select([
@@ -281,7 +281,7 @@ class ReportsService extends Component
             ])
             ->asArray();
 
-        $this->_applyConditions($query, $start, $end, $email);
+        $this->_applyConditions($query, $start, $end, $customer);
 
         return $query;
     }
@@ -352,7 +352,7 @@ class ReportsService extends Component
     /**
      * Applies conditions to a sales query.
      */
-    private function _applyConditions(ActiveQuery $query, string $start = null, string $end = null, string $email = null, string $search = null): void
+    private function _applyConditions(ActiveQuery $query, string $start = null, string $end = null, string $customer = null, string $search = null): void
     {
         $start = $start ? Db::prepareDateForDb($start . ' 00:00:00') : null;
 
@@ -366,8 +366,8 @@ class ReportsService extends Component
             $query->andWhere(['<=', 'dateSold', $end]);
         }
 
-        if ($email) {
-            $query->andWhere(['email' => $email]);
+        if ($customer) {
+            $query->andWhere(['customer' => $customer]);
         }
 
         if ($search) {
@@ -377,8 +377,8 @@ class ReportsService extends Component
                 ['like', 'edition', $search],
             ];
 
-            if (empty($email)) {
-                $condition[] = ['like', 'email', $search];
+            if (empty($customer)) {
+                $condition[] = ['like', 'customer', $search];
             }
 
             $query->joinWith('plugin')

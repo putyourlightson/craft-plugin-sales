@@ -16,7 +16,7 @@ use yii\db\ActiveQuery;
  * @property string $edition
  * @property bool $renewal
  * @property bool $first
- * @property string $email
+ * @property string $customer
  * @property string $notice
  * @property float $grossAmount
  * @property float $netAmount
@@ -26,8 +26,8 @@ use yii\db\ActiveQuery;
 class SaleRecord extends ActiveRecord
 {
     /**
-    * @inheritdoc
-    */
+     * @inheritdoc
+     */
     public static function tableName(): string
     {
         return '{{%pluginsales_sales}}';

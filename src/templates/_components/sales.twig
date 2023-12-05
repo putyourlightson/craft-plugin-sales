@@ -1,3 +1,4 @@
+{% set customer = customer ?? null %}
 {% set start = start ?? null %}
 {% set end = end ?? null %}
 {% set orderBy = orderBy ?? 'dateSold' %}
@@ -5,10 +6,10 @@
 {% set offset = offset ?? 0 %}
 {% set limit = limit ?? 10 %}
 {% set search = search ?? null %}
-{% set sales = craft.pluginSales.reports.getSalesData(email, start, end, orderBy, sortBy, offset, limit, search) %}
-{% set total = craft.pluginSales.reports.getSalesCount(email, start, end, search) %}
+{% set sales = craft.pluginSales.reports.getSalesData(customer, start, end, orderBy, sortBy, offset, limit, search) %}
+{% set total = craft.pluginSales.reports.getSalesCount(customer, start, end, search) %}
 {% set maxVisible = sales|length + offset %}
-{% set resultsId = 'sales-results' ~ (email ? '-slideout') %}
+{% set resultsId = 'sales-results' ~ (customer ? '-slideout') %}
 
 {{ hiddenInput('orderBy', orderBy) }}
 {{ hiddenInput('sortBy', sortBy) }}
@@ -35,9 +36,9 @@
         <table class="data fullwidth">
             <thead>
                 <tr>
-                    {% if email is null %}
-                        <th class="{{ orderBy == 'email' ? 'ordered' }} {{ sortBy == 'desc' ? 'desc' }} orderable">
-                            <button type="button" sprig s-val:order-by="email" s-val:sort-by="{{ orderBy == 'email' and sortBy == 'asc' ? 'desc' : 'asc' }}">
+                    {% if customer is null %}
+                        <th class="{{ orderBy == 'customer' ? 'ordered' }} {{ sortBy == 'desc' ? 'desc' }} orderable">
+                            <button type="button" sprig s-val:order-by="customer" s-val:sort-by="{{ orderBy == 'customer' and sortBy == 'asc' ? 'desc' : 'asc' }}">
                                 {{ 'Customer'|t('plugin-sales') }}
                             </button>
                         </th>
@@ -77,10 +78,10 @@
             <tbody>
                 {% for sale in sales %}
                     <tr>
-                        {% if email is null %}
+                        {% if customer is null %}
                             <td>
-                                <a onclick="openCustomerSlideout(this.text)">
-                                    {{- sale.email -}}
+                                <a onclick="new Craft.CustomerSlideout(this.text)">
+                                    {{- sale.customer -}}
                                 </a>
                                 {% if sale.first %}
                                     <span title="{{ 'First plugin license purchase.'|t('plugin-sales') }}" class="icon">

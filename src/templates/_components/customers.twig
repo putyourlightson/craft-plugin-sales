@@ -33,8 +33,8 @@
         <table class="data fullwidth">
             <thead>
                 <tr>
-                    <th class="{{ orderBy == 'email' ? 'ordered' }} {{ sortBy == 'desc' ? 'desc' }} orderable">
-                        <button sprig s-val:order-by="email" s-val:sort-by="{{ orderBy == 'email' and sortBy == 'asc' ? 'desc' : 'asc' }}">
+                    <th class="{{ orderBy == 'customer' ? 'ordered' }} {{ sortBy == 'desc' ? 'desc' }} orderable">
+                        <button sprig s-val:order-by="customer" s-val:sort-by="{{ orderBy == 'customer' and sortBy == 'asc' ? 'desc' : 'asc' }}">
                             {{ 'Customer'|t('plugin-sales') }}
                         </button>
                     </th>
@@ -59,8 +59,8 @@
                 {% for customer in customers %}
                     <tr>
                         <td>
-                            <a onclick="openCustomerSlideout(this.text)">
-                                {{- customer.email -}}
+                            <a onclick="new Craft.CustomerSlideout(this.text)">
+                                {{- customer.customer -}}
                             </a>
                         </td>
                         <td>

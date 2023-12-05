@@ -43,7 +43,7 @@ class SaleModel extends Model
     /**
      * @var string|null
      */
-    public ?string $email = null;
+    public ?string $customer = null;
 
     /**
      * @var string|null

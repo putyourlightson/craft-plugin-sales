@@ -18,25 +18,25 @@ class SlideoutController extends Controller
      */
     public function actionRender(): Response
     {
-        $email = $this->request->getRequiredParam('email');
-        $url = $this->_getUrlFromEmail($email);
-        $sales = PluginSales::$plugin->reports->getSalesData(email: $email);
+        $customer = $this->request->getRequiredParam('customer');
+        $url = $this->_getUrlFromCustomer($customer);
+        $sales = PluginSales::$plugin->reports->getSalesData($customer);
 
         return $this->asCpScreen()
             ->contentTemplate('plugin-sales/_slideout', [
-                'email' => $email,
+                'customer' => $customer,
                 'url' => $url,
                 'sales' => $sales,
             ]);
     }
 
-    private function _getUrlFromEmail(?string $email): ?string
+    private function _getUrlFromCustomer(?string $customer): ?string
     {
-        if ($email === null) {
+        if ($customer === null) {
             return null;
         }
 
-        $domain = explode('@', $email)[1] ?? null;
+        $domain = explode('@', $customer)[1] ?? null;
 
         if ($domain === null) {
             return null;
