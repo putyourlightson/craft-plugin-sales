@@ -1,6 +1,6 @@
 # Release Notes for Plugin Sales
 
-## 2.8.0 - Unreleased
+## 2.8.0 - 2023-12-04
 
 ### Added
 
