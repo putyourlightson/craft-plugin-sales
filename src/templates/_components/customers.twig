@@ -85,15 +85,12 @@
                 <div class="flex pagination">
                     <nav class="flex">
                         {% if offset > 0 %}
-                            <button sprig s-val:offset="{{ offset - limit }}" class="page-link prev-page" title="Previous
-                             Page"></button>
+                            <button sprig s-val:offset="{{ offset - limit }}" class="page-link prev-page" title="Previous Page"></button>
                         {% else %}
-                            <button class="page-link prev-page disabled" title="Previous
-                             Page"></button>
+                            <button class="page-link prev-page disabled" title="Previous Page"></button>
                         {% endif %}
                         {% if maxVisible < total %}
-                            <button sprig s-val:offset="{{ offset + limit }}" class="page-link next-page" title="Next
-                             Page"></button>
+                            <button sprig s-val:offset="{{ offset + limit }}" class="page-link next-page" title="Next Page"></button>
                         {% else %}
                             <button role="button" class="page-link next-page disabled" title="Next Page"></button>
                         {% endif %}
