@@ -137,7 +137,8 @@
                         {% endif %}
                     </nav>
                     <div class="page-info">
-                        {{ maxVisible > 0 ? offset + 1 : 0 }}–{{ maxVisible }} of {{ total }} sales
+                        {{ (maxVisible > 0 ? offset + 1 : 0)|number }}–{{ maxVisible|number }}
+                        of {{ total|number }} sales
                     </div>
                 </div>
             </div>
