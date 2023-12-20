@@ -1,11 +1,5 @@
 # Release Notes for Plugin Sales
 
-## 2.8.3 - 2023-12-20
-
-### Added
-
-- Added an update first sales job with a TTR config setting, defaulting to 1 hour.
-
 ## 2.8.2 - 2023-12-20
 
 ### Added

@@ -10,11 +10,9 @@ use craft\base\Component;
 use craft\helpers\App;
 use craft\helpers\DateTimeHelper;
 use craft\helpers\Db;
-use craft\helpers\Queue;
 use DateTime;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
-use putyourlightson\pluginsales\jobs\UpdateFirstSalesJob;
 use putyourlightson\pluginsales\models\SaleModel;
 use putyourlightson\pluginsales\PluginSales;
 use putyourlightson\pluginsales\records\PluginRecord;
@@ -208,6 +206,8 @@ class SalesService extends Component
             }
         }
 
+        $this->_updateFirstSales();
+
         $refreshRecord = new RefreshRecord();
         $refreshRecord->refreshed = $refreshCount;
         $refreshRecord->currency = PluginSales::$plugin->settings->currency;
@@ -220,57 +220,7 @@ class SalesService extends Component
 
         $refreshRecord->save();
 
-        Queue::push(new UpdateFirstSalesJob(), null, null, PluginSales::$plugin->settings->updateFirstSalesJobTtr);
-
         return $refreshCount;
-    }
-
-    /**
-     * Updates all first sale records.
-     */
-    public function updateFirstSales(callable $setProgressHandler = null): void
-    {
-        // Reset all firsts
-        Db::update(SaleRecord::tableName(), ['first' => false]);
-
-        $pluginIds = PluginRecord::find()->select('id')->column();
-        $total = count($pluginIds);
-        $count = 0;
-
-        foreach ($pluginIds as $pluginId) {
-            // Use a subquery to select first sale per customer per plugin
-            $dateSoldArray = SaleRecord::find()
-                ->select('MIN(dateSold) as dateSold')
-                ->where(['pluginId' => $pluginId])
-                ->groupBy(['customer', 'pluginId'])
-                ->column();
-
-            $saleRecordIds = SaleRecord::find()
-                ->select('id')
-                ->where([
-                    'pluginId' => $pluginId,
-                    'dateSold' => $dateSoldArray,
-                ])
-                ->column();
-
-            Db::update(
-                SaleRecord::tableName(),
-                [
-                    'first' => true,
-                ],
-                [
-                    'id' => $saleRecordIds,
-                    'renewal' => false,
-                    'first' => false,
-                ]
-            );
-
-            $count++;
-
-            if (is_callable($setProgressHandler)) {
-                call_user_func($setProgressHandler, $count, $total);
-            }
-        }
     }
 
     /**
@@ -368,5 +318,45 @@ class SalesService extends Component
         }
 
         return $count;
+    }
+
+    /**
+     * Updates all first sale records.
+     */
+    private function _updateFirstSales(): void
+    {
+        // Reset all firsts
+        Db::update(SaleRecord::tableName(), ['first' => false]);
+
+        $pluginIds = PluginRecord::find()->select('id')->column();
+
+        foreach ($pluginIds as $pluginId) {
+            // Use a subquery to select first sale per customer per plugin
+            $dateSoldArray = SaleRecord::find()
+                ->select('MIN(dateSold) as dateSold')
+                ->where(['pluginId' => $pluginId])
+                ->groupBy(['customer', 'pluginId'])
+                ->column();
+
+            $saleRecordIds = SaleRecord::find()
+                ->select('id')
+                ->where([
+                    'pluginId' => $pluginId,
+                    'dateSold' => $dateSoldArray,
+                ])
+                ->column();
+
+            Db::update(
+                SaleRecord::tableName(),
+                [
+                    'first' => true,
+                ],
+                [
+                    'id' => $saleRecordIds,
+                    'renewal' => false,
+                    'first' => false,
+                ]
+            );
+        }
     }
 }
