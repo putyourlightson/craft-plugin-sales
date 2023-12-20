@@ -30,5 +30,8 @@ return [
 
         // The number of colours to display in the colour palette
         //'colours' => 10,
+
+        // The TTR to use for refresh sales jobs
+        //'refreshSalesJobTtr' => 3600,
     ],
 ];

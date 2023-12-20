@@ -31,7 +31,7 @@ class RefreshSalesJob extends BaseJob
     /**
      * Handles setting the progress.
      */
-    public function setProgressHandler(int $count, int $total)
+    public function setProgressHandler(int $count, int $total): void
     {
         $progress = $total > 0 ? ($count / $total) : 0;
 

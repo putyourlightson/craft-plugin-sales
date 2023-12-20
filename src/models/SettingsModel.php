@@ -42,6 +42,11 @@ class SettingsModel extends Model
     public array $colourPalette = ['3B82F6', '4ADE80', 'FBBF24', 'F43F5E', '7DD3FC', '059669', 'FB923C', 'D946EF', 'A16207', '94A3B8'];
 
     /**
+     * @var int
+     */
+    public int $refreshSalesJobTtr = 3600;
+
+    /**
      * @inheritdoc
      */
     protected function defineBehaviors(): array

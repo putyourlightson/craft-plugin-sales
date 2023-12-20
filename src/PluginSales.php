@@ -8,6 +8,7 @@ namespace putyourlightson\pluginsales;
 use Craft;
 use craft\base\Plugin;
 use craft\events\PluginEvent;
+use craft\helpers\Queue;
 use craft\helpers\UrlHelper;
 use craft\log\MonologTarget;
 use craft\services\Plugins;
@@ -191,8 +192,7 @@ class PluginSales extends Plugin
                 if ($event->plugin === $this) {
                     PluginSales::$plugin->sales->delete();
 
-                    // Create queue job
-                    Craft::$app->getQueue()->push(new RefreshSalesJob());
+                    Queue::push(new RefreshSalesJob(), null, null, PluginSales::$plugin->settings->refreshSalesJobTtr);
                 }
             }
         );
