@@ -33,5 +33,8 @@ return [
 
         // The TTR to use for refresh sales jobs
         //'refreshSalesJobTtr' => 3600,
+
+        // The TTR to use for update first sales jobs
+        //'updateFirstSalesJobTtr' => 3600,
     ],
 ];

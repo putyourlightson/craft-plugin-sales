@@ -8,7 +8,6 @@ namespace putyourlightson\pluginsales\services;
 use Craft;
 use craft\base\Component;
 use craft\helpers\Db;
-use craft\helpers\Html;
 use DateInterval;
 use DateTime;
 use putyourlightson\pluginsales\PluginSales;
@@ -25,7 +24,7 @@ class ReportsService extends Component
     /**
      * Returns sales data.
      */
-    public function getSalesData(string $customer = null, string $start = null, string $end = null, string $orderBy = 'dateSold', string $sortBy = 'desc', string $offset = null, string $limit = null, string $search = null): array
+    public function getSalesData(string $customer = null, string $start = null, string $end = null, string $orderBy = 'dateSold', string $sortBy = 'desc', ?int $offset = null, ?int $limit = null, string $search = null): array
     {
         $data = [];
 
@@ -64,7 +63,7 @@ class ReportsService extends Component
     /**
      * Returns customers data.
      */
-    public function getCustomersData(string $start = null, string $end = null, string $orderBy = null, string $sortBy = null, string $offset = null, string $limit = null, string $search = null): array
+    public function getCustomersData(string $start = null, string $end = null, string $orderBy = null, string $sortBy = null, ?int $offset = null, ?int $limit = null, string $search = null): array
     {
         $query = $this->_getTotalsQuery($start, $end)
             ->addSelect(['customer'])
@@ -384,19 +383,5 @@ class ReportsService extends Component
             $query->joinWith('plugin')
                 ->andWhere($condition);
         }
-    }
-
-    /**
-     * Returns an icon.
-     */
-    private function _getIcon(string $icon, string $title): string
-    {
-        return Html::tag('span',
-            Html::svg(Craft::getAlias('@putyourlightson/pluginsales/resources/icons/' . $icon . '.svg')),
-            [
-                'title' => $title,
-                'class' => 'icon',
-            ]
-        );
     }
 }

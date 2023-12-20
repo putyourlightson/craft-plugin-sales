@@ -28,6 +28,8 @@ class PluginsService extends Component
     public function getPlugins(): array
     {
         $pluginModels = [];
+
+        /** @var PluginRecord[] $pluginRecords */
         $pluginRecords = PluginRecord::find()->all();
 
         foreach ($pluginRecords as $pluginRecord) {

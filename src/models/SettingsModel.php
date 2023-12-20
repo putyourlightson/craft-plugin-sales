@@ -47,6 +47,11 @@ class SettingsModel extends Model
     public int $refreshSalesJobTtr = 3600;
 
     /**
+     * @var int
+     */
+    public int $updateFirstSalesJobTtr = 3600;
+
+    /**
      * @inheritdoc
      */
     protected function defineBehaviors(): array
