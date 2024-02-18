@@ -5,7 +5,8 @@
 
 # Plugin Sales for Craft CMS
 
-Beautiful charts and reports of *your* Craft CMS plugin sales in the control panel.
+Beautiful charts and reports of
+*your* Craft CMS plugin sales in the control panel.
 
 - The most relevant charts for quick and insightful overviews.
 - See plugin sales in your currency and filtered by date range.
@@ -13,7 +14,7 @@ Beautiful charts and reports of *your* Craft CMS plugin sales in the control pan
 
 Requires a [Craft Console](https://console.craftcms.com/) account connected to an organisation account.
 
-![Plugin sales](https://putyourlightson.com/assets/images/plugins/plugin-sales/plugin-sales-121.png)  
+![Plugin sales](https://putyourlightson.com/assets/images/plugins/plugin-sales/plugin-sales-121.png)
 
 ## Documentation
 
@@ -25,7 +26,7 @@ This plugin requires a commercial license purchasable through the [Craft Plugin 
 
 ## Requirements
 
-This plugin requires [Craft CMS](https://craftcms.com/) 3.4.0 or later, or 4.0.0 or later.
+This plugin requires [Craft CMS](https://craftcms.com/) 3.4.0 or later, or 4.0.0 or later, or 5.0.0 or later.
 
 ## Installation
 

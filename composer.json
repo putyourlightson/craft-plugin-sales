@@ -1,7 +1,7 @@
 {
   "name": "putyourlightson/craft-plugin-sales",
   "description": "Your Craft CMS plugin sales visualised in the control panel.",
-  "version": "2.8.2",
+  "version": "3.0.0-beta.1",
   "type": "craft-plugin",
   "homepage": "https://putyourlightson.com/plugins/plugin-sales",
   "license": "proprietary",
@@ -14,15 +14,29 @@
     "reports"
   ],
   "require": {
-    "php": "^8.0.2",
+    "php": "^8.2",
     "ext-intl": "*",
-    "craftcms/cms": "^4.0.0",
-    "putyourlightson/craft-sprig-core": "^2.6.3"
+    "craftcms/cms": "^5.0.0-beta.1",
+    "putyourlightson/craft-sprig-core": "^3.0.0-beta.1"
   },
   "autoload": {
     "psr-4": {
       "putyourlightson\\pluginsales\\": "src/"
     }
+  },
+  "scripts": {
+    "phpstan": "phpstan --ansi --memory-limit=1G",
+    "check-cs": "ecs check --ansi",
+    "fix-cs": "ecs check --fix --ansi"
+  },
+  "config": {
+    "allow-plugins": {
+      "craftcms/plugin-installer": true,
+      "pestphp/pest-plugin": true,
+      "yiisoft/yii2-composer": true
+    },
+    "optimize-autoloader": true,
+    "sort-packages": true
   },
   "support": {
     "docs": "https://putyourlightson.com/plugins/plugin-sales",
@@ -35,7 +49,7 @@
     "developer": "PutYourLightsOn",
     "developerUrl": "https://putyourlightson.com/",
     "documentationUrl": "https://putyourlightson.com/plugins/plugin-sales",
-    "changelogUrl": "https://raw.githubusercontent.com/putyourlightson/craft-plugin-sales/v2/CHANGELOG.md",
+    "changelogUrl": "https://raw.githubusercontent.com/putyourlightson/craft-plugin-sales/v3/CHANGELOG.md",
     "class": "putyourlightson\\pluginsales\\PluginSales"
   }
 }
