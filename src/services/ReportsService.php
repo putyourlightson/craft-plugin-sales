@@ -34,7 +34,7 @@ class ReportsService extends Component
             ->offset($offset)
             ->limit($limit);
 
-        $this->_applyConditions($query, $start, $end, $customer, $search);
+        $this->applyConditions($query, $start, $end, $customer, $search);
 
         /** @var SaleRecord[] $saleRecords */
         $saleRecords = $query->all();
@@ -55,7 +55,7 @@ class ReportsService extends Component
     {
         $query = SaleRecord::find();
 
-        $this->_applyConditions($query, $start, $end, $customer, $search);
+        $this->applyConditions($query, $start, $end, $customer, $search);
 
         return $query->count();
     }
@@ -65,7 +65,7 @@ class ReportsService extends Component
      */
     public function getCustomersData(string $start = null, string $end = null, string $orderBy = null, string $sortBy = null, ?int $offset = null, ?int $limit = null, string $search = null): array
     {
-        $query = $this->_getTotalsQuery($start, $end)
+        $query = $this->getTotalsQuery($start, $end)
             ->addSelect(['customer'])
             ->groupBy(['customer'])
             ->orderBy([$orderBy => ($sortBy == 'desc' ? SORT_DESC : SORT_ASC)])
@@ -76,7 +76,7 @@ class ReportsService extends Component
             $query->andWhere(['like', 'customer', $search]);
         }
 
-        $this->_applyConditions($query, $start, $end, null, $search);
+        $this->applyConditions($query, $start, $end, null, $search);
 
         return $query->all();
     }
@@ -86,7 +86,7 @@ class ReportsService extends Component
      */
     public function getCustomersCount(string $start = null, string $end = null, string $search = null): int
     {
-        $query = $this->_getTotalsQuery($start, $end)
+        $query = $this->getTotalsQuery($start, $end)
             ->addSelect(['customer'])
             ->groupBy(['customer']);
 
@@ -94,7 +94,7 @@ class ReportsService extends Component
             $query->andWhere(['like', 'customer', $search]);
         }
 
-        $this->_applyConditions($query, $start, $end, null, $search);
+        $this->applyConditions($query, $start, $end, null, $search);
 
         return $query->count();
     }
@@ -104,14 +104,14 @@ class ReportsService extends Component
      */
     public function getTotals(string $start = null, string $end = null): array
     {
-        $totals = $this->_populateZeroValues(['grossAmount', 'netAmount']);
+        $totals = $this->populateZeroValues(['grossAmount', 'netAmount']);
 
-        $sales = $this->_getTotalsQuery($start, $end)->all();
+        $sales = $this->getTotalsQuery($start, $end)->all();
 
         foreach ($sales as $sale) {
             if ($sale['count'] > 0) {
-                $totals['grossAmount'] = $this->_prepareAmount($sale['grossAmount']);
-                $totals['netAmount'] = $this->_prepareAmount($sale['netAmount']);
+                $totals['grossAmount'] = $this->prepareAmount($sale['grossAmount']);
+                $totals['netAmount'] = $this->prepareAmount($sale['netAmount']);
             }
         }
 
@@ -123,16 +123,16 @@ class ReportsService extends Component
      */
     public function getPluginTotals(string $start = null, string $end = null): array
     {
-        $totals = $this->_populateZeroValues(PluginSales::$plugin->plugins->getNames());
+        $totals = $this->populateZeroValues(PluginSales::$plugin->plugins->getNames());
 
-        $sales = $this->_getTotalsQuery($start, $end)
+        $sales = $this->getTotalsQuery($start, $end)
             ->addSelect(['pluginId', 'name'])
             ->groupBy(['pluginId'])
             ->joinWith('plugin')
             ->all();
 
         foreach ($sales as $sale) {
-            $totals[$sale['name']] = $this->_prepareAmount($sale['grossAmount']);
+            $totals[$sale['name']] = $this->prepareAmount($sale['grossAmount']);
         }
 
         return $totals;
@@ -143,16 +143,16 @@ class ReportsService extends Component
      */
     public function getLicenseRenewalTotals(string $start = null, string $end = null): array
     {
-        $totals = $this->_populateZeroValues(['licenses', 'renewals']);
+        $totals = $this->populateZeroValues(['licenses', 'renewals']);
 
-        $sales = $this->_getTotalsQuery($start, $end)
+        $sales = $this->getTotalsQuery($start, $end)
             ->addSelect(['renewal'])
             ->groupBy(['renewal'])
             ->all();
 
         foreach ($sales as $sale) {
             $key = $sale['renewal'] ? 'renewals' : 'licenses';
-            $totals[$key] = $this->_prepareAmount($sale['grossAmount']);
+            $totals[$key] = $this->prepareAmount($sale['grossAmount']);
         }
 
         return $totals;
@@ -190,11 +190,11 @@ class ReportsService extends Component
      */
     public function getMonthlyTotals(string $start = null, string $end = null): array
     {
-        $monthlyTotals = $this->_getMonthlyTotalsQuery($start, $end)->all();
+        $monthlyTotals = $this->getMonthlyTotalsQuery($start, $end)->all();
 
         foreach ($monthlyTotals as $key => $monthlyTotal) {
-            $monthlyTotals[$key]['grossAmount'] = $this->_prepareAmount($monthlyTotal['grossAmount']);
-            $monthlyTotals[$key]['netAmount'] = $this->_prepareAmount($monthlyTotal['netAmount']);
+            $monthlyTotals[$key]['grossAmount'] = $this->prepareAmount($monthlyTotal['grossAmount']);
+            $monthlyTotals[$key]['netAmount'] = $this->prepareAmount($monthlyTotal['netAmount']);
         }
 
         return $monthlyTotals;
@@ -205,12 +205,12 @@ class ReportsService extends Component
      */
     public function getMonthlyPluginTotals(string $start = null, string $end = null): array
     {
-        $totals = $this->_populateZeroValues(
+        $totals = $this->populateZeroValues(
             PluginSales::$plugin->plugins->getNames(),
             $this->getMonths($start, $end)
         );
 
-        $sales = $this->_getMonthlyTotalsQuery($start, $end)
+        $sales = $this->getMonthlyTotalsQuery($start, $end)
             ->addSelect(['pluginId', 'name'])
             ->addGroupBy(['pluginId'])
             ->joinWith('plugin')
@@ -224,7 +224,7 @@ class ReportsService extends Component
             $key = $sale['name'];
             $currentMonth = new DateTime($sale['year'] . '-' . $sale['month'] . '-1');
 
-            $totals[$key][$currentMonth->format(self::MONTH_FORMAT)] = $this->_prepareAmount($sale['grossAmount']);
+            $totals[$key][$currentMonth->format(self::MONTH_FORMAT)] = $this->prepareAmount($sale['grossAmount']);
         }
 
         foreach ($totals as $key => $values) {
@@ -239,12 +239,12 @@ class ReportsService extends Component
      */
     public function getMonthlyLicenseRenewalTotals(string $start = null, string $end = null): array
     {
-        $totals = $this->_populateZeroValues(
+        $totals = $this->populateZeroValues(
             ['licenses', 'renewals'],
             $this->getMonths($start, $end)
         );
 
-        $sales = $this->_getMonthlyTotalsQuery($start, $end)
+        $sales = $this->getMonthlyTotalsQuery($start, $end)
             ->addSelect(['renewal'])
             ->addGroupBy(['renewal'])
             ->all();
@@ -257,7 +257,7 @@ class ReportsService extends Component
             $key = $sale['renewal'] ? 'renewals' : 'licenses';
             $currentMonth = new DateTime($sale['year'] . '-' . $sale['month'] . '-1');
 
-            $totals[$key][$currentMonth->format(self::MONTH_FORMAT)] = $this->_prepareAmount($sale['grossAmount']);
+            $totals[$key][$currentMonth->format(self::MONTH_FORMAT)] = $this->prepareAmount($sale['grossAmount']);
         }
 
         foreach ($totals as $key => $values) {
@@ -270,7 +270,7 @@ class ReportsService extends Component
     /**
      * Returns totals query.
      */
-    private function _getTotalsQuery(string $start = null, string $end = null, string $customer = null): ActiveQuery
+    private function getTotalsQuery(string $start = null, string $end = null, string $customer = null): ActiveQuery
     {
         $query = SaleRecord::find()
             ->select([
@@ -280,7 +280,7 @@ class ReportsService extends Component
             ])
             ->asArray();
 
-        $this->_applyConditions($query, $start, $end, $customer);
+        $this->applyConditions($query, $start, $end, $customer);
 
         return $query;
     }
@@ -288,7 +288,7 @@ class ReportsService extends Component
     /**
      * Returns monthly totals query.
      */
-    private function _getMonthlyTotalsQuery(string $start = null, string $end = null): ActiveQuery
+    private function getMonthlyTotalsQuery(string $start = null, string $end = null): ActiveQuery
     {
         $select = [
             'COUNT(*) as count',
@@ -315,7 +315,7 @@ class ReportsService extends Component
             ->orderBy(['year' => SORT_ASC, 'month' => SORT_ASC])
             ->asArray();
 
-        $this->_applyConditions($query, $start, $end);
+        $this->applyConditions($query, $start, $end);
 
         return $query;
     }
@@ -323,7 +323,7 @@ class ReportsService extends Component
     /**
      * Converts and formats an amount.
      */
-    private function _prepareAmount(float|int $value = 0): float
+    private function prepareAmount(float|int $value = 0): float
     {
         return round($value * PluginSales::$plugin->sales->getExchangeRate(), 2);
     }
@@ -331,7 +331,7 @@ class ReportsService extends Component
     /**
      * Populates an array with zero values.
      */
-    private function _populateZeroValues(array $keys, array $subkeys = null): array
+    private function populateZeroValues(array $keys, array $subkeys = null): array
     {
         $values = [];
 
@@ -351,7 +351,7 @@ class ReportsService extends Component
     /**
      * Applies conditions to a sales query.
      */
-    private function _applyConditions(ActiveQuery $query, string $start = null, string $end = null, string $customer = null, string $search = null): void
+    private function applyConditions(ActiveQuery $query, string $start = null, string $end = null, string $customer = null, string $search = null): void
     {
         $start = $start ? Db::prepareDateForDb($start . ' 00:00:00') : null;
 

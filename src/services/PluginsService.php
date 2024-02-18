@@ -18,7 +18,7 @@ class PluginsService extends Component
     /**
      * @var int[]|null
      */
-    private ?array $_pluginIds = null;
+    private ?array $pluginIds = null;
 
     /**
      * Returns plugins.
@@ -58,11 +58,11 @@ class PluginsService extends Component
      */
     public function create(int $id, string $name, bool $hasMultipleEditions): void
     {
-        if ($this->_pluginIds === null) {
-            $this->_pluginIds = PluginRecord::find()->select('id')->column();
+        if ($this->pluginIds === null) {
+            $this->pluginIds = PluginRecord::find()->select('id')->column();
         }
 
-        if (in_array($id, $this->_pluginIds)) {
+        if (in_array($id, $this->pluginIds)) {
             return;
         }
 
@@ -74,6 +74,6 @@ class PluginsService extends Component
 
         $pluginRecord->save();
 
-        $this->_pluginIds[] = $pluginRecord->id;
+        $this->pluginIds[] = $pluginRecord->id;
     }
 }

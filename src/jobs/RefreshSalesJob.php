@@ -16,14 +16,14 @@ class RefreshSalesJob extends BaseJob
     /**
      * @var Queue|QueueInterface
      */
-    private Queue|QueueInterface $_queue;
+    private Queue|QueueInterface $queue;
 
     /**
      * @inheritdoc
      */
     public function execute($queue): void
     {
-        $this->_queue = $queue;
+        $this->queue = $queue;
 
         PluginSales::$plugin->sales->refresh([$this, 'setProgressHandler']);
     }
@@ -35,7 +35,7 @@ class RefreshSalesJob extends BaseJob
     {
         $progress = $total > 0 ? ($count / $total) : 0;
 
-        $this->setProgress($this->_queue, $progress);
+        $this->setProgress($this->queue, $progress);
     }
 
     /**

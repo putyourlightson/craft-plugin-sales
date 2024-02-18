@@ -23,7 +23,6 @@ use yii\web\ForbiddenHttpException;
 
 /**
  * @property-read float $exchangeRate
- * @property-read null|array $lastRefresh
  * @property-read SaleModel[] $sales
  */
 class SalesService extends Component
@@ -31,7 +30,7 @@ class SalesService extends Component
     /**
      * @var array|null
      */
-    private ?array $_lastRefresh = null;
+    private ?array $lastRefresh = null;
 
     /**
      * Returns plugin sales.
@@ -68,16 +67,16 @@ class SalesService extends Component
      */
     public function getLastRefresh(): ?array
     {
-        if ($this->_lastRefresh !== null) {
-            return $this->_lastRefresh;
+        if ($this->lastRefresh !== null) {
+            return $this->lastRefresh;
         }
 
-        $this->_lastRefresh = RefreshRecord::find()
+        $this->lastRefresh = RefreshRecord::find()
             ->orderBy(['dateCreated' => SORT_DESC])
             ->asArray()
             ->one();
 
-        return $this->_lastRefresh;
+        return $this->lastRefresh;
     }
 
     /**
@@ -198,7 +197,7 @@ class SalesService extends Component
                 ]);
 
                 $result = json_decode($response->getBody(), true);
-                $refreshCount += $this->_saveSales($result['data']);
+                $refreshCount += $this->saveSales($result['data']);
 
                 if (is_callable($setProgressHandler)) {
                     call_user_func($setProgressHandler, $refreshCount, $amount);
@@ -206,7 +205,7 @@ class SalesService extends Component
             }
         }
 
-        $this->_updateFirstSales();
+        $this->updateFirstSales();
 
         $refreshRecord = new RefreshRecord();
         $refreshRecord->refreshed = $refreshCount;
@@ -215,7 +214,7 @@ class SalesService extends Component
 
         // Get live exchange rate if not USD
         if (PluginSales::$plugin->settings->currency != 'USD') {
-            $refreshRecord->exchangeRate = $this->_getExchangeRateFromApi($client);
+            $refreshRecord->exchangeRate = $this->getExchangeRateFromApi($client);
         }
 
         $refreshRecord->save();
@@ -239,7 +238,7 @@ class SalesService extends Component
     /**
      * Returns the exchange rate from the API, at most once per day.
      */
-    private function _getExchangeRateFromApi(Client $client): float
+    private function getExchangeRateFromApi(Client $client): float
     {
         $lastExchangeRate = 1;
         $lastRefresh = $this->getLastRefresh();
@@ -279,7 +278,7 @@ class SalesService extends Component
     /**
      * Updates or creates the provided sales as records.
      */
-    private function _saveSales(array $sales): int
+    private function saveSales(array $sales): int
     {
         $count = 0;
 
@@ -323,7 +322,7 @@ class SalesService extends Component
     /**
      * Updates all first sale records.
      */
-    private function _updateFirstSales(): void
+    private function updateFirstSales(): void
     {
         // Reset all firsts
         Db::update(SaleRecord::tableName(), ['first' => false]);

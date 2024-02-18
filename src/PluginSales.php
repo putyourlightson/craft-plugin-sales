@@ -82,13 +82,13 @@ class PluginSales extends Plugin
 
         Sprig::getInstance()->init();
 
-        $this->_registerVariables();
-        $this->_registerLogTarget();
-        $this->_registerRefreshAfterSettingsSaved();
+        $this->registerVariables();
+        $this->registerLogTarget();
+        $this->registerRefreshAfterSettingsSaved();
 
         // Register control panel events
         if (Craft::$app->getRequest()->getIsCpRequest()) {
-            $this->_registerRedirectAfterInstall();
+            $this->registerRedirectAfterInstall();
         }
     }
 
@@ -135,7 +135,7 @@ class PluginSales extends Plugin
     /**
      * Registers the variables.
      */
-    private function _registerVariables(): void
+    private function registerVariables(): void
     {
         Event::on(CraftVariable::class, CraftVariable::EVENT_INIT,
             function(Event $event) {
@@ -151,7 +151,7 @@ class PluginSales extends Plugin
      *
      * @see LineFormatter::SIMPLE_FORMAT
      */
-    private function _registerLogTarget(): void
+    private function registerLogTarget(): void
     {
         Craft::getLogger()->dispatcher->targets[] = new MonologTarget([
             'name' => 'plugin-sales',
@@ -169,7 +169,7 @@ class PluginSales extends Plugin
     /**
      * Registers redirect after install.
      */
-    private function _registerRedirectAfterInstall(): void
+    private function registerRedirectAfterInstall(): void
     {
         Event::on(Plugins::class, Plugins::EVENT_AFTER_INSTALL_PLUGIN,
             function(PluginEvent $event) {
@@ -185,7 +185,7 @@ class PluginSales extends Plugin
     /**
      * Registers a refresh after settings are saved.
      */
-    private function _registerRefreshAfterSettingsSaved(): void
+    private function registerRefreshAfterSettingsSaved(): void
     {
         Event::on(Plugins::class, Plugins::EVENT_AFTER_SAVE_PLUGIN_SETTINGS,
             function(PluginEvent $event) {

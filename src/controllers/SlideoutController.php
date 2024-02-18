@@ -19,7 +19,7 @@ class SlideoutController extends Controller
     public function actionRender(): Response
     {
         $customer = $this->request->getRequiredParam('customer');
-        $url = $this->_getUrlFromCustomer($customer);
+        $url = $this->getUrlFromCustomer($customer);
         $sales = PluginSales::$plugin->reports->getSalesData($customer);
 
         return $this->asCpScreen()
@@ -30,7 +30,7 @@ class SlideoutController extends Controller
             ]);
     }
 
-    private function _getUrlFromCustomer(?string $customer): ?string
+    private function getUrlFromCustomer(?string $customer): ?string
     {
         if ($customer === null) {
             return null;
