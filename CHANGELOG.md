@@ -1,6 +1,6 @@
 # Release Notes for Plugin Sales
 
-## 3.0.0-beta.1 - Unreleased
+## 3.0.0-beta.1 - 2024-02-19
 
 ### Added
 
