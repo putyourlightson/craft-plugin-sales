@@ -19,6 +19,10 @@
     "craftcms/cms": "^5.0.0-beta.1",
     "putyourlightson/craft-sprig-core": "^3.0.0-beta.1"
   },
+  "require-dev": {
+    "craftcms/ecs": "dev-main",
+    "craftcms/phpstan": "dev-main"
+  },
   "autoload": {
     "psr-4": {
       "putyourlightson\\pluginsales\\": "src/"
