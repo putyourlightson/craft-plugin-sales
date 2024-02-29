@@ -135,7 +135,7 @@ class PluginSales extends Plugin
                     PluginSales::$plugin->sales->delete();
 
                     // Create queue job
-                    Craft::$app->getQueue()->push(new RefreshSalesJob());
+                    Craft::$app->getQueue()->ttr(3600)->push(new RefreshSalesJob());
                 }
             }
         );
