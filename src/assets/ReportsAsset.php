@@ -30,7 +30,7 @@ class ReportsAsset extends AssetBundle
             'css/cp.css',
         ];
         $this->js = [
-            'https://cdn.jsdelivr.net/npm/apexcharts@3',
+            'https://cdn.jsdelivr.net/npm/apexcharts@3.46',
             'https://cdn.jsdelivr.net/npm/moment@2',
             'https://cdn.jsdelivr.net/npm/daterangepicker@3',
             'js/PluginSales.js',

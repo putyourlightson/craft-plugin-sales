@@ -1,5 +1,11 @@
 # Release Notes for Plugin Sales
 
+## 2.8.3 - 2024-03-11
+
+### Changed
+
+- Locked ApexCharts to version 3.46, to prevent it breaking multi-axis charts.
+
 ## 2.8.2 - 2023-12-20
 
 ### Added
