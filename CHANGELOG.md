@@ -1,5 +1,12 @@
 # Release Notes for Plugin Sales
 
+## 1.4.3 - 2024-03-11
+### Added
+- Added a refresh sales job TTR of 1 hour.
+
+### Changed
+- Locked ApexCharts to version 3.46, to prevent it breaking multi-axis charts.
+
 ## 1.4.2 - 2023-07-10
 ### Added
 - Added compatibility with the organisation customer feature in Craft Console.
@@ -18,15 +25,15 @@
 
 ## 1.3.10 - 2022-01-26
 ### Changed
-- Exchange rates are now fetched from the API at most once per day, to help avoid exceeding monthly request limits.  
+- Exchange rates are now fetched from the API at most once per day, to help avoid exceeding monthly request limits.
 
 ## 1.3.9 - 2021-09-14
 ### Fixed
-- Fixed a bug that was throwing an error when a plugin did not have any sales.  
+- Fixed a bug that was throwing an error when a plugin did not have any sales.
 
 ## 1.3.8 - 2021-09-01
 ### Changed
-- Improved the outputting of converted net amount.  
+- Improved the outputting of converted net amount.
 
 ## 1.3.7 - 2021-08-26
 ### Fixed
