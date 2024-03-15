@@ -179,7 +179,8 @@ class SalesService extends Component
 
         // Get total
         try {
-            $response = $client->get($baseSalesUri . '&page=1&limit=1', [
+            // Using a limit of `1` would be sufficient, but it can trigger what appears to an off-by-one error in Craft Console, so we use the “magic number” `3` instead.
+            $response = $client->get($baseSalesUri . '&page=1&limit=3', [
                 'headers' => $headers,
             ]);
         }

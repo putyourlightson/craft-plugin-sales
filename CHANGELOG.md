@@ -4,6 +4,9 @@
 ### Added
 - Added a progress bar to the refresh console controller action.
 
+### Changed
+- Guard against what appears to be an off-by-one error in Craft Console.
+
 ## 1.4.3 - 2024-03-11
 ### Added
 - Added a refresh sales job TTR of 1 hour.
