@@ -8,6 +8,7 @@
 
 ### Changed
 
+- Set a timeout of 60 seconds to Guzzle requests.
 - Guard against what appears to be an off-by-one error in Craft Console.
 
 ## 2.8.3 - 2024-03-11
