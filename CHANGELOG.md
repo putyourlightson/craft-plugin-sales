@@ -1,5 +1,11 @@
 # Release Notes for Plugin Sales
 
+## 2.8.4 - 2024-03-15
+
+### Added
+
+- Added a progress bar to the refresh console controller action.
+
 ## 2.8.3 - 2024-03-11
 
 ### Changed
