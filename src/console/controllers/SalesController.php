@@ -27,7 +27,7 @@ class SalesController extends Controller
     {
         $this->stdout(Craft::t('plugin-sales', 'Refreshing sales...').PHP_EOL, Console::FG_YELLOW);
 
-        $refreshed = PluginSales::$plugin->sales->refresh();
+        $refreshed = PluginSales::$plugin->sales->refresh([$this, 'setProgressHandler']);
 
         if ($refreshed !== false) {
             $this->stdout(
@@ -55,5 +55,21 @@ class SalesController extends Controller
         $this->stdout(Craft::t('plugin-sales', 'Plugin sales successfully deleted.').PHP_EOL, Console::FG_GREEN);
 
         return ExitCode::OK;
+    }
+
+    /**
+     * Handles setting the progress.
+     */
+    public function setProgressHandler(int $count, int $total)
+    {
+        if ($count === 0) {
+            Console::startProgress(0, $total, '', 0.8);
+        }
+
+        Console::updateProgress($count, $total);
+
+        if ($count >= $total) {
+            Console::endProgress();
+        }
     }
 }

@@ -201,6 +201,10 @@ class SalesService extends Component
             $pages = (int)ceil($amount / $limit);
 
             for ($page = 1; $page <= $pages; $page++) {
+                if (is_callable($setProgressHandler)) {
+                    call_user_func($setProgressHandler, $refreshCount, $amount);
+                }
+
                 if ($pages == 1) {
                     $limit = $amount;
                 }
@@ -211,11 +215,11 @@ class SalesService extends Component
 
                 $result = json_decode($response->getBody(), true);
                 $refreshCount += $this->_saveSales($result['data']);
-
-                if (is_callable($setProgressHandler)) {
-                    call_user_func($setProgressHandler, $refreshCount, $amount);
-                }
             }
+        }
+
+        if (is_callable($setProgressHandler)) {
+            call_user_func($setProgressHandler, $refreshCount, $amount);
         }
 
         $refreshRecord = new RefreshRecord();
