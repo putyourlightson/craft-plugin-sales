@@ -108,6 +108,7 @@ class SalesService extends Component
         $client = new Client([
             'base_uri' => 'https://console.craftcms.com/',
             'cookies' => true,
+            'timeout' => 60,
         ]);
 
         try {

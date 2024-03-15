@@ -5,6 +5,7 @@
 - Added a progress bar to the refresh console controller action.
 
 ### Changed
+- Set a timeout of 60 seconds to Guzzle requests.
 - Guard against what appears to be an off-by-one error in Craft Console.
 
 ## 1.4.3 - 2024-03-11
