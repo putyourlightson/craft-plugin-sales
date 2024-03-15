@@ -99,6 +99,7 @@ class SalesService extends Component
         $client = new Client([
             'base_uri' => 'https://console.craftcms.com/',
             'cookies' => true,
+            'timeout' => 60,
         ]);
 
         try {
@@ -167,7 +168,8 @@ class SalesService extends Component
 
         // Get total
         try {
-            $response = $client->get($baseSalesUri . '&page=1&limit=1', [
+            // Using a limit of `1` would be sufficient, but it can trigger what appears to an off-by-one error in Craft Console, so we use the “magic number” `3` instead.
+            $response = $client->get($baseSalesUri . '&page=1&limit=3', [
                 'headers' => $headers,
             ]);
         } catch (GuzzleException $exception) {
@@ -188,6 +190,10 @@ class SalesService extends Component
             $pages = (int)ceil($amount / $limit);
 
             for ($page = 1; $page <= $pages; $page++) {
+                if (is_callable($setProgressHandler)) {
+                    call_user_func($setProgressHandler, $refreshCount, $amount);
+                }
+
                 if ($pages == 1) {
                     $limit = $amount;
                 }
@@ -198,10 +204,10 @@ class SalesService extends Component
 
                 $result = json_decode($response->getBody(), true);
                 $refreshCount += $this->saveSales($result['data']);
+            }
 
-                if (is_callable($setProgressHandler)) {
-                    call_user_func($setProgressHandler, $refreshCount, $amount);
-                }
+            if (is_callable($setProgressHandler)) {
+                call_user_func($setProgressHandler, $refreshCount, $amount);
             }
         }
 
