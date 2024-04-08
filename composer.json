@@ -1,7 +1,7 @@
 {
   "name": "putyourlightson/craft-plugin-sales",
   "description": "Your Craft CMS plugin sales visualised in the control panel.",
-  "version": "3.0.0-beta.2",
+  "version": "3.0.0",
   "type": "craft-plugin",
   "homepage": "https://putyourlightson.com/plugins/plugin-sales",
   "license": "proprietary",
@@ -16,8 +16,8 @@
   "require": {
     "php": "^8.2",
     "ext-intl": "*",
-    "craftcms/cms": "^5.0.0-beta.1",
-    "putyourlightson/craft-sprig-core": "^3.0.0-beta.1"
+    "craftcms/cms": "^5.0",
+    "putyourlightson/craft-sprig-core": "^3.0"
   },
   "require-dev": {
     "craftcms/ecs": "dev-main",
@@ -53,7 +53,7 @@
     "developer": "PutYourLightsOn",
     "developerUrl": "https://putyourlightson.com/",
     "documentationUrl": "https://putyourlightson.com/plugins/plugin-sales",
-    "changelogUrl": "https://raw.githubusercontent.com/putyourlightson/craft-plugin-sales/v3/CHANGELOG.md",
+    "changelogUrl": "https://raw.githubusercontent.com/putyourlightson/craft-plugin-sales/develop/CHANGELOG.md",
     "class": "putyourlightson\\pluginsales\\PluginSales"
   }
 }
