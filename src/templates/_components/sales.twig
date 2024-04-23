@@ -80,7 +80,7 @@
                     <tr>
                         {% if customer is null %}
                             <td>
-                                <a onclick="new PluginSales.CustomerSlideout('{{ sale.customer }}')">
+                                <a href="#" onclick="event.preventDefault(); new PluginSales.CustomerSlideout('{{ sale.customer }}')">
                                     {{- sale.customer -}}
                                 </a>
                                 {% if sale.first %}
