@@ -70,7 +70,7 @@ class PluginSales extends Plugin
     /**
      * @inheritdoc
      */
-    public string $minVersionRequired = '1.2.0';
+    public string $minVersionRequired = '2.8.0';
 
     /**
      * @inheritdoc
