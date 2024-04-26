@@ -1,5 +1,14 @@
 <h2>
     {{ customer }}
+    {% if linkedCustomers %}
+        <span class="info">
+            Linked to from
+            {% for linkedCustomer in linkedCustomers %}
+                <code>{{ linkedCustomer }}</code>
+                {{- not loop.last ? ',' }}
+            {% endfor %}
+        </span>
+    {% endif %}
     {% if url %}
         <a href="{{ url }}" title="{{ url }}" target="_blank" rel="noreferrer">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" style="display: inline; width: 20px; height: 20px;">

@@ -8,7 +8,6 @@ namespace putyourlightson\pluginsales;
 use Craft;
 use craft\base\Plugin;
 use craft\events\PluginEvent;
-use craft\helpers\Queue;
 use craft\helpers\UrlHelper;
 use craft\log\MonologTarget;
 use craft\services\Plugins;
@@ -16,7 +15,6 @@ use craft\services\ProjectConfig;
 use craft\web\twig\variables\CraftVariable;
 use Monolog\Formatter\LineFormatter;
 use Psr\Log\LogLevel;
-use putyourlightson\pluginsales\jobs\RefreshSalesJob;
 use putyourlightson\pluginsales\models\SettingsModel;
 use putyourlightson\pluginsales\services\PluginsService;
 use putyourlightson\pluginsales\services\ReportsService;
@@ -84,7 +82,6 @@ class PluginSales extends Plugin
 
         $this->registerVariables();
         $this->registerLogTarget();
-        $this->registerRefreshAfterSettingsSaved();
 
         // Register control panel events
         if (Craft::$app->getRequest()->getIsCpRequest()) {
@@ -177,22 +174,6 @@ class PluginSales extends Plugin
                     Craft::$app->getResponse()->redirect(
                         UrlHelper::cpUrl('settings/plugins/plugin-sales')
                     )->send();
-                }
-            }
-        );
-    }
-
-    /**
-     * Registers a refresh after settings are saved.
-     */
-    private function registerRefreshAfterSettingsSaved(): void
-    {
-        Event::on(Plugins::class, Plugins::EVENT_AFTER_SAVE_PLUGIN_SETTINGS,
-            function(PluginEvent $event) {
-                if ($event->plugin === $this) {
-                    PluginSales::$plugin->sales->delete();
-
-                    Queue::push(new RefreshSalesJob(), null, null, PluginSales::$plugin->settings->refreshSalesJobTtr);
                 }
             }
         );

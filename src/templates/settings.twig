@@ -1,5 +1,11 @@
 {% import '_includes/forms' as forms %}
 
+<p class='warning with-icon first'>
+    Saving these settings does
+    <em>not</em> trigger a job to refresh your plugin sales. To perform a full refresh,
+    <a href="{{ actionUrl('plugin-sales/sales/refresh-all') }}">click here</a>.
+</p>
+
 {{ forms.autosuggestField({
     label: 'Craft Console Username/Email'|t('plugin-sales'),
     instructions: 'The username or email address you use to login to your Craft Console account.'|t('plugin-sales'),
@@ -8,7 +14,6 @@
     value: settings.email,
     errors: settings.getErrors('email'),
     required: true,
-    first: true,
 }) }}
 
 {{ forms.autosuggestField({
@@ -91,6 +96,44 @@
     required: true,
 }, input) }}
 
-<p class='warning with-icon'>
-    Saving these settings will trigger a job to refresh your plugin sales. Once complete they will be visible at the <a href='{{ url('plugin-sales') }}' class='go'>plugin page</a>
-</p>
+{% set cols = {
+    heading: {
+        type: 'heading',
+        heading: "Site"|t('blitz'),
+    },
+    cacheFolderPath: {
+        type: 'html',
+        heading: "Cache Folder Path"|t('blitz'),
+        class: 'code',
+    },
+    pages: {
+        type: 'html',
+        heading: "Pages"|t('blitz'),
+    },
+    includes: {
+        type: 'html',
+        heading: "Includes"|t('blitz'),
+    },
+} %}
+
+{{ forms.editableTableField({
+    label: 'Linked Customers'|t('plugin-sales'),
+    instructions: 'Customers can be linked together, useful to ease the transition from Craft ID to Craft Console, which added support for organisations.'|t('plugin-sales'),
+    name: 'linkedCustomers',
+    id: 'linkedCustomers',
+    cols: {
+        canonical: {
+            type: 'singleline',
+            heading: 'Canonical customer'|t('plugin-sales'),
+        },
+        linked: {
+            type: 'singleline',
+            heading: 'Linked customer'|t('plugin-sales'),
+        },
+    },
+    rows: settings.linkedCustomers,
+    addRowLabel: 'Add a linked customer'|t('plugin-sales'),
+    allowAdd: true,
+    allowDelete: true,
+    allowReorder: true,
+}) }}

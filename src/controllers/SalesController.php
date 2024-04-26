@@ -6,7 +6,9 @@
 namespace putyourlightson\pluginsales\controllers;
 
 use Craft;
+use craft\helpers\Queue;
 use craft\web\Controller;
+use putyourlightson\pluginsales\jobs\RefreshSalesJob;
 use putyourlightson\pluginsales\PluginSales;
 use yii\web\Response;
 
@@ -17,19 +19,35 @@ class SalesController extends Controller
      */
     public function actionRefresh(): Response
     {
-        $refreshed = PluginSales::$plugin->sales->refresh();
+        Queue::push(
+            job: new RefreshSalesJob(),
+            ttr: PluginSales::$plugin->settings->refreshSalesJobTtr,
+        );
 
-        if ($refreshed !== false) {
-            Craft::$app->getSession()->setNotice(
-                Craft::t('plugin-sales', '{count} plugin sale(s) refreshed.', ['count' => $refreshed])
-            );
-        } else {
-            Craft::$app->getSession()->setError(
-                Craft::t('plugin-sales', 'Plugin sales could not be refreshed. Check the credentials and network connection.')
-            );
-        }
+        return $this->asSuccess(
+            message: Craft::t('plugin-sales', 'Plugin sales queued for refreshing.'),
+            redirect: 'plugin-sales',
+        );
+    }
 
-        return $this->redirect('plugin-sales');
+    /**
+     * Refreshes all plugin sales.
+     */
+    public function actionRefreshAll(): Response
+    {
+        $this->requireAdmin();
+
+        PluginSales::$plugin->sales->delete();
+
+        Queue::push(
+            job: new RefreshSalesJob(),
+            ttr: PluginSales::$plugin->settings->refreshSalesJobTtr,
+        );
+
+        return $this->asSuccess(
+            message: Craft::t('plugin-sales', 'Plugin sales successfully deleted and queued for refreshing.'),
+            redirect: 'settings/plugins/plugin-sales',
+        );
     }
 
     /**

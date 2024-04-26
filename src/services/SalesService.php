@@ -211,6 +211,7 @@ class SalesService extends Component
             }
         }
 
+        $this->updateLinkedCustomers();
         $this->updateFirstSales();
 
         $refreshRecord = new RefreshRecord();
@@ -309,7 +310,7 @@ class SalesService extends Component
                 'saleId' => $sale['id'],
                 'pluginId' => $sale['plugin']['id'],
                 'edition' => $sale['edition']['handle'],
-                'renewal' => ($sale['purchasableType'] == 'craftnet\\plugins\\PluginRenewal'),
+                'renewal' => ($sale['purchasableType'] === 'craftnet\\plugins\\PluginRenewal'),
                 'grossAmount' => $sale['grossAmount'],
                 'netAmount' => $sale['netAmount'],
                 'customer' => $sale['customer']['ownerReference'],
@@ -323,6 +324,26 @@ class SalesService extends Component
         }
 
         return $count;
+    }
+
+    /**
+     * Updates all linked customers.
+     */
+    private function updateLinkedCustomers(): void
+    {
+        $linkedCustomers = PluginSales::$plugin->settings->linkedCustomers;
+
+        foreach ($linkedCustomers as $linkedCustomer) {
+            Db::update(
+                SaleRecord::tableName(),
+                [
+                    'customer' => $linkedCustomer['canonical'],
+                ],
+                [
+                    'customer' => $linkedCustomer['linked'],
+                ]
+            );
+        }
     }
 
     /**

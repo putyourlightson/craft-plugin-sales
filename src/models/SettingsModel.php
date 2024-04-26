@@ -42,9 +42,30 @@ class SettingsModel extends Model
     public array $colourPalette = ['3B82F6', '4ADE80', 'FBBF24', 'F43F5E', '7DD3FC', '059669', 'FB923C', 'D946EF', 'A16207', '94A3B8'];
 
     /**
+     * @var array
+     */
+    public array $linkedCustomers = [];
+
+    /**
      * @var int
      */
     public int $refreshSalesJobTtr = 3600;
+
+    /**
+     * Returns linked customers for the given customer.
+     */
+    public function getLinkedCustomers(string $customer): array
+    {
+        $linkedCustomers = [];
+
+        foreach ($this->linkedCustomers as $linkedCustomer) {
+            if ($linkedCustomer['canonical'] === $customer) {
+                $linkedCustomers[] = $linkedCustomer['linked'];
+            }
+        }
+
+        return $linkedCustomers;
+    }
 
     /**
      * @inheritdoc
