@@ -117,22 +117,22 @@
 } %}
 
 {{ forms.editableTableField({
-    label: 'Linked Customers'|t('plugin-sales'),
-    instructions: 'Customers can be linked together, useful to ease the transition from Craft ID to Craft Console, which added support for organisations.'|t('plugin-sales'),
-    name: 'linkedCustomers',
-    id: 'linkedCustomers',
+    label: 'Customer Aliases'|t('plugin-sales'),
+    instructions: 'Customers can be assigned aliases, useful to ease the transition from Craft ID to Craft Console, which added support for organisations. Customer aliases will be replaced with the customer name on each refresh.'|t('plugin-sales'),
+    name: 'customerAliases',
+    id: 'customerAliases',
     cols: {
-        canonical: {
+        customer: {
             type: 'singleline',
-            heading: 'Canonical customer'|t('plugin-sales'),
+            heading: 'Customer'|t('plugin-sales'),
         },
-        linked: {
+        alias: {
             type: 'singleline',
-            heading: 'Linked customer'|t('plugin-sales'),
+            heading: 'Alias'|t('plugin-sales'),
         },
     },
-    rows: settings.linkedCustomers,
-    addRowLabel: 'Add a linked customer'|t('plugin-sales'),
+    rows: settings.customerAliases,
+    addRowLabel: 'Add customer alias'|t('plugin-sales'),
     allowAdd: true,
     allowDelete: true,
     allowReorder: true,

@@ -211,7 +211,7 @@ class SalesService extends Component
             }
         }
 
-        $this->updateLinkedCustomers();
+        $this->updateCustomerAliases();
         $this->updateFirstSales();
 
         $refreshRecord = new RefreshRecord();
@@ -327,20 +327,20 @@ class SalesService extends Component
     }
 
     /**
-     * Updates all linked customers.
+     * Updates all customer aliases.
      */
-    private function updateLinkedCustomers(): void
+    private function updateCustomerAliases(): void
     {
-        $linkedCustomers = PluginSales::$plugin->settings->linkedCustomers;
+        $customerAliases = PluginSales::$plugin->settings->customerAliases;
 
-        foreach ($linkedCustomers as $linkedCustomer) {
+        foreach ($customerAliases as $customerAlias) {
             Db::update(
                 SaleRecord::tableName(),
                 [
-                    'customer' => $linkedCustomer['canonical'],
+                    'customer' => $customerAlias['customer'],
                 ],
                 [
-                    'customer' => $linkedCustomer['linked'],
+                    'customer' => $customerAlias['alias'],
                 ]
             );
         }

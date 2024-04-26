@@ -4,7 +4,7 @@
 
 ### Added
 
-- Added the ability to link customers in the plugin settings.
+- Added the ability to define customer aliases in the plugin settings.
 
 ### Changed
 

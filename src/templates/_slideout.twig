@@ -1,10 +1,10 @@
 <h2>
     {{ customer }}
-    {% if linkedCustomers %}
+    {% if customerAliases %}
         <span class="info">
-            Linked to from
-            {% for linkedCustomer in linkedCustomers %}
-                <code>{{ linkedCustomer }}</code>
+            Customer aliases:
+            {% for customerAlias in customerAliases %}
+                <code>{{ customerAlias }}</code>
                 {{- not loop.last ? ',' }}
             {% endfor %}
         </span>

@@ -44,7 +44,7 @@ class SettingsModel extends Model
     /**
      * @var array
      */
-    public array $linkedCustomers = [];
+    public array $customerAliases = [];
 
     /**
      * @var int
@@ -52,19 +52,19 @@ class SettingsModel extends Model
     public int $refreshSalesJobTtr = 3600;
 
     /**
-     * Returns linked customers for the given customer.
+     * Returns customer aliases for the given customer.
      */
-    public function getLinkedCustomers(string $customer): array
+    public function getCustomerAliases(string $customer): array
     {
-        $linkedCustomers = [];
+        $customerAliases = [];
 
-        foreach ($this->linkedCustomers as $linkedCustomer) {
-            if ($linkedCustomer['canonical'] === $customer) {
-                $linkedCustomers[] = $linkedCustomer['linked'];
+        foreach ($this->customerAliases as $customerAlias) {
+            if ($customerAlias['customer'] === $customer) {
+                $customerAliases[] = $customerAlias['alias'];
             }
         }
 
-        return $linkedCustomers;
+        return $customerAliases;
     }
 
     /**

@@ -19,14 +19,14 @@ class SlideoutController extends Controller
     public function actionRender(): Response
     {
         $customer = $this->request->getRequiredParam('customer');
-        $linkedCustomers = PluginSales::$plugin->settings->getLinkedCustomers($customer);
+        $customerAliases = PluginSales::$plugin->settings->getCustomerAliases($customer);
         $url = $this->getUrlFromCustomer($customer);
         $sales = PluginSales::$plugin->reports->getSalesData($customer);
 
         return $this->asCpScreen()
             ->contentTemplate('plugin-sales/_slideout', [
                 'customer' => $customer,
-                'linkedCustomers' => $linkedCustomers,
+                'customerAliases' => $customerAliases,
                 'url' => $url,
                 'sales' => $sales,
             ]);
