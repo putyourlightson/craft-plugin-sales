@@ -1,5 +1,11 @@
 # Release Notes for Plugin Sales
 
+## 3.1.2 - 2024-06-03
+
+### Fixed
+
+- Fixed the order of paginated results being non-deterministic in some cases.
+
 ## 3.1.1 - 2024-06-03
 
 ### Fixed

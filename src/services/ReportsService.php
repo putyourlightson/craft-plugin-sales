@@ -30,7 +30,7 @@ class ReportsService extends Component
 
         $query = SaleRecord::find()
             ->joinWith('plugin')
-            ->orderBy([$orderBy => ($sortBy == 'desc' ? SORT_DESC : SORT_ASC)])
+            ->orderBy([$orderBy => ($sortBy == 'desc' ? SORT_DESC : SORT_ASC), 'id' => SORT_ASC])
             ->offset($offset)
             ->limit($limit);
 
@@ -68,7 +68,7 @@ class ReportsService extends Component
         $query = $this->getTotalsQuery($start, $end)
             ->addSelect(['customer'])
             ->groupBy(['customer'])
-            ->orderBy([$orderBy => ($sortBy == 'desc' ? SORT_DESC : SORT_ASC)])
+            ->orderBy([$orderBy => ($sortBy == 'desc' ? SORT_DESC : SORT_ASC), 'id' => SORT_ASC])
             ->offset($offset)
             ->limit($limit);
 
