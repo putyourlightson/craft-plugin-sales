@@ -1,5 +1,11 @@
 # Release Notes for Plugin Sales
 
+## 3.1.1 - 2024-06-03
+
+### Fixed
+
+- Fixed the order and sort direction not being maintained when searching or paginating results.
+
 ## 3.1.0 - 2024-04-26
 
 ### Added
