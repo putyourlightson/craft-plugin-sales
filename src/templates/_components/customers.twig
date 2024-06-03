@@ -9,9 +9,6 @@
 {% set total = craft.pluginSales.reports.getCustomersCount(start, end, search) %}
 {% set maxVisible = customers|length + offset %}
 
-{{ hiddenInput('orderBy', orderBy) }}
-{{ hiddenInput('sortBy', sortBy) }}
-
 <div s-replace="#customer-results" s-indicator="#customer-results">
     <div class="set-table flex">
         <div class="select">
@@ -29,6 +26,8 @@
         </div>
     </div>
     <div id="customer-results" class="elements" style="margin-top: 1rem;">
+        {{ hiddenInput('orderBy', orderBy) }}
+        {{ hiddenInput('sortBy', sortBy) }}
         <div class="update-spinner spinner spinner-absolute"></div>
         <table class="data fullwidth">
             <thead>
