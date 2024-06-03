@@ -11,10 +11,6 @@
 {% set maxVisible = sales|length + offset %}
 {% set resultsId = 'sales-results' ~ (customer ? '-slideout') %}
 
-{{ hiddenInput('orderBy', orderBy) }}
-{{ hiddenInput('sortBy', sortBy) }}
-{{ hiddenInput('resultsId', resultsId) }}
-
 <div s-replace="#{{ resultsId }}" s-indicator="#{{ resultsId }}">
     <div class="set-table flex">
         <div class="select">
@@ -32,6 +28,8 @@
         </div>
     </div>
     <div id="{{ resultsId }}" class="elements" style="margin-top: 1rem;">
+        {{ hiddenInput('orderBy', orderBy) }}
+        {{ hiddenInput('sortBy', sortBy) }}
         <div class="update-spinner spinner spinner-absolute"></div>
         <table class="data fullwidth">
             <thead>
