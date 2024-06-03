@@ -49,7 +49,7 @@ class PluginsService extends Component
     public function getNames(): array
     {
         return PluginRecord::find()
-            ->select('name')
+            ->select(['name'])
             ->column();
     }
 
@@ -59,7 +59,7 @@ class PluginsService extends Component
     public function create(int $id, string $name, bool $hasMultipleEditions): void
     {
         if ($this->pluginIds === null) {
-            $this->pluginIds = PluginRecord::find()->select('id')->column();
+            $this->pluginIds = PluginRecord::find()->select(['id'])->column();
         }
 
         if (in_array($id, $this->pluginIds)) {

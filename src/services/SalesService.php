@@ -354,18 +354,18 @@ class SalesService extends Component
         // Reset all firsts
         Db::update(SaleRecord::tableName(), ['first' => false]);
 
-        $pluginIds = PluginRecord::find()->select('id')->column();
+        $pluginIds = PluginRecord::find()->select(['id'])->column();
 
         foreach ($pluginIds as $pluginId) {
             // Use a subquery to select first sale per customer per plugin
             $dateSoldArray = SaleRecord::find()
-                ->select('MIN(dateSold) as dateSold')
+                ->select(['MIN(dateSold) as dateSold'])
                 ->where(['pluginId' => $pluginId])
                 ->groupBy(['customer', 'pluginId'])
                 ->column();
 
             $saleRecordIds = SaleRecord::find()
-                ->select('id')
+                ->select(['id'])
                 ->where([
                     'pluginId' => $pluginId,
                     'dateSold' => $dateSoldArray,
