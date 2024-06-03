@@ -337,10 +337,10 @@ class SalesService extends Component
             Db::update(
                 SaleRecord::tableName(),
                 [
-                    'customer' => $customerAlias['customer'],
+                    'customer' => trim($customerAlias['customer']),
                 ],
                 [
-                    'customer' => $customerAlias['alias'],
+                    'customer' => trim($customerAlias['alias']),
                 ]
             );
         }
