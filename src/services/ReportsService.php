@@ -66,9 +66,9 @@ class ReportsService extends Component
     public function getCustomersData(string $start = null, string $end = null, string $orderBy = null, string $sortBy = null, ?int $offset = null, ?int $limit = null, string $search = null): array
     {
         $query = $this->getTotalsQuery($start, $end)
-            ->addSelect(['customer', 'id' => 'MIN([[id]])'])
+            ->addSelect(['customer', 'id' => 'MIN(' . SaleRecord::tableName() . '.[[id]])'])
             ->groupBy(['customer'])
-            ->orderBy([$orderBy => ($sortBy == 'desc' ? SORT_DESC : SORT_ASC), 'id' => SORT_ASC])
+            ->orderBy([$orderBy => ($sortBy == 'desc' ? SORT_DESC : SORT_ASC)])
             ->offset($offset)
             ->limit($limit);
 
