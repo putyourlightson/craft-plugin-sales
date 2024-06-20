@@ -1,5 +1,11 @@
 # Release Notes for Plugin Sales
 
+## 2.8.7 - 2024-06-20
+
+### Fixed
+
+- Fixed a bug that was causing the filtering of customers to fail.
+
 ## 2.8.6 - 2024-06-03
 
 ### Fixed
