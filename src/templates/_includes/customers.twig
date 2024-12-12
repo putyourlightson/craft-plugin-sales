@@ -1,0 +1,90 @@
+{% set start = start ?? null %}
+{% set end = end ?? null %}
+{% set orderBy = 'netAmount' %}
+{% set sortBy = 'desc' %}
+{% set offset = 0 %}
+{% set offset = offset > 0 ? offset : 0 %}
+{% set limit = 10 %}
+{% set search = '' %}
+{% set customers = craft.pluginSales.reports.getCustomersData(start, end, orderBy, sortBy, offset, limit, search) %}
+{% set total = craft.pluginSales.reports.getCustomersCount(start, end, search) %}
+{% set maxVisible = customers|length + offset %}
+
+{% set signals = {
+    customers: {
+        offset: offset,
+        limit: limit,
+        search: search,
+        orderBy: orderBy,
+        sortBy: sortBy,
+        maxVisible: maxVisible,
+        total: total,
+    },
+} %}
+
+<div data-signals="{{ signals|json_encode }}" class="set-table flex">
+    <div class="select">
+        <select data-bind="customers.limit" data-on-change="customers.offset.value = 0; {{ datastar.sse('plugin-sales/_datastar/customers') }}" data-indicator-fetching-customer>
+            <option value="10">10</option>
+            <option value="25">25</option>
+            <option value="50">50</option>
+            <option value="100">100</option>
+        </select>
+    </div>
+    customers displayed
+    <div class="search-container flex-grow texticon has-filter-btn">
+        <span class="texticon-icon search icon" aria-hidden="true"></span>
+        <input data-bind="customers.search" data-on-keydown__debounce.400ms="customers.offset.value = 0; {{ datastar.sse('plugin-sales/_datastar/customers') }}" data-indicator-fetching-customers type="text" class="clearable text fullwidth" autocomplete="off" placeholder="Search">
+    </div>
+</div>
+
+<div class="elements" data-class="{'busy': fetchingCustomers.value}" style="margin-top: 1rem;">
+    <div class="update-spinner spinner spinner-absolute"></div>
+    <table class="data fullwidth">
+        <thead>
+            <tr>
+                <th class="orderable" data-class="{'ordered': customers.orderBy.value == 'customer', 'desc': customers.sortBy.value == 'desc'}">
+                    <button data-on-click="customers.sortBy.value = customers.orderBy.value == 'customer' && customers.sortBy.value == 'asc' ? 'desc' : 'asc'; customers.orderBy.value = 'customer'; {{ datastar.sse('plugin-sales/_datastar/customers') }}" data-indicator-fetching-customers>
+                        {{ 'Customer'|t('plugin-sales') }}
+                    </button>
+                </th>
+                <th class="orderable" data-class="{'ordered': customers.orderBy.value == 'count', 'desc': customers.sortBy.value == 'desc'}">
+                    <button data-on-click="customers.sortBy.value = customers.orderBy.value == 'count' && customers.sortBy.value == 'desc' ? 'asc' : 'desc'; customers.orderBy.value = 'count'; {{ datastar.sse('plugin-sales/_datastar/customers') }}" data-indicator-fetching-customers>
+                        {{ 'Purchases'|t('plugin-sales') }}
+                    </button>
+                </th>
+                <th class="orderable" data-class="{'ordered': customers.orderBy.value == 'grossAmount', 'desc': customers.sortBy.value == 'desc'}">
+                    <button data-on-click="customers.sortBy.value = customers.orderBy.value == 'grossAmount' && customers.sortBy.value == 'desc' ? 'asc' : 'desc'; customers.orderBy.value = 'grossAmount'; {{ datastar.sse('plugin-sales/_datastar/customers') }}" data-indicator-fetching-customers>
+                        {{ 'Gross'|t('plugin-sales') }} ($)
+                    </button>
+                </th>
+                <th class="orderable" data-class="{'ordered': customers.orderBy.value == 'netAmount', 'desc': customers.sortBy.value == 'desc'}">
+                    <button data-on-click="customers.sortBy.value = customers.orderBy.value == 'netAmount' && customers.sortBy.value == 'desc' ? 'asc' : 'desc'; customers.orderBy.value = 'netAmount'; {{ datastar.sse('plugin-sales/_datastar/customers') }}" data-indicator-fetching-customers>
+                        {{ 'Net'|t('plugin-sales') }} ($)
+                    </button>
+                </th>
+            </tr>
+        </thead>
+        {{ include('plugin-sales/_includes/customer-results') }}
+    </table>
+    <div class="centeralign hidden">
+        <div class="spinner loadingmore"></div>
+    </div>
+    <div id="footer" class="flex flex-justify">
+        <div id="count-spinner" class="spinner small hidden"></div>
+        <div id="count-container" class="light">
+            <div class="flex pagination">
+                <nav class="flex">
+                    <button data-show="customers.offset.value > 0" data-on-click="customers.offset.value = customers.offset.value - customers.limit.value; {{ datastar.sse('plugin-sales/_datastar/customers') }}" data-indicator-fetching-sales class="page-link prev-page" title="Previous Page" style="display: none"></button>
+                    <button data-show="customers.offset.value <= 0" class="page-link prev-page disabled" title="Previous Page"></button>
+                    <button data-show="customers.maxVisible.value < customers.total.value" data-on-click="customers.offset.value = customers.offset.value + customers.limit.value; {{ datastar.sse('plugin-sales/_datastar/customers') }}" data-indicator-fetching-sales class="page-link next-page" title="Next Page" style="display: none"></button>
+                    <button data-show="customers.maxVisible.value >= customers.total.value" class="page-link next-page disabled" title="Next Page"></button>
+                </nav>
+                <div class="page-info">
+                    <span data-text="customers.maxVisible.value > 0 ? customers.offset.value + 1 : 0">0</span>-<span data-text="customers.maxVisible.value">0</span>
+                    of <span data-text="customers.total.value">0</span> sales
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

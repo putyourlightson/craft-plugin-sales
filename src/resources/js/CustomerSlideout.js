@@ -7,7 +7,7 @@ PluginSales.CustomerSlideout = Craft.CpScreenSlideout.extend(
 
             this.on('load', () => {
                 this.removeNamespace();
-                this.processHtmx();
+                //ds.applyPlugins(this.$container[0]);
             });
 
             this.base(action);
@@ -27,10 +27,6 @@ PluginSales.CustomerSlideout = Craft.CpScreenSlideout.extend(
             });
         },
 
-        processHtmx: function() {
-            htmx.process(this.$container[0]);
-        },
-
         handleSubmit: function(event) {
             event.preventDefault();
         },
@@ -44,5 +40,10 @@ PluginSales.CustomerSlideout = Craft.CpScreenSlideout.extend(
 
             // There can be only one!
             this.destroy();
+
+            // Clean up the store
+            // delete ds.store.sales[ds.store.customerHandle.value];
+            // ds.store.customer.value = '';
+            // ds.store.customerHandle.value = '';
         },
     });

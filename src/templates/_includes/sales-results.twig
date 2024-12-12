@@ -1,0 +1,41 @@
+<tbody id="sales-results{{ customer ? '-slideout' }}">
+    {% for sale in sales %}
+        <tr>
+            {% if customer is empty %}
+                <td>
+                    <a href="#" onclick="event.preventDefault(); new PluginSales.CustomerSlideout('{{ sale.customer }}')">
+                        {{- sale.customer -}}
+                    </a>
+                    {% if sale.first %}
+                        <span title="{{ 'First plugin license purchase.'|t('plugin-sales') }}" class="icon">
+                            {{ svg('@putyourlightson/pluginsales/resources/icons/excite.svg') }}
+                        </span>
+                    {% endif %}
+                </td>
+            {% endif %}
+            <td>
+                {{ sale.name }}
+            </td>
+            <td>
+                {{ sale.edition|ucfirst }}
+            </td>
+            <td>
+                {{ sale.renewal ? 'Renewal'|t('plugin-sales') : 'Licence'|t('plugin-sales') }}
+                {% if sale.notice %}
+                    <span title="{{ sale.notice }}" class="icon">
+                        {{ svg('@putyourlightson/pluginsales/resources/icons/info.svg') }}
+                    </span>
+                {% endif %}
+            </td>
+            <td>
+                {{ sale.grossAmount|number(2) }}
+            </td>
+            <td>
+                {{ sale.netAmount|number(2) }}
+            </td>
+            <td>
+                {{ sale.dateSold|datetime }}
+            </td>
+        </tr>
+    {% endfor %}
+</tbody>

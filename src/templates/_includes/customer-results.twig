@@ -1,0 +1,20 @@
+<tbody id="customer-results">
+    {% for customer in customers %}
+        <tr>
+            <td>
+                <a href="#" onclick="event.preventDefault(); new PluginSales.CustomerSlideout('{{ customer.customer }}')">
+                    {{- customer.customer -}}
+                </a>
+            </td>
+            <td>
+                {{ customer.count }}
+            </td>
+            <td>
+                {{ customer.grossAmount|number(2) }}
+            </td>
+            <td>
+                {{ customer.netAmount|number(2) }}
+            </td>
+        </tr>
+    {% endfor %}
+</tbody>

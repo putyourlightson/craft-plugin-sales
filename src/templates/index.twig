@@ -3,7 +3,6 @@
 {% set title = "Plugin Sales"|t('plugin-sales') %}
 
 {% do view.registerAssetBundle('putyourlightson\\pluginsales\\assets\\ReportsAsset') %}
-{% do sprig.setConfig({ requestClass: 'busy' }) %}
 
 {% set start = craft.app.request.get('start') %}
 {% set end = craft.app.request.get('end') %}
@@ -19,7 +18,13 @@
 
 {% block content %}
 
-    <div class="flex" style="justify-content: space-between; align-items: flex-start; margin-bottom: 40px;">
+    {% set start = craft.app.request.param('start') %}
+    {% set end = craft.app.request.param('end') %}
+    {% set signals = {
+        start: start,
+        end: end,
+    } %}
+    <div data-signals="{{ signals|json_encode }}" class="flex" style="justify-content: space-between; align-items: flex-start; margin-bottom: 40px;">
         <div>
             <p>
                 {% if netAmount %}
@@ -50,7 +55,8 @@
             {% if netAmount and refreshDate and not craft.pluginSales.hasValidLicense() %}
                 <p class="warning" data-icon="alert">
                     <strong>
-                        Please support development of this plugin: <a href="{{ url('plugin-store/plugin-sales') }}" class="go">Buy a license</a>
+                        Please support development of this plugin:
+                        <a href="{{ url('plugin-store/plugin-sales') }}" class="go">Buy a license</a>
                     </strong>
                 </p>
             {% endif %}
@@ -66,21 +72,15 @@
     </div>
 
     {% if netAmount %}
-        {% include 'plugin-sales/_charts/monthly-totals' %}
-        {% include 'plugin-sales/_charts/plugins-licenses-renewals' %}
-        {% include 'plugin-sales/_charts/pie-charts' %}
+        {{ include('plugin-sales/_charts/monthly-totals') }}
+        {{ include('plugin-sales/_charts/plugins-licenses-renewals') }}
+        {{ include('plugin-sales/_charts/pie-charts') }}
 
         <h2>Sales</h2>
-        {{ sprig('plugin-sales/_components/sales', {
-            start: start,
-            end: end,
-        }) }}
+        {{ include('plugin-sales/_includes/sales') }}
 
         <h2 style="margin-top: 40px;">Customers</h2>
-        {{ sprig('plugin-sales/_components/customers', {
-            start: start,
-            end: end,
-        }) }}
+        {{ include('plugin-sales/_includes/customers') }}
     {% endif %}
 
 {% endblock %}
