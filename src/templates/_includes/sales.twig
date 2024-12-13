@@ -29,10 +29,11 @@
         },
     },
 } %}
+{% set sse = datastar.sse('plugin-sales/_datastar/sales') %}
 
 <div data-signals="{{ signals|json_encode }}" class="set-table flex">
     <div class="select">
-        <select data-bind="{{ namespace }}.limit" data-on-change="{{ namespace }}.offset.value = 0; {{ datastar.sse('plugin-sales/_datastar/sales') }}" data-indicator="fetching{{ namespace }}">
+        <select data-bind="{{ namespace }}.limit" data-on-change="{{ namespace }}.offset.value = 0; {{ sse }}" data-indicator="fetching{{ namespace }}">
             <option value="10">10</option>
             <option value="25">25</option>
             <option value="50">50</option>
@@ -42,7 +43,7 @@
     sales displayed
     <div class="search-container flex-grow texticon has-filter-btn">
         <span class="texticon-icon search icon" aria-hidden="true"></span>
-        <input data-bind="{{ namespace }}.search" data-on-keydown__debounce.400ms="{{ namespace }}.offset.value = 0; {{ datastar.sse('plugin-sales/_datastar/sales') }}" data-indicator="fetching{{ namespace }}" type="text" class="clearable text fullwidth" autocomplete="off" placeholder="Search">
+        <input data-bind="{{ namespace }}.search" data-on-keydown__debounce.400ms="{{ namespace }}.offset.value = 0; {{ sse }}" data-indicator="fetching{{ namespace }}" type="text" class="clearable text fullwidth" autocomplete="off" placeholder="Search">
     </div>
 </div>
 
@@ -53,38 +54,38 @@
             <tr>
                 {% if customer is empty %}
                     <th class="orderable" data-class="{'ordered': {{ namespace }}.orderBy.value == 'customer', 'desc': {{ namespace }}.sortBy.value == 'desc'}">
-                        <button data-on-click="{{ namespace }}.sortBy.value = {{ namespace }}.orderBy.value == 'customer' && {{ namespace }}.sortBy.value == 'asc' ? 'desc' : 'asc'; {{ namespace }}.orderBy.value = 'customer'; {{ datastar.sse('plugin-sales/_datastar/sales') }}" data-indicator="fetching{{ namespace }}">
+                        <button data-on-click="{{ namespace }}.sortBy.value = {{ namespace }}.orderBy.value == 'customer' && {{ namespace }}.sortBy.value == 'asc' ? 'desc' : 'asc'; {{ namespace }}.orderBy.value = 'customer'; {{ sse }}" data-indicator="fetching{{ namespace }}">
                             {{ 'Customer'|t('plugin-sales') }}
                         </button>
                     </th>
                 {% endif %}
                 <th class="orderable" data-class="{'ordered': {{ namespace }}.orderBy.value == 'name', 'desc': {{ namespace }}.sortBy.value == 'desc'}">
-                    <button data-on-click="{{ namespace }}.sortBy.value = {{ namespace }}.orderBy.value == 'name' && {{ namespace }}.sortBy.value == 'asc' ? 'desc' : 'asc'; {{ namespace }}.orderBy.value = 'name'; {{ datastar.sse('plugin-sales/_datastar/sales') }}" data-indicator="fetching{{ namespace }}">
+                    <button data-on-click="{{ namespace }}.sortBy.value = {{ namespace }}.orderBy.value == 'name' && {{ namespace }}.sortBy.value == 'asc' ? 'desc' : 'asc'; {{ namespace }}.orderBy.value = 'name'; {{ sse }}" data-indicator="fetching{{ namespace }}">
                         {{ 'Plugin'|t('plugin-sales') }}
                     </button>
                 </th>
                 <th class="orderable" data-class="{'ordered': {{ namespace }}.orderBy.value == 'edition', 'desc': {{ namespace }}.sortBy.value == 'desc'}">
-                    <button data-on-click="{{ namespace }}.sortBy.value = {{ namespace }}.orderBy.value == 'edition' && {{ namespace }}.sortBy.value == 'asc' ? 'desc' : 'asc'; {{ namespace }}.orderBy.value = 'edition'; {{ datastar.sse('plugin-sales/_datastar/sales') }}" data-indicator="fetching{{ namespace }}">
+                    <button data-on-click="{{ namespace }}.sortBy.value = {{ namespace }}.orderBy.value == 'edition' && {{ namespace }}.sortBy.value == 'asc' ? 'desc' : 'asc'; {{ namespace }}.orderBy.value = 'edition'; {{ sse }}" data-indicator="fetching{{ namespace }}">
                         {{ 'Edition'|t('plugin-sales') }}
                     </button>
                 </th>
                 <th class="orderable" data-class="{'ordered': {{ namespace }}.orderBy.value == 'renewal', 'desc': {{ namespace }}.sortBy.value == 'desc'}">
-                    <button data-on-click="{{ namespace }}.sortBy.value = {{ namespace }}.orderBy.value == 'renewal' && {{ namespace }}.sortBy.value == 'asc' ? 'desc' : 'asc'; {{ namespace }}.orderBy.value = 'renewal'; {{ datastar.sse('plugin-sales/_datastar/sales') }}" data-indicator="fetching{{ namespace }}">
+                    <button data-on-click="{{ namespace }}.sortBy.value = {{ namespace }}.orderBy.value == 'renewal' && {{ namespace }}.sortBy.value == 'asc' ? 'desc' : 'asc'; {{ namespace }}.orderBy.value = 'renewal'; {{ sse }}" data-indicator="fetching{{ namespace }}">
                         {{ 'Type'|t('plugin-sales') }}
                     </button>
                 </th>
                 <th class="orderable" data-class="{'ordered': {{ namespace }}.orderBy.value == 'grossAmount', 'desc': {{ namespace }}.sortBy.value == 'desc'}">
-                    <button data-on-click="{{ namespace }}.sortBy.value = {{ namespace }}.orderBy.value == 'grossAmount' && {{ namespace }}.sortBy.value == 'desc' ? 'asc' : 'desc'; {{ namespace }}.orderBy.value = 'grossAmount'; {{ datastar.sse('plugin-sales/_datastar/sales') }}" data-indicator="fetching{{ namespace }}">
+                    <button data-on-click="{{ namespace }}.sortBy.value = {{ namespace }}.orderBy.value == 'grossAmount' && {{ namespace }}.sortBy.value == 'desc' ? 'asc' : 'desc'; {{ namespace }}.orderBy.value = 'grossAmount'; {{ sse }}" data-indicator="fetching{{ namespace }}">
                         {{ 'Gross'|t('plugin-sales') }} ($)
                     </button>
                 </th>
                 <th class="orderable" data-class="{'ordered': {{ namespace }}.orderBy.value == 'netAmount', 'desc': {{ namespace }}.sortBy.value == 'desc'}">
-                    <button data-on-click="{{ namespace }}.sortBy.value = {{ namespace }}.orderBy.value == 'netAmount' && {{ namespace }}.sortBy.value == 'desc' ? 'asc' : 'desc'; {{ namespace }}.orderBy.value = 'netAmount'; {{ datastar.sse('plugin-sales/_datastar/sales') }}" data-indicator="fetching{{ namespace }}">
+                    <button data-on-click="{{ namespace }}.sortBy.value = {{ namespace }}.orderBy.value == 'netAmount' && {{ namespace }}.sortBy.value == 'desc' ? 'asc' : 'desc'; {{ namespace }}.orderBy.value = 'netAmount'; {{ sse }}" data-indicator="fetching{{ namespace }}">
                         {{ 'Net'|t('plugin-sales') }} ($)
                     </button>
                 </th>
                 <th class="orderable" data-class="{'ordered': {{ namespace }}.orderBy.value == 'dateSold', 'desc': {{ namespace }}.sortBy.value == 'desc'}">
-                    <button data-on-click="{{ namespace }}.sortBy.value = {{ namespace }}.orderBy.value == 'dateSold' && {{ namespace }}.sortBy.value == 'desc' ? 'asc' : 'desc'; {{ namespace }}.orderBy.value = 'dateSold'; {{ datastar.sse('plugin-sales/_datastar/sales') }}" data-indicator="fetching{{ namespace }}">
+                    <button data-on-click="{{ namespace }}.sortBy.value = {{ namespace }}.orderBy.value == 'dateSold' && {{ namespace }}.sortBy.value == 'desc' ? 'asc' : 'desc'; {{ namespace }}.orderBy.value = 'dateSold'; {{ sse }}" data-indicator="fetching{{ namespace }}">
                         {{ 'Date'|t('plugin-sales') }}
                     </button>
                 </th>
@@ -100,9 +101,9 @@
         <div id="count-container" class="light">
             <div class="flex pagination">
                 <nav class="flex">
-                    <button data-show="{{ namespace }}.offset.value > 0" data-on-click="{{ namespace }}.offset.value = {{ namespace }}.offset.value - {{ namespace }}.limit.value; {{ datastar.sse('plugin-sales/_datastar/sales') }}" data-indicator="fetching{{ namespace }}" class="page-link prev-page" title="Previous Page" style="display: none"></button>
+                    <button data-show="{{ namespace }}.offset.value > 0" data-on-click="{{ namespace }}.offset.value = {{ namespace }}.offset.value - {{ namespace }}.limit.value; {{ sse }}" data-indicator="fetching{{ namespace }}" class="page-link prev-page" title="Previous Page" style="display: none"></button>
                     <button data-show="{{ namespace }}.offset.value <= 0" class="page-link prev-page disabled" title="Previous Page"></button>
-                    <button data-show="{{ namespace }}.maxVisible.value < {{ namespace }}.total.value" data-on-click="{{ namespace }}.offset.value = {{ namespace }}.offset.value + {{ namespace }}.limit.value; {{ datastar.sse('plugin-sales/_datastar/sales') }}" data-indicator="fetching{{ namespace }}" class="page-link next-page" title="Next Page" style="display: none"></button>
+                    <button data-show="{{ namespace }}.maxVisible.value < {{ namespace }}.total.value" data-on-click="{{ namespace }}.offset.value = {{ namespace }}.offset.value + {{ namespace }}.limit.value; {{ sse }}" data-indicator="fetching{{ namespace }}" class="page-link next-page" title="Next Page" style="display: none"></button>
                     <button data-show="{{ namespace }}.maxVisible.value >= {{ namespace }}.total.value" class="page-link next-page disabled" title="Next Page"></button>
                 </nav>
                 <div class="page-info">
