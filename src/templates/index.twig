@@ -77,14 +77,15 @@
         {{ include('plugin-sales/_charts/pie-charts') }}
 
         <h2>Sales</h2>
-        {{ include('plugin-sales/_includes/sales') }}
+        <div id="sales">
+            {{ include('plugin-sales/_includes/sales') }}
+        </div>
 
         <h2 style="margin-top: 40px;">Customers</h2>
         {{ include('plugin-sales/_includes/customers') }}
     {% endif %}
 
 {% endblock %}
-
 
 {% js %}
 

@@ -7,7 +7,8 @@ PluginSales.CustomerSlideout = Craft.CpScreenSlideout.extend(
 
             this.on('load', () => {
                 this.removeNamespace();
-                //ds.applyPlugins(this.$container[0]);
+
+                Datastar.apply(this.$container[0]);
             });
 
             this.base(action);
@@ -41,9 +42,9 @@ PluginSales.CustomerSlideout = Craft.CpScreenSlideout.extend(
             // There can be only one!
             this.destroy();
 
-            // Clean up the store
-            // delete ds.store.sales[ds.store.customerHandle.value];
-            // ds.store.customer.value = '';
-            // ds.store.customerHandle.value = '';
+            // Clean up the signals
+            const sales = document.getElementById('sales');
+            sales.setAttribute('data-signals', "{customer: '', customerHandle: ''}");
+            Datastar.apply(sales);
         },
     });
