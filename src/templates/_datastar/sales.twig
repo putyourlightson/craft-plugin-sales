@@ -20,3 +20,9 @@
 {% fragment %}
     {{ include('plugin-sales/_includes/sales-results') }}
 {% endfragment %}
+
+{% if not customer %}
+    {% fragment with { mergeMode: 'upsertAttributes' } %}
+        <div id="sales" data-scroll-into-view__vstart></div>
+    {% endfragment %}
+{% endif %}

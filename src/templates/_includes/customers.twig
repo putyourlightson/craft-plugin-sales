@@ -25,7 +25,7 @@
 
 <div data-signals="{{ signals|json_encode }}" class="set-table flex">
     <div class="select">
-        <select data-bind="customers.limit" data-on-change="customers.offset.value = 0; {{ sse }}" data-indicator-fetching-customer>
+        <select data-bind="customers.limit" data-on-change="customers.offset.value = 0; {{ sse }}" data-indicator-fetching.customers>
             <option value="10">10</option>
             <option value="25">25</option>
             <option value="50">50</option>
@@ -35,32 +35,32 @@
     customers displayed
     <div class="search-container flex-grow texticon has-filter-btn">
         <span class="texticon-icon search icon" aria-hidden="true"></span>
-        <input data-bind="customers.search" data-on-keydown__debounce.400ms="customers.offset.value = 0; {{ sse }}" data-indicator-fetching-customers type="text" class="clearable text fullwidth" autocomplete="off" placeholder="Search">
+        <input data-bind="customers.search" data-on-keydown__debounce.400ms="customers.offset.value = 0; {{ sse }}" data-indicator-fetching.customers type="text" class="clearable text fullwidth" autocomplete="off" placeholder="Search">
     </div>
 </div>
 
-<div class="elements" data-class="{'busy': fetchingCustomers.value}" style="margin-top: 1rem;">
+<div class="elements" data-class="{'busy': fetching.customers.value}" style="margin-top: 1rem;">
     <div class="update-spinner spinner spinner-absolute"></div>
     <table class="data fullwidth">
         <thead>
             <tr>
                 <th class="orderable" data-class="{'ordered': customers.orderBy.value == 'customer', 'desc': customers.sortBy.value == 'desc'}">
-                    <button data-on-click="customers.sortBy.value = customers.orderBy.value == 'customer' && customers.sortBy.value == 'asc' ? 'desc' : 'asc'; customers.orderBy.value = 'customer'; {{ sse }}" data-indicator-fetching-customers>
+                    <button data-on-click="customers.sortBy.value = customers.orderBy.value == 'customer' && customers.sortBy.value == 'asc' ? 'desc' : 'asc'; customers.orderBy.value = 'customer'; {{ sse }}" data-indicator-fetching.customers>
                         {{ 'Customer'|t('plugin-sales') }}
                     </button>
                 </th>
                 <th class="orderable" data-class="{'ordered': customers.orderBy.value == 'count', 'desc': customers.sortBy.value == 'desc'}">
-                    <button data-on-click="customers.sortBy.value = customers.orderBy.value == 'count' && customers.sortBy.value == 'desc' ? 'asc' : 'desc'; customers.orderBy.value = 'count'; {{ sse }}" data-indicator-fetching-customers>
+                    <button data-on-click="customers.sortBy.value = customers.orderBy.value == 'count' && customers.sortBy.value == 'desc' ? 'asc' : 'desc'; customers.orderBy.value = 'count'; {{ sse }}" data-indicator-fetching.customers>
                         {{ 'Purchases'|t('plugin-sales') }}
                     </button>
                 </th>
                 <th class="orderable" data-class="{'ordered': customers.orderBy.value == 'grossAmount', 'desc': customers.sortBy.value == 'desc'}">
-                    <button data-on-click="customers.sortBy.value = customers.orderBy.value == 'grossAmount' && customers.sortBy.value == 'desc' ? 'asc' : 'desc'; customers.orderBy.value = 'grossAmount'; {{ sse }}" data-indicator-fetching-customers>
+                    <button data-on-click="customers.sortBy.value = customers.orderBy.value == 'grossAmount' && customers.sortBy.value == 'desc' ? 'asc' : 'desc'; customers.orderBy.value = 'grossAmount'; {{ sse }}" data-indicator-fetching.customers>
                         {{ 'Gross'|t('plugin-sales') }} ($)
                     </button>
                 </th>
                 <th class="orderable" data-class="{'ordered': customers.orderBy.value == 'netAmount', 'desc': customers.sortBy.value == 'desc'}">
-                    <button data-on-click="customers.sortBy.value = customers.orderBy.value == 'netAmount' && customers.sortBy.value == 'desc' ? 'asc' : 'desc'; customers.orderBy.value = 'netAmount'; {{ sse }}" data-indicator-fetching-customers>
+                    <button data-on-click="customers.sortBy.value = customers.orderBy.value == 'netAmount' && customers.sortBy.value == 'desc' ? 'asc' : 'desc'; customers.orderBy.value = 'netAmount'; {{ sse }}" data-indicator-fetching.customers>
                         {{ 'Net'|t('plugin-sales') }} ($)
                     </button>
                 </th>
@@ -76,9 +76,9 @@
         <div id="count-container" class="light">
             <div class="flex pagination">
                 <nav class="flex">
-                    <button data-show="customers.offset.value > 0" data-on-click="customers.offset.value = customers.offset.value - customers.limit.value; {{ sse }}" data-indicator-fetching-sales class="page-link prev-page" title="Previous Page" style="display: none"></button>
+                    <button data-show="customers.offset.value > 0" data-on-click="customers.offset.value = customers.offset.value - customers.limit.value; {{ sse }}" data-indicator-fetching.customers class="page-link prev-page" title="Previous Page" style="display: none"></button>
                     <button data-show="customers.offset.value <= 0" class="page-link prev-page disabled" title="Previous Page"></button>
-                    <button data-show="customers.maxVisible.value < customers.total.value" data-on-click="customers.offset.value = customers.offset.value + customers.limit.value; {{ sse }}" data-indicator-fetching-sales class="page-link next-page" title="Next Page" style="display: none"></button>
+                    <button data-show="customers.maxVisible.value < customers.total.value" data-on-click="customers.offset.value = customers.offset.value + customers.limit.value; {{ sse }}" data-indicator-fetching.customers class="page-link next-page" title="Next Page" style="display: none"></button>
                     <button data-show="customers.maxVisible.value >= customers.total.value" class="page-link next-page disabled" title="Next Page"></button>
                 </nav>
                 <div class="page-info">

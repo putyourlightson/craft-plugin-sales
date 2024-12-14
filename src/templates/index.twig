@@ -76,13 +76,15 @@
         {{ include('plugin-sales/_charts/plugins-licenses-renewals') }}
         {{ include('plugin-sales/_charts/pie-charts') }}
 
-        <h2>Sales</h2>
-        <div id="sales">
+        <div id="sales" style="scroll-margin-top: 60px">
+            <h2>Sales</h2>
             {{ include('plugin-sales/_includes/sales') }}
         </div>
 
-        <h2 style="margin-top: 40px;">Customers</h2>
-        {{ include('plugin-sales/_includes/customers') }}
+        <div id="customers" style="margin-top: 40px; scroll-margin-top: 60px">
+            <h2>Customers</h2>
+            {{ include('plugin-sales/_includes/customers') }}
+        </div>
     {% endif %}
 
 {% endblock %}

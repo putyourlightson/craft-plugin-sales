@@ -16,3 +16,7 @@
 {% fragment %}
     {{ include('plugin-sales/_includes/customer-results') }}
 {% endfragment %}
+
+{% fragment with { mergeMode: 'upsertAttributes' } %}
+    <div id="customers" data-scroll-into-view__vstart></div>
+{% endfragment %}
