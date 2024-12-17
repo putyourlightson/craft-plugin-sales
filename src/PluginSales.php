@@ -79,6 +79,7 @@ class PluginSales extends Plugin
         self::$plugin = $this;
 
         Datastar::bootstrap();
+        Datastar::getInstance()->expose();
 
         $this->registerVariables();
         $this->registerLogTarget();

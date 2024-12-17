@@ -1,21 +1,21 @@
 {% set customer = customer ?? signals.customer ?? null %}
-{% set customerHandle = customer ? customer|replace({ '-': ' ', '@': ' ', '.' : ' ' })|camel : 'all' %}
-{% set namespace = 'sales.' ~ customerHandle %}
+{% set salesType = customer ? 'customer' : 'all' %}
+{% set namespace = 'sales.' ~ salesType %}
 
 {% set start = customer ? null : (start ?? signals.start ?? null) %}
 {% set end = customer ? null : (end ?? signals.end ?? null) %}
-{% set orderBy = signals.sales[customerHandle].orderBy %}
-{% set sortBy = signals.sales[customerHandle].sortBy %}
-{% set offset = signals.sales[customerHandle].offset %}
+{% set orderBy = signals.sales[salesType].orderBy %}
+{% set sortBy = signals.sales[salesType].sortBy %}
+{% set offset = signals.sales[salesType].offset %}
 {% set offset = offset > 0 ? offset : 0 %}
-{% set limit = signals.sales[customerHandle].limit %}
-{% set search = signals.sales[customerHandle].search %}
+{% set limit = signals.sales[salesType].limit %}
+{% set search = signals.sales[salesType].search %}
 {% set sales = craft.pluginSales.reports.getSalesData(customer, start, end, orderBy, sortBy, offset, limit, search) %}
 {% set total = craft.pluginSales.reports.getSalesCount(customer, start, end, search) %}
 {% set maxVisible = sales|length + offset %}
 
-{% do signals.set('sales.' ~ customerHandle ~ '.total', total) %}
-{% do signals.set('sales.' ~ customerHandle ~ '.maxVisible', maxVisible) %}
+{% do signals.set('sales.' ~ salesType ~ '.total', total) %}
+{% do signals.set('sales.' ~ salesType ~ '.maxVisible', maxVisible) %}
 
 {% fragment %}
     {{ include('plugin-sales/_includes/sales-results') }}

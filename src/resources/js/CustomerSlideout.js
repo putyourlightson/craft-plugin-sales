@@ -43,8 +43,6 @@ PluginSales.CustomerSlideout = Craft.CpScreenSlideout.extend(
             this.destroy();
 
             // Clean up the signals
-            const sales = document.getElementById('sales');
-            sales.setAttribute('data-signals', "{customer: '', customerHandle: ''}");
-            Datastar.apply(sales);
+            window.dispatchEvent(new CustomEvent('close-slideout'));
         },
     });

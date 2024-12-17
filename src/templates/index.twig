@@ -76,7 +76,7 @@
         {{ include('plugin-sales/_charts/plugins-licenses-renewals') }}
         {{ include('plugin-sales/_charts/pie-charts') }}
 
-        <div id="sales" style="scroll-margin-top: 60px">
+        <div id="sales" data-on-close-slideout__window="customer.value = ''" style=" scroll-margin-top: 60px">
             <h2>Sales</h2>
             {{ include('plugin-sales/_includes/sales') }}
         </div>
