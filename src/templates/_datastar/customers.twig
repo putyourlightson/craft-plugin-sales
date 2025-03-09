@@ -10,13 +10,6 @@
 {% set total = craft.pluginSales.reports.getCustomersCount(start, end, search) %}
 {% set maxVisible = customers|length + offset %}
 
-{% do signals.set('customers.total', total) %}
-{% do signals.set('customers.maxVisible', maxVisible) %}
-
 {% fragment %}
     {{ include('plugin-sales/_includes/customer-results') }}
-{% endfragment %}
-
-{% fragment with { mergeMode: 'upsertAttributes' } %}
-    <div id="customers" data-scroll-into-view__vstart></div>
 {% endfragment %}

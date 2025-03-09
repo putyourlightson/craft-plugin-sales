@@ -1,28 +1,18 @@
 {% set customer = customer ?? signals.customer ?? null %}
 {% set salesType = customer ? 'customer' : 'all' %}
-{% set namespace = 'sales.' ~ salesType %}
+{% set namespace = '$sales.' ~ salesType %}
 
 {% set start = customer ? null : (start ?? signals.start ?? null) %}
 {% set end = customer ? null : (end ?? signals.end ?? null) %}
-{% set orderBy = signals.sales[salesType].orderBy %}
-{% set sortBy = signals.sales[salesType].sortBy %}
-{% set offset = signals.sales[salesType].offset %}
-{% set offset = offset > 0 ? offset : 0 %}
 {% set limit = signals.sales[salesType].limit %}
 {% set search = signals.sales[salesType].search %}
+{% set orderBy = signals.sales[salesType].orderBy %}
+{% set sortBy = signals.sales[salesType].sortBy %}
+{% set offset = offset ?? 0 %}
 {% set sales = craft.pluginSales.reports.getSalesData(customer, start, end, orderBy, sortBy, offset, limit, search) %}
 {% set total = craft.pluginSales.reports.getSalesCount(customer, start, end, search) %}
 {% set maxVisible = sales|length + offset %}
 
-{% do signals.set('sales.' ~ salesType ~ '.total', total) %}
-{% do signals.set('sales.' ~ salesType ~ '.maxVisible', maxVisible) %}
-
 {% fragment %}
     {{ include('plugin-sales/_includes/sales-results') }}
 {% endfragment %}
-
-{% if not customer %}
-    {% fragment with { mergeMode: 'upsertAttributes' } %}
-        <div id="sales" data-scroll-into-view__vstart></div>
-    {% endfragment %}
-{% endif %}

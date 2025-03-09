@@ -1,13 +1,12 @@
 {% set customer = customer ?? null %}
 {% set salesType = customer ? 'customer' : 'all' %}
-{% set namespace = 'sales.' ~ salesType %}
+{% set namespace = '$sales.' ~ salesType %}
 
 {% set start = start ?? null %}
 {% set end = end ?? null %}
 {% set orderBy = 'dateSold' %}
 {% set sortBy = 'desc' %}
 {% set offset = 0 %}
-{% set offset = offset > 0 ? offset : 0 %}
 {% set limit = 10 %}
 {% set search = '' %}
 {% set sales = craft.pluginSales.reports.getSalesData(customer, start, end, orderBy, sortBy, offset, limit, search) %}
@@ -18,21 +17,17 @@
     customer: customer,
     sales: {
         (salesType): {
-            offset: offset,
             limit: limit,
             search: search,
             orderBy: orderBy,
             sortBy: sortBy,
-            maxVisible: maxVisible,
-            total: total,
         },
     },
 } %}
-{% set sse = datastar.sse('plugin-sales/_datastar/sales') %}
 
-<div data-signals="{{ signals|json_encode }}" class="set-table flex">
+<div data-signals="{{ datastar.signals(signals) }}" class="set-table flex">
     <div class="select">
-        <select data-bind="{{ namespace }}.limit" data-on-change="{{ namespace }}.offset.value = 0; {{ sse }}" data-indicator-fetching.sales.{{ customer ? 'customer'  : 'all' }}>
+        <select data-bind="{{ namespace }}.limit" data-on-change="{{ datastar.get('plugin-sales/_datastar/sales') }}" data-indicator-fetching.sales.{{ customer ? 'customer' : 'all' }}>
             <option value="10">10</option>
             <option value="25">25</option>
             <option value="50">50</option>
@@ -42,75 +37,8 @@
     sales displayed
     <div class="search-container flex-grow texticon has-filter-btn">
         <span class="texticon-icon search icon" aria-hidden="true"></span>
-        <input data-bind="{{ namespace }}.search" data-on-keydown__debounce.400ms="{{ namespace }}.offset.value = 0; {{ sse }}" data-indicator-fetching.sales.{{ customer ? 'customer'  : 'all' }} type="text" class="clearable text fullwidth" autocomplete="off" placeholder="Search">
+        <input data-bind="{{ namespace }}.search" data-on-keydown__debounce.400ms="{{ datastar.get('plugin-sales/_datastar/sales') }}" data-indicator-fetching.sales.{{ customer ? 'customer'  : 'all' }} type="text" class="clearable text fullwidth" autocomplete="off" placeholder="Search">
     </div>
 </div>
 
-<div class="elements" data-class="{'busy': fetching.sales.{{ customer ? 'customer' : 'all' }}.value}" style="margin-top: 1rem;">
-    <div id="sales-indicator" class="update-spinner spinner spinner-absolute"></div>
-    <table class="data fullwidth">
-        <thead>
-            <tr>
-                {% if customer is empty %}
-                    <th class="orderable" data-class="{'ordered': {{ namespace }}.orderBy.value == 'customer', 'desc': {{ namespace }}.sortBy.value == 'desc'}">
-                        <button data-on-click="{{ namespace }}.sortBy.value = {{ namespace }}.orderBy.value == 'customer' && {{ namespace }}.sortBy.value == 'asc' ? 'desc' : 'asc'; {{ namespace }}.orderBy.value = 'customer'; {{ sse }}" data-indicator-fetching.sales.{{ customer ? 'customer' : 'all' }}>
-                            {{ 'Customer'|t('plugin-sales') }}
-                        </button>
-                    </th>
-                {% endif %}
-                <th class="orderable" data-class="{'ordered': {{ namespace }}.orderBy.value == 'name', 'desc': {{ namespace }}.sortBy.value == 'desc'}">
-                    <button data-on-click="{{ namespace }}.sortBy.value = {{ namespace }}.orderBy.value == 'name' && {{ namespace }}.sortBy.value == 'asc' ? 'desc' : 'asc'; {{ namespace }}.orderBy.value = 'name'; {{ sse }}" data-indicator-fetching.sales.{{ customer ? 'customer'  : 'all' }}>
-                        {{ 'Plugin'|t('plugin-sales') }}
-                    </button>
-                </th>
-                <th class="orderable" data-class="{'ordered': {{ namespace }}.orderBy.value == 'edition', 'desc': {{ namespace }}.sortBy.value == 'desc'}">
-                    <button data-on-click="{{ namespace }}.sortBy.value = {{ namespace }}.orderBy.value == 'edition' && {{ namespace }}.sortBy.value == 'asc' ? 'desc' : 'asc'; {{ namespace }}.orderBy.value = 'edition'; {{ sse }}" data-indicator-fetching.sales.{{ customer ? 'customer' : 'all' }}>
-                        {{ 'Edition'|t('plugin-sales') }}
-                    </button>
-                </th>
-                <th class="orderable" data-class="{'ordered': {{ namespace }}.orderBy.value == 'renewal', 'desc': {{ namespace }}.sortBy.value == 'desc'}">
-                    <button data-on-click="{{ namespace }}.sortBy.value = {{ namespace }}.orderBy.value == 'renewal' && {{ namespace }}.sortBy.value == 'asc' ? 'desc' : 'asc'; {{ namespace }}.orderBy.value = 'renewal'; {{ sse }}" data-indicator-fetching.sales.{{ customer ? 'customer' : 'all' }}>
-                        {{ 'Type'|t('plugin-sales') }}
-                    </button>
-                </th>
-                <th class="orderable" data-class="{'ordered': {{ namespace }}.orderBy.value == 'grossAmount', 'desc': {{ namespace }}.sortBy.value == 'desc'}">
-                    <button data-on-click="{{ namespace }}.sortBy.value = {{ namespace }}.orderBy.value == 'grossAmount' && {{ namespace }}.sortBy.value == 'desc' ? 'asc' : 'desc'; {{ namespace }}.orderBy.value = 'grossAmount'; {{ sse }}" data-indicator-fetching.sales.{{ customer ? 'customer' : 'all' }}>
-                        {{ 'Gross'|t('plugin-sales') }} ($)
-                    </button>
-                </th>
-                <th class="orderable" data-class="{'ordered': {{ namespace }}.orderBy.value == 'netAmount', 'desc': {{ namespace }}.sortBy.value == 'desc'}">
-                    <button data-on-click="{{ namespace }}.sortBy.value = {{ namespace }}.orderBy.value == 'netAmount' && {{ namespace }}.sortBy.value == 'desc' ? 'asc' : 'desc'; {{ namespace }}.orderBy.value = 'netAmount'; {{ sse }}" data-indicator-fetching.sales.{{ customer ? 'customer' : 'all' }}>
-                        {{ 'Net'|t('plugin-sales') }} ($)
-                    </button>
-                </th>
-                <th class="orderable" data-class="{'ordered': {{ namespace }}.orderBy.value == 'dateSold', 'desc': {{ namespace }}.sortBy.value == 'desc'}">
-                    <button data-on-click="{{ namespace }}.sortBy.value = {{ namespace }}.orderBy.value == 'dateSold' && {{ namespace }}.sortBy.value == 'desc' ? 'asc' : 'desc'; {{ namespace }}.orderBy.value = 'dateSold'; {{ sse }}" data-indicator-fetching.sales.{{ customer ? 'customer' : 'all' }}>
-                        {{ 'Date'|t('plugin-sales') }}
-                    </button>
-                </th>
-            </tr>
-        </thead>
-        {{ include('plugin-sales/_includes/sales-results') }}
-    </table>
-    <div class="centeralign hidden">
-        <div class="spinner loadingmore"></div>
-    </div>
-    <div id="footer" class="flex flex-justify">
-        <div id="count-spinner" class="spinner small hidden"></div>
-        <div id="count-container" class="light">
-            <div class="flex pagination">
-                <nav class="flex">
-                    <button data-show="{{ namespace }}.offset.value > 0" data-on-click="{{ namespace }}.offset.value = {{ namespace }}.offset.value - {{ namespace }}.limit.value; {{ sse }}" data-indicator-fetching.sales.{{ customer ? 'customer'  : 'all' }} class="page-link prev-page" title="Previous Page" style="display: none"></button>
-                    <button data-show="{{ namespace }}.offset.value <= 0" class="page-link prev-page disabled" title="Previous Page"></button>
-                    <button data-show="{{ namespace }}.maxVisible.value < {{ namespace }}.total.value" data-on-click="{{ namespace }}.offset.value = {{ namespace }}.offset.value + {{ namespace }}.limit.value; {{ sse }}" data-indicator-fetching.sales.{{ customer ? 'customer'  : 'all' }} class="page-link next-page" title="Next Page" style="display: none"></button>
-                    <button data-show="{{ namespace }}.maxVisible.value >= {{ namespace }}.total.value" class="page-link next-page disabled" title="Next Page"></button>
-                </nav>
-                <div class="page-info">
-                    <span data-text="{{ namespace }}.maxVisible.value > 0 ? {{ namespace }}.offset.value + 1 : 0">0</span>-<span data-text="{{ namespace }}.maxVisible.value">0</span>
-                    of
-                    <span data-text="{{ namespace }}.total.value">0</span> sales
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+{{ include('plugin-sales/_includes/sales-results') }}

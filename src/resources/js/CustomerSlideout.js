@@ -7,8 +7,6 @@ PluginSales.CustomerSlideout = Craft.CpScreenSlideout.extend(
 
             this.on('load', () => {
                 this.removeNamespace();
-
-                Datastar.apply(this.$container[0]);
             });
 
             this.base(action);
@@ -43,6 +41,6 @@ PluginSales.CustomerSlideout = Craft.CpScreenSlideout.extend(
             this.destroy();
 
             // Clean up the signals
-            window.dispatchEvent(new CustomEvent('close-slideout'));
+            window.dispatchEvent(new CustomEvent('closeSlideout'));
         },
     });

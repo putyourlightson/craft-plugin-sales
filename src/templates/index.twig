@@ -23,8 +23,9 @@
     {% set signals = {
         start: start,
         end: end,
+        customer: '',
     } %}
-    <div data-signals="{{ signals|json_encode }}" class="flex" style="justify-content: space-between; align-items: flex-start; margin-bottom: 40px;">
+    <div data-signals="{{ datastar.signals(signals) }}" class="flex" style="justify-content: space-between; align-items: flex-start; margin-bottom: 40px;">
         <div>
             <p>
                 {% if netAmount %}
@@ -76,7 +77,7 @@
         {{ include('plugin-sales/_charts/plugins-licenses-renewals') }}
         {{ include('plugin-sales/_charts/pie-charts') }}
 
-        <div id="sales" data-on-close-slideout__window="customer.value = ''" style=" scroll-margin-top: 60px">
+        <div id="sales" data-on-close-slideout__window="$customer = ''" style=" scroll-margin-top: 60px">
             <h2>Sales</h2>
             {{ include('plugin-sales/_includes/sales') }}
         </div>
