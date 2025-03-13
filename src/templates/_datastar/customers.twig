@@ -2,8 +2,7 @@
 {% set end = end ?? signals.end ?? null %}
 {% set orderBy = signals.customers.orderBy ?? 'netAmount' %}
 {% set sortBy = signals.customers.sortBy ?? 'desc' %}
-{% set offset = signals.customers.offset ?? 0 %}
-{% set offset = offset > 0 ? offset : 0 %}
+{% set offset = offset ?? 0 %}
 {% set limit = signals.customers.limit ?? 10 %}
 {% set search = signals.customers.search ?? '' %}
 {% set customers = craft.pluginSales.reports.getCustomersData(start, end, orderBy, sortBy, offset, limit, search) %}
