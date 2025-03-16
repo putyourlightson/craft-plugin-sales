@@ -25,7 +25,7 @@
         end: end,
         customer: '',
     } %}
-    <div data-signals="{{ datastar.signals(signals) }}" class="flex" style="justify-content: space-between; align-items: flex-start; margin-bottom: 40px;">
+    <div data-star-signals="{{ datastar.signals(signals) }}" class="flex" style="justify-content: space-between; align-items: flex-start; margin-bottom: 40px;">
         <div>
             <p>
                 {% if netAmount %}
@@ -34,7 +34,7 @@
                     {% else %}
                         You earned a net profit during this period of
                     {% endif %}
-                    <strong id="total" data-value="{{ netAmount }}">
+                    <strong id="total" data-star-value="{{ netAmount }}">
                         {{ craft.pluginSales.getFormattedAmount(netAmount) }}
                     </strong>
                 {% else %}
@@ -54,7 +54,7 @@
                 {% endif %}
             </p>
             {% if netAmount and refreshDate and not craft.pluginSales.hasValidLicense() %}
-                <p class="warning" data-icon="alert">
+                <p class="warning" data-star-icon="alert">
                     <strong>
                         Please support development of this plugin:
                         <a href="{{ url('plugin-store/plugin-sales') }}" class="go">Buy a license</a>
@@ -64,7 +64,7 @@
         </div>
         <div class="flex">
             <div class="spinner" style="display: none;"></div>
-            <div id="daterange" data-icon="date" class="btn menubtn">
+            <div id="daterange" data-star-icon="date" class="btn menubtn">
                 <span></span>
             </div>
             <a href="{{ actionUrl('plugin-sales/sales/refresh') }}" id="refresh" class="btn">Refresh Sales</a>
@@ -77,7 +77,7 @@
         {{ include('plugin-sales/_charts/plugins-licenses-renewals') }}
         {{ include('plugin-sales/_charts/pie-charts') }}
 
-        <div id="sales" data-on-close-slideout__window="$customer = ''" style=" scroll-margin-top: 60px">
+        <div id="sales" data-star-on-close-slideout__window="$customer = ''" style=" scroll-margin-top: 60px">
             <h2>Sales</h2>
             {{ include('plugin-sales/_includes/sales') }}
         </div>
@@ -158,7 +158,7 @@ var locale = '{{ currentSite.language }}';
         });
     }
 
-    var value = parseFloat($('#total').attr('data-value'));
+    var value = parseFloat($('#total').attr('data-star-value'));
 
     if (rate != 1) {
         var originalValue = value / rate;

@@ -1,25 +1,25 @@
-<div id="customer-results" class="elements" data-class="{'busy': $fetching.customers}" style="margin-top: 1rem;">
+<div id="customer-results" class="elements" data-star-class="{'busy': $fetching.customers}" style="margin-top: 1rem;">
     <div class="update-spinner spinner spinner-absolute"></div>
     <table class="data fullwidth">
         <thead>
             <tr>
-                <th class="orderable" data-class="{'ordered': $customers.orderBy == 'customer', 'desc': customers.sortBy == 'desc'}">
-                    <button data-on-click="$customers.sortBy = $customers.orderBy == 'customer' && customers.sortBy == 'asc' ? 'desc' : 'asc'; $customers.orderBy = 'customer'; {{ datastar.get('plugin-sales/_datastar/customers') }}" data-indicator-fetching.customers>
+                <th class="orderable" data-star-class="{'ordered': $customers.orderBy == 'customer', 'desc': customers.sortBy == 'desc'}">
+                    <button data-star-on-click="$customers.sortBy = $customers.orderBy == 'customer' && customers.sortBy == 'asc' ? 'desc' : 'asc'; $customers.orderBy = 'customer'; {{ datastar.get('plugin-sales/_datastar/customers') }}" data-star-indicator-fetching.customers>
                         {{ 'Customer'|t('plugin-sales') }}
                     </button>
                 </th>
-                <th class="orderable" data-class="{'ordered': $customers.orderBy == 'count', 'desc': customers.sortBy == 'desc'}">
-                    <button data-on-click="$customers.sortBy = $customers.orderBy == 'count' && customers.sortBy == 'desc' ? 'asc' : 'desc'; $customers.orderBy = 'count'; {{ datastar.get('plugin-sales/_datastar/customers') }}" data-indicator-fetching.customers>
+                <th class="orderable" data-star-class="{'ordered': $customers.orderBy == 'count', 'desc': customers.sortBy == 'desc'}">
+                    <button data-star-on-click="$customers.sortBy = $customers.orderBy == 'count' && customers.sortBy == 'desc' ? 'asc' : 'desc'; $customers.orderBy = 'count'; {{ datastar.get('plugin-sales/_datastar/customers') }}" data-star-indicator-fetching.customers>
                         {{ 'Purchases'|t('plugin-sales') }}
                     </button>
                 </th>
-                <th class="orderable" data-class="{'ordered': $customers.orderBy == 'grossAmount', 'desc': customers.sortBy == 'desc'}">
-                    <button data-on-click="$customers.sortBy = $customers.orderBy == 'grossAmount' && customers.sortBy == 'desc' ? 'asc' : 'desc'; $customers.orderBy = 'grossAmount'; {{ datastar.get('plugin-sales/_datastar/customers') }}" data-indicator-fetching.customers>
+                <th class="orderable" data-star-class="{'ordered': $customers.orderBy == 'grossAmount', 'desc': customers.sortBy == 'desc'}">
+                    <button data-star-on-click="$customers.sortBy = $customers.orderBy == 'grossAmount' && customers.sortBy == 'desc' ? 'asc' : 'desc'; $customers.orderBy = 'grossAmount'; {{ datastar.get('plugin-sales/_datastar/customers') }}" data-star-indicator-fetching.customers>
                         {{ 'Gross'|t('plugin-sales') }} ($)
                     </button>
                 </th>
-                <th class="orderable" data-class="{'ordered': $customers.orderBy == 'netAmount', 'desc': customers.sortBy == 'desc'}">
-                    <button data-on-click="$customers.sortBy = $customers.orderBy == 'netAmount' && customers.sortBy == 'desc' ? 'asc' : 'desc'; $customers.orderBy = 'netAmount'; {{ datastar.get('plugin-sales/_datastar/customers') }}" data-indicator-fetching.customers>
+                <th class="orderable" data-star-class="{'ordered': $customers.orderBy == 'netAmount', 'desc': customers.sortBy == 'desc'}">
+                    <button data-star-on-click="$customers.sortBy = $customers.orderBy == 'netAmount' && customers.sortBy == 'desc' ? 'asc' : 'desc'; $customers.orderBy = 'netAmount'; {{ datastar.get('plugin-sales/_datastar/customers') }}" data-star-indicator-fetching.customers>
                         {{ 'Net'|t('plugin-sales') }} ($)
                     </button>
                 </th>
@@ -55,12 +55,12 @@
             <div class="flex pagination">
                 <nav class="flex">
                     {% if offset > 0 %}
-                        <button data-on-click="{{ datastar.get('plugin-sales/_datastar/customers', {offset: offset - limit}) }}" data-indicator-fetching.customers class="page-link prev-page" title="Previous Page"></button>
+                        <button data-star-on-click="{{ datastar.get('plugin-sales/_datastar/customers', {offset: offset - limit}) }}" data-star-indicator-fetching.customers class="page-link prev-page" title="Previous Page"></button>
                     {% else %}
                         <button class="page-link prev-page disabled" title="Previous Page"></button>
                     {% endif %}
                     {% if maxVisible < total %}
-                        <button data-on-click="{{ datastar.get('plugin-sales/_datastar/customers', {offset: offset + limit}) }}" data-indicator-fetching.customers class="page-link next-page" title="Next Page"></button>
+                        <button data-star-on-click="{{ datastar.get('plugin-sales/_datastar/customers', {offset: offset + limit}) }}" data-star-indicator-fetching.customers class="page-link next-page" title="Next Page"></button>
                     {% else %}
                         <button class="page-link next-page disabled" title="Next Page"></button>
                     {% endif %}

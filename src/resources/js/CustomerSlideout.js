@@ -41,6 +41,6 @@ PluginSales.CustomerSlideout = Craft.CpScreenSlideout.extend(
             this.destroy();
 
             // Clean up the signals
-            window.dispatchEvent(new CustomEvent('closeSlideout'));
+            window.dispatchEvent(new CustomEvent('close-slideout'));
         },
     });

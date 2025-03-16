@@ -18,9 +18,9 @@
     },
 } %}
 
-<div data-signals="{{ datastar.signals(signals) }}" class="set-table flex">
+<div data-star-signals="{{ datastar.signals(signals) }}" class="set-table flex">
     <div class="select">
-        <select data-bind="customers.limit" data-on-change="{{ datastar.get('plugin-sales/_datastar/customers') }}" data-indicator-fetching.customers>
+        <select data-star-bind="customers.limit" data-star-on-change="{{ datastar.get('plugin-sales/_datastar/customers') }}" data-star-indicator-fetching.customers>
             <option value="10">10</option>
             <option value="25">25</option>
             <option value="50">50</option>
@@ -30,7 +30,7 @@
     customers displayed
     <div class="search-container toolbar flex-grow texticon has-filter-btn">
         <span class="texticon-icon search icon" aria-hidden="true"></span>
-        <input data-bind="customers.search" data-on-keydown__debounce.400ms="{{ datastar.get('plugin-sales/_datastar/customers') }}" data-indicator-fetching.customers type="text" class="clearable text fullwidth" autocomplete="off" placeholder="Search">
+        <input data-star-bind="customers.search" data-star-on-keydown__debounce.200ms="{{ datastar.get('plugin-sales/_datastar/customers') }}" data-star-indicator-fetching.customers type="text" class="clearable text fullwidth" autocomplete="off" placeholder="Search">
     </div>
 </div>
 

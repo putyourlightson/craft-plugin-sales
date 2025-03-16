@@ -78,13 +78,11 @@ class PluginSales extends Plugin
         parent::init();
         self::$plugin = $this;
 
-        Datastar::bootstrap();
-
-        $this->registerVariables();
-        $this->registerLogTarget();
-
         // Register control panel events
         if (Craft::$app->getRequest()->getIsCpRequest()) {
+            Datastar::bootstrap();
+            $this->registerVariables();
+            $this->registerLogTarget();
             $this->registerRedirectAfterInstall();
         }
     }
