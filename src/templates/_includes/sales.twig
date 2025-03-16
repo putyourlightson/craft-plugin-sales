@@ -35,7 +35,7 @@
         </select>
     </div>
     sales displayed
-    <div class="search-container flex-grow texticon has-filter-btn">
+    <div class="search-container toolbar flex-grow texticon has-filter-btn">
         <span class="texticon-icon search icon" aria-hidden="true"></span>
         <input data-bind="{{ namespace }}.search" data-on-keydown__debounce.400ms="{{ datastar.get('plugin-sales/_datastar/sales') }}" data-indicator-fetching.sales.{{ customer ? 'customer'  : 'all' }} type="text" class="clearable text fullwidth" autocomplete="off" placeholder="Search">
     </div>
