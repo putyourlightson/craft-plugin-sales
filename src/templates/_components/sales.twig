@@ -92,7 +92,7 @@
                             {{ sale.name }}
                         </td>
                         <td>
-                            {{ sale.edition|ucfirst }}
+                            {{ sale.edition|capitalize }}
                         </td>
                         <td>
                             {{ sale.renewal ? 'Renewal'|t('plugin-sales') : 'Licence'|t('plugin-sales') }}
