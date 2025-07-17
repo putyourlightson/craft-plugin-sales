@@ -1,0 +1,32 @@
+{% set orderBy = 'netAmount' %}
+{% set sortBy = 'desc' %}
+{% set offset = 0 %}
+{% set limit = 10 %}
+{% set search = '' %}
+
+{% set signals = {
+    customers: {
+        limit: limit,
+        search: search,
+        orderBy: orderBy,
+        sortBy: sortBy,
+    },
+} %}
+
+<div data-star-signals="{{ signals|json_encode }}" class="set-table flex">
+    <div class="select">
+        <select data-star-bind="customers.limit" data-star-on-change="{{ datastar.get('plugin-sales/_partials/customer-results') }}" data-star-indicator-fetching.customers>
+            <option value="10">10</option>
+            <option value="25">25</option>
+            <option value="50">50</option>
+            <option value="100">100</option>
+        </select>
+    </div>
+    customers displayed
+    <div class="search-container toolbar flex-grow texticon has-filter-btn">
+        <span class="texticon-icon search icon" aria-hidden="true"></span>
+        <input data-star-bind="customers.search" data-star-on-keydown__debounce.200ms="{{ datastar.get('plugin-sales/_partials/customer-results') }}" data-star-indicator-fetching.customers type="text" class="clearable text fullwidth" autocomplete="off" placeholder="Search">
+    </div>
+</div>
+
+{{ include('plugin-sales/_partials/customer-results') }}

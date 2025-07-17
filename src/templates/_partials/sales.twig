@@ -1,0 +1,39 @@
+{% set customer = customer ?? null %}
+{% set salesType = customer ? 'customer' : 'all' %}
+{% set namespace = 'sales.' ~ salesType %}
+
+{% set orderBy = 'dateSold' %}
+{% set sortBy = 'desc' %}
+{% set offset = 0 %}
+{% set limit = 10 %}
+{% set search = '' %}
+
+{% set signals = {
+    customer: customer,
+    sales: {
+        (salesType): {
+            limit: limit,
+            search: search,
+            orderBy: orderBy,
+            sortBy: sortBy,
+        },
+    },
+} %}
+
+<div data-star-signals="{{ signals|json_encode }}" class="set-table flex">
+    <div class="select">
+        <select data-star-bind="{{ namespace }}.limit" data-star-on-change="{{ datastar.get('plugin-sales/_partials/sales-results') }}" data-star-indicator-fetching.sales.{{ customer ? 'customer' : 'all' }}>
+            <option value="10">10</option>
+            <option value="25">25</option>
+            <option value="50">50</option>
+            <option value="100">100</option>
+        </select>
+    </div>
+    sales displayed
+    <div class="search-container toolbar flex-grow texticon has-filter-btn">
+        <span class="texticon-icon search icon" aria-hidden="true"></span>
+        <input data-star-bind="{{ namespace }}.search" data-star-on-keydown__debounce.200ms="{{ datastar.get('plugin-sales/_partials/sales-results') }}" data-star-indicator-fetching.sales.{{ customer ? 'customer'  : 'all' }} type="text" class="clearable text fullwidth" autocomplete="off" placeholder="Search">
+    </div>
+</div>
+
+{{ include('plugin-sales/_partials/sales-results') }}

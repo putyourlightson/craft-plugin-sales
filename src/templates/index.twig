@@ -25,7 +25,7 @@
         end: end,
         customer: '',
     } %}
-    <div data-star-signals="{{ datastar.signals(signals) }}" class="flex" style="justify-content: space-between; align-items: flex-start; margin-bottom: 40px;">
+    <div data-star-signals="{{ signals|json_encode }}" class="flex" style="justify-content: space-between; align-items: flex-start; margin-bottom: 40px;">
         <div>
             <p>
                 {% if netAmount %}
@@ -77,14 +77,14 @@
         {{ include('plugin-sales/_charts/plugins-licenses-renewals') }}
         {{ include('plugin-sales/_charts/pie-charts') }}
 
-        <div id="sales" data-star-on-close-slideout__window="$customer = ''" style=" scroll-margin-top: 60px">
+        {# Delaying the signal update appears to be necessary (unknown why). #}
+        <div id="sales" data-star-on-close-slideout__delay__window="$customer = null">
             <h2>Sales</h2>
-            {{ include('plugin-sales/_includes/sales') }}
+            {{ include('plugin-sales/_partials/sales') }}
         </div>
-
         <div id="customers" style="margin-top: 40px; scroll-margin-top: 60px">
             <h2>Customers</h2>
-            {{ include('plugin-sales/_includes/customers') }}
+            {{ include('plugin-sales/_partials/customers') }}
         </div>
     {% endif %}
 
