@@ -1,5 +1,9 @@
 # Release Notes for Plugin Sales
 
+## 3.2.0 - 2026-04-18
+
+- Replaced Sprig Core with the Datastar Module.
+
 ## 3.1.4 - 2026-03-24
 
 - Fixed a deprecation warning about the use of a deprecated Twig filter.

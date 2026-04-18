@@ -72,7 +72,7 @@ class ReportsService extends Component
             ->offset($offset)
             ->limit($limit);
 
-        if ($search) {
+        if ($search = trim($search)) {
             $query->andWhere(['like', 'customer', $search]);
         }
 
@@ -90,7 +90,7 @@ class ReportsService extends Component
             ->addSelect(['customer'])
             ->groupBy(['customer']);
 
-        if ($search) {
+        if ($search = trim($search)) {
             $query->andWhere(['like', 'customer', $search]);
         }
 
@@ -369,7 +369,7 @@ class ReportsService extends Component
             $query->andWhere(['customer' => $customer]);
         }
 
-        if ($search) {
+        if ($search = trim($search)) {
             $condition = [
                 'or',
                 ['like', 'name', $search],

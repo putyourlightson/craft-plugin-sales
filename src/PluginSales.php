@@ -15,12 +15,12 @@ use craft\services\ProjectConfig;
 use craft\web\twig\variables\CraftVariable;
 use Monolog\Formatter\LineFormatter;
 use Psr\Log\LogLevel;
+use putyourlightson\datastar\Datastar;
 use putyourlightson\pluginsales\models\SettingsModel;
 use putyourlightson\pluginsales\services\PluginsService;
 use putyourlightson\pluginsales\services\ReportsService;
 use putyourlightson\pluginsales\services\SalesService;
 use putyourlightson\pluginsales\variables\PluginSalesVariable;
-use putyourlightson\sprig\Sprig;
 use yii\base\Event;
 use yii\log\Logger;
 
@@ -78,13 +78,11 @@ class PluginSales extends Plugin
         parent::init();
         self::$plugin = $this;
 
-        Sprig::getInstance()->init();
-
-        $this->registerVariables();
-        $this->registerLogTarget();
-
         // Register control panel events
         if (Craft::$app->getRequest()->getIsCpRequest()) {
+            Datastar::bootstrap();
+            $this->registerVariables();
+            $this->registerLogTarget();
             $this->registerRedirectAfterInstall();
         }
     }

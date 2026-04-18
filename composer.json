@@ -1,7 +1,7 @@
 {
   "name": "putyourlightson/craft-plugin-sales",
   "description": "Your Craft CMS plugin sales visualised in the control panel.",
-  "version": "3.1.4",
+  "version": "3.2.0",
   "type": "craft-plugin",
   "homepage": "https://putyourlightson.com/plugins/plugin-sales",
   "license": "proprietary",
@@ -14,10 +14,10 @@
     "reports"
   ],
   "require": {
-    "php": "^8.2",
     "ext-intl": "*",
+    "php": "^8.2",
     "craftcms/cms": "^5.0",
-    "putyourlightson/craft-sprig-core": "^3.0"
+    "putyourlightson/craft-datastar-module": "^1.0.0"
   },
   "require-dev": {
     "craftcms/ecs": "dev-main",
