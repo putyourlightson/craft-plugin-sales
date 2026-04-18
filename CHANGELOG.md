@@ -2,7 +2,8 @@
 
 ## 3.2.0 - 2026-04-18
 
-- Replaced Sprig Core with the Datastar Module.
+- Replaced Sprig core with the Datastar module.
+- Updated and vendored all JavaScript libraries to prevent supply-chain attacks.
 
 ## 3.1.4 - 2026-03-24
 

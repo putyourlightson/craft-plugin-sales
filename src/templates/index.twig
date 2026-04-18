@@ -54,7 +54,7 @@
                 {% endif %}
             </p>
             {% if netAmount and refreshDate and not craft.pluginSales.hasValidLicense() %}
-                <p class="warning" data-star-icon="alert">
+                <p class="warning" data-icon="alert">
                     <strong>
                         Please support development of this plugin:
                         <a href="{{ url('plugin-store/plugin-sales') }}" class="go">Buy a license</a>
@@ -64,7 +64,7 @@
         </div>
         <div class="flex">
             <div class="spinner" style="display: none;"></div>
-            <div id="daterange" data-star-icon="date" class="btn menubtn">
+            <div id="daterange" data-icon="date" class="btn menubtn">
                 <span></span>
             </div>
             <a href="{{ actionUrl('plugin-sales/sales/refresh') }}" id="refresh" class="btn">Refresh Sales</a>

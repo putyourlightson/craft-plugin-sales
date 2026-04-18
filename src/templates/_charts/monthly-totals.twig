@@ -17,37 +17,37 @@
 
 {% js %}
 
-    var options = {
-        colors: palette,
-        chart: {
-            width: '100%',
-            height: 400,
-            type: 'area',
+var options = {
+    colors: palette,
+    chart: {
+        width: '100%',
+        height: 400,
+        type: 'area',
+    },
+    title: {
+        text: 'Monthly Sales',
+        style: {
+            fontSize: '16px',
         },
-        title: {
-            text: 'Monthly Sales',
-            style: {
-                fontSize: '16px',
-            },
-        },
-        tooltip: {
-            y: [
-                {
-                    formatter: (value) => formatCurrency(value),
-                },
-                {
-                    formatter: (value) => formatCurrency(value),
-                },
-                {},
-                {
-                    formatter: (value) => formatCurrency(value),
-                },
-            ],
-        },
-        series: [
+    },
+    tooltip: {
+        y: [
             {
-                name: 'Gross Sales',
-                data: {{ grossAmounts|json_encode|raw }},
+                formatter: (value) => formatCurrency(value),
+            },
+            {
+                formatter: (value) => formatCurrency(value),
+            },
+            {},
+            {
+                formatter: (value) => formatCurrency(value),
+            },
+        ],
+    },
+    series: [
+        {
+            name: 'Gross Sales',
+            data: {{ grossAmounts|json_encode|raw }},
             },
             {
                 name: 'Net Profit',
@@ -128,6 +128,7 @@
             },
         ],
         legend: {
+            clusterGroupedSeries: false,
             position: 'top',
             itemMargin: {
                 horizontal: 5,
