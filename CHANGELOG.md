@@ -4,6 +4,10 @@
 
 - Replaced Sprig Core with the Datastar Module.
 
+## 3.1.4 - 2026-03-24
+
+- Fixed a deprecation warning about the use of a deprecated Twig filter.
+
 ## 3.1.3 - 2024-06-20
 
 - Fixed a bug that was causing the filtering of customers to fail.
