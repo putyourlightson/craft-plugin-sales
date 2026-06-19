@@ -1,5 +1,10 @@
 # Release Notes for Plugin Sales
 
+## 3.2.1 - 2026-06-19
+
+- Improved number formatting in pagination and search results.
+- Fixed pagination in the customer list.
+
 ## 3.2.0 - 2026-04-18
 
 - Replaced Sprig core with the Datastar module.

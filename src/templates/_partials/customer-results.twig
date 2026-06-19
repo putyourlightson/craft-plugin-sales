@@ -73,15 +73,15 @@
                         <button class="page-link prev-page disabled" title="Previous Page"></button>
                     {% endif %}
                     {% if maxVisible < total %}
-                        <button data-star-on:click="{{ datastar.get('plugin-sales/_partials/customers', {offset: offset + limit}) }}" data-star-indicator:fetching.customers class="page-link next-page" title="Next Page"></button>
+                        <button data-star-on:click="{{ datastar.get('plugin-sales/_partials/customer-results', {offset: offset + limit}) }}" data-star-indicator:fetching.customers class="page-link next-page" title="Next Page"></button>
                     {% else %}
                         <button class="page-link next-page disabled" title="Next Page"></button>
                     {% endif %}
                 </nav>
                 <div class="page-info">
-                    {{ maxVisible > 0 ? offset + 1 : 0 }}-{{ maxVisible }}
+                    {{ (maxVisible > 0 ? offset + 1 : 0)|number }}-{{ maxVisible|number }}
                     of
-                    {{ total }} sales
+                    {{ total|number }} sales
                 </div>
             </div>
         </div>
