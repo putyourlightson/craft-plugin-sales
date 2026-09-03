@@ -4,8 +4,11 @@
 
 {% do view.registerAssetBundle('putyourlightson\\pluginsales\\assets\\ReportsAsset') %}
 
-{% set start = craft.app.request.get('start') %}
+{% set origin = '2018-04-01' %}
+{% set defaultStart = now|date_modify('-4 years')|date('Y-m-d') %}
+{% set start = craft.app.request.get('start', defaultStart) %}
 {% set end = craft.app.request.get('end') %}
+{% set isAllTime = start == origin and end == now|date('Y-m-d') %}
 {% set months = craft.pluginSales.reports.getMonths(start, end) %}
 
 {% set monthlyTotals = craft.pluginSales.reports.getMonthlyTotals(start, end) %}
@@ -18,18 +21,16 @@
 
 {% block content %}
 
-    {% set start = craft.app.request.param('start') %}
-    {% set end = craft.app.request.param('end') %}
     {% set signals = {
         start: start,
         end: end,
         customer: '',
     } %}
-    <div data-star-signals="{{ signals|json_encode }}" class="flex" style="justify-content: space-between; align-items: flex-start; margin-bottom: 40px;">
+    <div data-star-signals="{{ signals|json_encode }}" class="heading">
         <div>
             <p>
                 {% if netAmount %}
-                    {% if not start and not end %}
+                    {% if isAllTime %}
                         Congratulations, you’ve earned a total net profit of
                     {% else %}
                         You earned a net profit during this period of
@@ -38,7 +39,7 @@
                         {{ craft.pluginSales.getFormattedAmount(netAmount) }}
                     </strong>
                 {% else %}
-                    {% if not start and not end %}
+                    {% if isAllTime %}
                         No earnings yet, keep on truckin!
                     {% else %}
                         No plugins sold during this period.
@@ -97,8 +98,7 @@ var locale = '{{ currentSite.language }}';
     var rate = {{ craft.pluginSales.getExchangeRate() }};
     var palette = {{ craft.pluginSales.getColourPalette()|json_encode|raw }};
 
-    {% set origin = '2018-04-01' %}
-    var start = moment('{{ start ?? origin }}');
+    var start = moment('{{ start }}');
     var end = moment('{{ end ?? now|date('Y-m-d') }}');
 
     function isAllTime(start, end) {
@@ -138,10 +138,6 @@ var locale = '{{ currentSite.language }}';
         $('.spinner').show();
 
         var queryString = '?start=' + picker.startDate.format('YYYY-MM-DD') + '&end=' + picker.endDate.format('YYYY-MM-DD');
-
-        if (isAllTime(picker.startDate, picker.endDate)) {
-            queryString = '';
-        }
 
         location = location.pathname + queryString;
     });

@@ -1,6 +1,13 @@
 /* This ensures that things remain responsive */
 #content-container {
     max-width: 100%;
+
+    .heading {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 40px;
+    }
 }
 
 .chart {

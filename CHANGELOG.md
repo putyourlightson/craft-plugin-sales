@@ -1,5 +1,9 @@
 # Release Notes for Plugin Sales
 
+## 3.2.2 - 2026-08-03
+
+- The default range is now set to the past 4 years instead of all time.
+
 ## 3.2.1 - 2026-06-19
 
 - Improved number formatting in pagination and search results.
