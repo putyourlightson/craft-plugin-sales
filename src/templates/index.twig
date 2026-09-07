@@ -5,7 +5,7 @@
 {% do view.registerAssetBundle('putyourlightson\\pluginsales\\assets\\ReportsAsset') %}
 
 {% set origin = '2018-04-01' %}
-{% set defaultStart = now|date_modify('-4 years')|date('Y-m-d') %}
+{% set defaultStart = now|date_modify('-4 years')|date('Y-m-01') %}
 {% set start = craft.app.request.get('start', defaultStart) %}
 {% set end = craft.app.request.get('end') %}
 {% set isAllTime = start == origin and end == now|date('Y-m-d') %}

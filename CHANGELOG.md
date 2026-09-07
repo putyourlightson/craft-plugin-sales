@@ -1,5 +1,9 @@
 # Release Notes for Plugin Sales
 
+## 3.2.3 - 2026-08-07
+
+- The default range now begins on the first day of the month 4 years ago.
+
 ## 3.2.2 - 2026-08-03
 
 - The default range is now set to the past 4 years instead of all time.
